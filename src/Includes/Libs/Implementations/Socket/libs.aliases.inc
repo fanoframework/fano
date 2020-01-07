@@ -26,3 +26,5 @@ TEpollInetSocketSvr = EpollInetSocketSvrImpl.TEpollInetSocketSvr;
 TEpollUnixSocketSvr = EpollUnixSocketSvrImpl.TEpollUnixSocketSvr;
 TEpollBoundSocketSvr = EpollBoundSocketSvrImpl.TEpollBoundSocketSvr;
 {$ENDIF}
+
+TWithErrLogSvr = WithErrLogSvrImpl.TWithErrLogSvr;

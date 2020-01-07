@@ -26,3 +26,5 @@ EpollInetSocketSvrImpl,
 EpollUnixSocketSvrImpl,
 EpollBoundSocketSvrImpl,
 {$ENDIF}
+
+WithErrLogSvrImpl,
