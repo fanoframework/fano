@@ -25,7 +25,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TWithErrLogSvr = class (TInterfacedObject, IRunnableWithDataNotif)
+    TWithErrLogSvr = class (TInterfacedObject, IRunnable, IRunnableWithDataNotif)
     private
         fActualSvr : IRunnableWithDataNotif;
         fLogger : ILogger;
