@@ -240,6 +240,7 @@ uses
     ESockListenImpl,
     ESockWouldBlockImpl,
     ESockErrorImpl,
+    ESockStreamImpl,
     StreamAdapterImpl,
     SockStreamImpl,
     CloseableStreamImpl,
@@ -617,7 +618,15 @@ uses
                 getSockStream(clientSocket)
             );
             try
-                result := fDataAvailListener.handleData(aStream, self, astream, astream);
+                try
+                    result := fDataAvailListener.handleData(aStream, self, astream, astream);
+                except
+                    on e : ESockStream do
+                    begin
+                        aStream.close();
+                        raise;
+                    end;
+                end;
             finally
                 aStream.free();
             end;

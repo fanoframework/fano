@@ -229,6 +229,7 @@ uses
     ESockListenImpl,
     ESockWouldBlockImpl,
     EEpollCreateImpl,
+    ESockStreamImpl,
     StreamAdapterImpl,
     SockStreamImpl,
     CloseableStreamImpl,
@@ -617,12 +618,20 @@ uses
                 //from epoll monitoring and after that close socket
                 streamCloser := TEpollCloseable.create(epollFd, clientSocket);
                 try
-                    fDataAvailListener.handleData(
-                        astream,
-                        self,
-                        streamCloser,
-                        streamCloser as IStreamId
-                    );
+                    try
+                        fDataAvailListener.handleData(
+                            astream,
+                            self,
+                            streamCloser,
+                            streamCloser as IStreamId
+                        );
+                    except
+                        on e: ESockStream do
+                        begin
+                            streamCloser.close();
+                            raise;
+                        end;
+                    end;
                 finally
                     streamCloser := nil;
                 end;
