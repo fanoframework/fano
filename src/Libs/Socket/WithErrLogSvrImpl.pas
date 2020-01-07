@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2018 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit WithIOErrorSvrImpl;
+unit WithErrLogSvrImpl;
 
 interface
 
