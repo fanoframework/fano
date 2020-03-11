@@ -95,7 +95,7 @@ uses
     DependencyContainerImpl,
     DependencyListImpl,
     EnvironmentImpl,
-    ErrorHandlerImpl,
+    FancyErrorHandlerImpl,
     SimpleRouterFactoryImpl,
     SimpleDispatcherFactoryImpl,
     StdInReaderImpl,
@@ -140,7 +140,7 @@ resourcestring
         const config : IAppConfiguration
     ) : IErrorHandler;
     begin
-        result := TErrorHandler.create();
+        result := TFancyErrorHandler.create();
     end;
 
     function TBasicAppServiceProvider.buildEnvironment(
