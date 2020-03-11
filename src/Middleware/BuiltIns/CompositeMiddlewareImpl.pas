@@ -27,7 +27,7 @@ type
     TMiddlewareArray = array of IMiddlewareLink;
 
     (*!------------------------------------------------
-     * midlleware class that is composed from several
+     * middleware class that is composed from several
      * external middlewares
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
@@ -109,8 +109,10 @@ uses
         totMiddlewares := length(fMiddlewares);
         if (totMiddlewares > 0) then
         begin
+            //point last middleware next to next middleware
             fMiddlewares[totMiddlewares-1].next := next;
             try
+                //execute middleware start from first
                 result := fMiddlewares[0].handleRequest(request, response, args);
             finally
                 //remove reference to avoid memory leak
