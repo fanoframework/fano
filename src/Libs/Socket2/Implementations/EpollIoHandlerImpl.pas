@@ -20,10 +20,7 @@ uses
     DataAvailListenerIntf,
     ListenSocketIntf,
     StreamAdapterIntf,
-<<<<<<< HEAD
-=======
     AbstractIoHandlerImpl,
->>>>>>> experiment-refactor-socket-server
     BaseUnix,
     Unix,
     Linux;
@@ -36,15 +33,9 @@ type
      *------------------------------------------------
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-<<<<<<< HEAD
-    TEpollIoHandler = class(TInterfacedObject, IIoHandler)
-    private
-        procedure raiseExceptionIfAny();
-=======
     TEpollIoHandler = class(TAbstractIoHandler)
     private
         fTimeoutVal : longint;
->>>>>>> experiment-refactor-socket-server
 
         (*!-----------------------------------------------
          * accept all incoming connection until no more pending
