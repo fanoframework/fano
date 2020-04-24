@@ -50,12 +50,6 @@ type
         );
 
         (*!-----------------------------------------------
-         * read terminate pipe in
-         * @param pipeIn, terminate pipe input handle
-         *-----------------------------------------------*)
-        procedure readPipe(const pipeIn : longint);
-
-        (*!-----------------------------------------------
          * wait for connection
          *-------------------------------------------------
          * @param epollFd, file descriptor returned from epoll_create()
@@ -161,7 +155,6 @@ uses
     Errors,
     StreamIdIntf;
 
-
     (*!-----------------------------------------------
      * add file descriptor to monitored set
      *-------------------------------------------------
@@ -225,7 +218,7 @@ uses
 
             if (clientSocket < 0) then
             begin
-                raiseExceptionIfAny();
+                handleAcceptError();
             end else
             begin
                 //TODO : improve FCGI parser so we can use non blocking socket
@@ -239,26 +232,6 @@ uses
                 addToMonitoredSet(epollFd, clientSocket, EPOLLIN or EPOLLET);
             end;
         until (clientSocket < 0);
-    end;
-
-    (*!-----------------------------------------------
-     * read terminate pipe in
-     * @param pipeIn, terminate pipe input handle
-     *-----------------------------------------------*)
-    procedure TEpollIoHandler.readPipe(const pipeIn : longint);
-    var ch : char;
-        res, err : longint;
-    begin
-        //we get termination signal, just read until no more
-        //bytes and quit
-        err := 0;
-        repeat
-            res := fpRead(pipeIn, @ch, 1);
-            if (res < 0) then
-            begin
-                err := socketError();
-            end;
-        until (res = 0) or (err = ESysEAGAIN);
     end;
 
     (*!-----------------------------------------------

@@ -295,7 +295,7 @@ uses
 
             if (clientSocket < 0) then
             begin
-                raiseExceptionIfAny();
+                handleAcceptError();
             end else
             begin
                 fSockOpts.makeNonBlocking(clientSocket);
@@ -323,8 +323,7 @@ uses
         var origFds : TFDSet;
         var terminated : boolean
     );
-    var ch : char;
-        fds : longint;
+    var fds : longint;
     begin
         for fds := 0 to maxHandle do
         begin
@@ -334,7 +333,7 @@ uses
                 begin
                     //we get termination signal, just read until no more
                     //bytes and quit
-                    fpRead(pipeIn, @ch, 1);
+                    readPipe(pipeIn);
                     terminated := true;
                     break;
                 end else
