@@ -35,6 +35,13 @@ type
         *-----------------------------------------------*)
         procedure makeNonBlocking(fd : longint);
 
+        (*!-----------------------------------------------
+         * reuse address
+         *-------------------------------------------------
+         * @param listenSocket, listen socket handle
+         *-----------------------------------------------*)
+        procedure reuseAddr(listenSocket : longint);
+
     end;
 
 implementation
@@ -57,4 +64,15 @@ uses
         fpFcntl(fd, F_SETFl, flags or O_NONBLOCK);
     end;
 
+    (*!-----------------------------------------------
+     * reuse address
+     *-------------------------------------------------
+     * @param listenSocket, listen socket handle
+     *-----------------------------------------------*)
+    procedure TSocketOpts.reuseAddr(listenSocket : longint);
+    var reuse : longint;
+    begin
+        reuse := 1;
+        fpsetsockopt(listenSocket, SOL_SOCKET, SO_REUSEADDR, @reuse, sizeof(reuse));
+    end;
 end.

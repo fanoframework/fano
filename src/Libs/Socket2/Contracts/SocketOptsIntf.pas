@@ -25,12 +25,18 @@ type
         ['{819107E1-0574-4AC0-BC71-9E2B53AF26C2}']
 
         (*!-----------------------------------------------
-        * make file descriptor, socket non blocking
-        *-------------------------------------------------
-        * @param listenSocket, listen socket handle
-        *-----------------------------------------------*)
+         * make file descriptor, socket non blocking
+         *-------------------------------------------------
+         * @param fd, socket handle
+         *-----------------------------------------------*)
         procedure makeNonBlocking(fd : longint);
 
+        (*!-----------------------------------------------
+         * reuse address
+         *-------------------------------------------------
+         * @param listenSocket, listen socket handle
+         *-----------------------------------------------*)
+        procedure reuseAddr(listenSocket : longint);
     end;
 
 implementation
