@@ -85,7 +85,7 @@ type
         function getHighestHandle(listenSocketFd : longint; pipeIn : longint) : longint;
 
         (*!-----------------------------------------------
-         * handle when one or more file descriptor is ready for I/O
+         * handle when one or more file descriptor is ready for read I/O
          *-------------------------------------------------
          * @param listenSocket, listen socket handle
          * @param pipeIn, terminate pipe input handle
@@ -95,7 +95,7 @@ type
          * @param origFds, original file descriptor set
          * @param terminated, set true if we should terminate
          *-----------------------------------------------*)
-        procedure handleFileDescriptorIOReady(
+        procedure handleFileDescriptorReadIOReady(
             listenSocket : IListenSocket;
             pipeIn : longint;
             const readfds : TFDSet;
@@ -103,6 +103,21 @@ type
             var maxHandle : longint;
             var origFds : TFDSet;
             var terminated : boolean
+        );
+
+        (*!-----------------------------------------------
+         * handle when one or more file descriptor is ready for read I/O
+         *-------------------------------------------------
+         * @param writefds, file descriptor set
+         * @param totDesc, number of file descriptor ready for I/O
+         * @param maxHandle, highest handle
+         * @param origWriteFds, original file descriptor set
+         *-----------------------------------------------*)
+        procedure handleFileDescriptorWriteIOReady(
+            const writefds : TFDSet;
+            var totDesc : longint;
+            var maxHandle : longint;
+            var origWriteFds : TFDSet
         );
 
         (*!-----------------------------------------------
@@ -305,16 +320,16 @@ uses
         until (clientSocket < 0);
     end;
 
-
     (*!-----------------------------------------------
-     * handle when one or more file descriptor is ready for I/O
+     * handle when one or more file descriptor is ready for
+     * read I/O
      *-------------------------------------------------
      * @param listenSocket, listen socket handle
      * @param pipeIn, terminate pipe input handle
      * @param readfds, file descriptor set
      * @param terminated, set true if we should terminate
      *-----------------------------------------------*)
-    procedure TSelectIoHandler.handleFileDescriptorIOReady(
+    procedure TSelectIoHandler.handleFileDescriptorReadIOReady(
         listenSocket : IListenSocket;
         pipeIn : longint;
         const readfds : TFDSet;
@@ -364,10 +379,47 @@ uses
     end;
 
     (*!-----------------------------------------------
+     * handle when one or more file descriptor is ready for
+     * write I/O
+     *-------------------------------------------------
+     * @param writefds, file descriptor set
+     *-----------------------------------------------*)
+    procedure TSelectIoHandler.handleFileDescriptorWriteIOReady(
+        const writefds : TFDSet;
+        var totDesc : longint;
+        var maxHandle : longint;
+        var origFds : TFDSet
+    );
+    var fds : longint;
+    begin
+        for fds := 0 to maxHandle do
+        begin
+            if fpFD_ISSET(fds, writefds) > 0 then
+            begin
+                //if we get here then it must be from one or
+                //more client connections
+                if handleClientWrite(fds) then
+                begin
+                    removeFromMonitoredSet(fds, maxHandle, origFds);
+                end;
+
+                dec(totDesc);
+                if (totDesc <= 0) then
+                begin
+                    //if we get here, it means all file descriptors ready for I/O
+                    //has been processed, so we can exit loop early
+                    break;
+                end;
+            end;
+        end;
+    end;
+
+    (*!-----------------------------------------------
      * handle incoming connection until terminated
      *-----------------------------------------------*)
     procedure TSelectIoHandler.handleConnection(const listenSocket : IListenSocket; termPipeIn : longint);
     var origfds, readfds : TFDSet;
+        origwritefds, writefds : TFDSet;
         highestHandle : longint;
         terminated : boolean;
     var totDesc : longint;
@@ -375,12 +427,15 @@ uses
         //find file descriptor with biggest value
         highestHandle := getHighestHandle(listenSocket.fd, termPipeIn);
         origfds := initFileDescSet(listenSocket.fd, termPipeIn);
+        origwritefds := default(TFDSet);
+        fpFD_ZERO(origwritefds);
         terminated := false;
         repeat
             readfds := origfds;
+            writefds := writefds;
             //wait until something happen in
             //listenSocket or termPipeIn or client connection or timeout
-            totDesc := fpSelect(highestHandle + 1, @readfds, nil, nil, @fTimeoutVal);
+            totDesc := fpSelect(highestHandle + 1, @readfds, @writefds, nil, @fTimeoutVal);
             if totDesc > 0 then
             begin
                 //one or more file descriptors is ready for I/O, check further
@@ -392,6 +447,14 @@ uses
                     highestHandle,
                     origfds,
                     terminated
+                );
+                //one or more file descriptors is ready for write I/O, check further
+                handleFileDescriptorWriteIOReady(
+                    listenSocket.fd,
+                    writefds,
+                    totDesc,
+                    highestHandle,
+                    origwritefds
                 );
             end;
         until terminated;
