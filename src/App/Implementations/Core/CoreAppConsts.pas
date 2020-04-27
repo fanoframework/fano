@@ -21,6 +21,8 @@ resourcestring
      *-----------------------------------------------*)
 
     sHttp400Message = 'Bad Request';
+    sHttp401Message = 'Unauthorized';
+    sHttp403Message = 'Forbidden';
     sHttp404Message = 'Not Found';
     sHttp405Message = 'Method Not Allowed';
     sHttp501Message = 'Not Implemented';

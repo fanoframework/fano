@@ -14,6 +14,8 @@ EInvalidRequest = EInvalidRequestImpl.EInvalidRequest;
 EInvalidUploadedFile = EInvalidUploadedFileImpl.EInvalidUploadedFile;
 EInvalidMethod = EInvalidMethodImpl.EInvalidMethod;
 ENotFound = ENotFoundImpl.ENotFound;
+EForbidden = EForbiddenImpl.EForbidden;
+EUnauthorized = EUnauthorizedImpl.EUnauthorized;
 
 TCookie = CookieImpl.TCookie;
 TCookieFactory = CookieFactoryImpl.TCookieFactory;

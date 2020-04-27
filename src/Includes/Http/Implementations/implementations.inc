@@ -28,6 +28,8 @@ EInvalidRequestImpl,
 EInvalidUploadedFileImpl,
 EInvalidMethodImpl,
 ENotFoundImpl,
+EForbiddenImpl,
+EUnauthorizedImpl,
 
 CookieImpl,
 CookieFactoryImpl,
