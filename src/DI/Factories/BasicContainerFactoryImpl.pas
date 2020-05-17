@@ -39,7 +39,6 @@ implementation
 
 uses
 
-    ServiceContainerImpl,
     DependencyContainerImpl,
     DependencyListImpl;
 

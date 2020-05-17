@@ -76,7 +76,7 @@ uses
     var tmpStr, statusLine : string;
     begin
         statusLine := extractStatusLineHeaderIfAny(str);
-        if length(statusLine) = 0 then
+        if statusLine = '' then
         begin
             tmpStr := 'HTTP/1.1 200 OK' + LineEnding + str;
         end else

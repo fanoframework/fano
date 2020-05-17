@@ -49,3 +49,4 @@ IEncrypter = EncrypterIntf.IEncrypter;
 IDecrypter = DecrypterIntf.IDecrypter;
 
 {$INCLUDE Socket2/libs.aliases.inc}
+{$INCLUDE Mailer/libs.aliases.inc}

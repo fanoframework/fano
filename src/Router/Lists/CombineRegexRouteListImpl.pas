@@ -90,6 +90,17 @@ type
         function keyOfIndex(const indx : integer) : shortstring;
 
         (*!------------------------------------------------
+         * delete item by key
+         *-----------------------------------------------
+         * @param key name to use to associate item
+         * @return item being removed
+         *-----------------------------------------------
+         * implementor is free to decide whether delete
+         * item in list only or also free item memory
+         *-----------------------------------------------*)
+        function remove(const key : shortstring) : pointer;
+
+        (*!------------------------------------------------
          * get index by key name
          *-----------------------------------------------
          * @param key name
@@ -596,6 +607,11 @@ const
     procedure TCombineRegexRouteList.delete(const indx : integer);
     begin
         hashesList.delete(indx);
+    end;
+
+    function TCombineRegexRouteList.remove(const key : shortstring) : pointer;
+    begin
+        result := hashesList.remove(translateRouteName(key));
     end;
 
     function TCombineRegexRouteList.keyOfIndex(const indx : integer) : shortstring;

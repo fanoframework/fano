@@ -5,7 +5,8 @@
  * @copyright Copyright (c) 2018 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit ServiceFactoryIntf;
+
+unit EMailerImpl;
 
 interface
 
@@ -13,16 +14,17 @@ interface
 
 uses
 
-    DependencyContainerIntf;
+    sysutils;
 
 type
-    {*!
-     interface for any class that can be injected in
-     depdendency container
 
-     @author Zamrony P. Juhara <zamronypj@yahoo.com>
-    *}
-    IServiceFactory = IDependencyFactory;
+    (*!------------------------------------------------
+     * Exception that is raised when mailer fails
+     *
+     * @author Zamrony P. Juhara <zamronypj@yahoo.com>
+     *-------------------------------------------------*)
+    EMailer = class(Exception);
 
 implementation
+
 end.

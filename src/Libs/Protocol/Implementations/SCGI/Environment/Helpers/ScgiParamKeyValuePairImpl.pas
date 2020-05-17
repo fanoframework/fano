@@ -75,7 +75,7 @@ uses
         tmpStr : string;
     begin
         tmpStr := aStr;
-        while (length(tmpStr) > 0) do
+        while (tmpStr <> '') do
         begin
             extractKeyValue(tmpStr, akey, avalue);
             setValue(akey, avalue);

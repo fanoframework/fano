@@ -5,25 +5,17 @@
  * @copyright Copyright (c) 2018 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit ServiceIntf;
+
+unit SendmailConsts;
 
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
-uses
+const
 
-    DependencyIntf;
-
-type
-
-    {*!
-     interface for any class that can be injected in
-     depdendency container
-
-     @author Zamrony P. Juhara <zamronypj@yahoo.com>
-    *}
-    IService = IDependency;
+    DEFAULT_SENDMAIL_BIN = '/usr/sbin/sendmail';
 
 implementation
 end.

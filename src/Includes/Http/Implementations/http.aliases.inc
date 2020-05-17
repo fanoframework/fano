@@ -6,6 +6,7 @@ TResponse = ResponseImpl.TResponse;
 TJsonResponse = JsonResponseImpl.TJsonResponse;
 TBinaryResponse = BinaryResponseImpl.TBinaryResponse;
 TRedirectResponse = RedirectResponseImpl.TRedirectResponse;
+TNotModifiedResponse = NotMOdifiedResponseImpl.TNotModifiedResponse;
 TResponseStream = ResponseStreamImpl.TResponseStream;
 TUploadedFile = UploadedFileImpl.TUploadedFile;
 TUploadedFileCollection = UploadedFileCollectionImpl.TUploadedFileCollection;

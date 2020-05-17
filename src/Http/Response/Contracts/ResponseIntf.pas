@@ -49,6 +49,13 @@ type
          * @return response body
          *-------------------------------------*)
         function body() : IResponseStream;
+
+        (*!------------------------------------
+         * set new response body
+         *-------------------------------------
+         * @return response body
+         *-------------------------------------*)
+        function setBody(const newBody : IResponseStream) : IResponse;
     end;
 
 implementation

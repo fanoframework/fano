@@ -14,12 +14,11 @@ interface
 {$H+}
 
 uses
-    classes,
+
     ResponseIntf,
     ResponseStreamIntf,
     HeadersIntf,
-    CloneableIntf,
-    fpjson;
+    CloneableIntf;
 
 type
     (*!------------------------------------------------
@@ -31,7 +30,6 @@ type
     private
         httpHeaders : IHeaders;
         responseStream : IResponseStream;
-        jsonStream : TStringStream;
     public
         constructor create(const hdrs : IHeaders; const json : string);
         destructor destroy(); override;
@@ -52,28 +50,35 @@ type
          * @return response body
          *-------------------------------------*)
         function body() : IResponseStream;
+
+        (*!------------------------------------
+         * set new response body
+         *-------------------------------------
+         * @return response body
+         *-------------------------------------*)
+        function setBody(const newBody : IResponseStream) : IResponse;
     end;
 
 implementation
 
 uses
 
+    classes,
     sysutils,
+    httpprotocol,
     ResponseStreamImpl;
 
     constructor TJsonResponse.create(const hdrs : IHeaders; const json : string);
     begin
         httpHeaders := hdrs;
-        jsonStream := TStringStream.create(json);
-        responseStream := TResponseStream.create(jsonStream, false);
+        responseStream := TResponseStream.create(TStringStream.create(json));
     end;
 
     destructor TJsonResponse.destroy();
     begin
-        inherited destroy();
-        jsonStream.free();
         responseStream := nil;
         httpHeaders := nil;
+        inherited destroy();
     end;
 
     (*!------------------------------------
@@ -89,9 +94,9 @@ uses
     function TJsonResponse.write() : IResponse;
     begin
         httpHeaders.setHeader('Content-Type', 'application/json');
-        httpHeaders.setHeader('Content-Length', intToStr(jsonStream.size));
+        httpHeaders.setHeader('Content-Length', intToStr(responseStream.size()));
         httpHeaders.writeHeaders();
-        writeln(jsonStream.dataString);
+        writeln(responseStream.read());
         result := self;
     end;
 
@@ -100,7 +105,7 @@ uses
     begin
         clonedObj := TJsonResponse.create(
             httpHeaders.clone() as IHeaders,
-            jsonStream.dataString
+            responseStream.read()
         );
         result := clonedObj;
     end;
@@ -113,5 +118,16 @@ uses
     function TJsonResponse.body() : IResponseStream;
     begin
         result := responseStream;
+    end;
+
+    (*!------------------------------------
+     * set new response body
+     *-------------------------------------
+     * @return response body
+     *-------------------------------------*)
+    function TJsonResponse.setBody(const newBody : IResponseStream) : IResponse;
+    begin
+        responseStream := newBody;
+        result := self;
     end;
 end.

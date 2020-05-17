@@ -28,4 +28,7 @@ SysLogLoggerImpl,
 SysLogLoggerFactoryImpl,
 
 ThreadSafeLoggerImpl,
+
+DbLoggerImpl,
+DbLoggerFactoryImpl,
 {------------ End logger-related------------------}

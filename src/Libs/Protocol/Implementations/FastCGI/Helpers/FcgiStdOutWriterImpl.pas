@@ -105,7 +105,7 @@ uses
     var arecord : IFcgiRecord;
         strStream : IStreamAdapter;
     begin
-        if (length(str) > 0) then
+        if (str <> '') then
         begin
             strStream := TStreamAdapter.create(TStringStream.create(str));
             strStream.seek(0);

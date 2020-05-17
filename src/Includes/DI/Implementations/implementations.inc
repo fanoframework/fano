@@ -14,7 +14,6 @@
  *-----------------------------------------------*)
 
 DependencyContainerImpl,
-InitializeableContainerImpl,
 DependencyListImpl,
 InjectableObjectImpl,
 
@@ -23,9 +22,6 @@ EInvalidFactoryImpl,
 EDependencyAliasImpl,
 FactoryImpl,
 
-ServiceImpl,
-ServiceContainerImpl,
 BasicContainerFactoryImpl,
-ServiceContainerFactoryImpl,
 
 CompositeServiceProviderImpl,

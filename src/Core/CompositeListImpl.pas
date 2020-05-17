@@ -43,6 +43,17 @@ type
         function keyOfIndex(const indx : integer) : shortstring;
 
         (*!------------------------------------------------
+         * delete item by key
+         *-----------------------------------------------
+         * @param aKey name to use to associate item
+         * @return item being removed
+         *-----------------------------------------------
+         * implementor is free to decide whether delete
+         * item in list only or also free item memory
+         *-----------------------------------------------*)
+        function remove(const aKey : shortstring) : pointer;
+
+        (*!------------------------------------------------
          * get index by key name
          *-----------------------------------------------
          * @param key name
@@ -134,6 +145,16 @@ resourcestring
         begin
             //not found in first list, try second one
             result := fSecondList.find(aKey);
+        end;
+    end;
+
+    function TCompositeList.remove(const aKey : shortstring) : pointer;
+    begin
+        result := fFirstList.remove(aKey);
+        if result = nil then
+        begin
+            //not found in first list, try second one
+            result := fSecondList.remove(aKey);
         end;
     end;
 
