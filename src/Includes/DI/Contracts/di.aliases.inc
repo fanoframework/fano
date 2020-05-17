@@ -17,11 +17,5 @@ IDependencyContainer = DependencyContainerIntf.IDependencyContainer;
 IDependencyFactory = DependencyContainerIntf.IDependencyFactory;
 IDependency = DependencyIntf.IDependency;
 IDependencyList = DependencyListIntf.IDependencyList;
-
-IServiceContainer = ServiceContainerIntf.IServiceContainer;
-IServiceFactory = ServiceFactoryIntf.IServiceFactory;
-IService = ServiceIntf.IService;
-
 IContainerFactory = ContainerFactoryIntf.IContainerFactory;
-
 IServiceProvider = ServiceProviderIntf.IServiceProvider;

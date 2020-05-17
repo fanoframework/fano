@@ -58,6 +58,13 @@ type
          *-------------------------------------*)
         function body() : IResponseStream;
 
+        (*!------------------------------------
+         * set new response body
+         *-------------------------------------
+         * @return response body
+         *-------------------------------------*)
+        function setBody(const newBody : IResponseStream) : IResponse;
+
         function clone() : ICloneable; virtual; abstract;
     end;
 
@@ -141,5 +148,16 @@ const
     function TBaseResponse.body() : IResponseStream;
     begin
         result := bodyStream;
+    end;
+
+    (*!------------------------------------
+     * set new response body
+     *-------------------------------------
+     * @return response body
+     *-------------------------------------*)
+    function TBaseResponse.setBody(const newBody : IResponseStream) : IResponse;
+    begin
+        bodyStream := newBody;
+        result := self;
     end;
 end.

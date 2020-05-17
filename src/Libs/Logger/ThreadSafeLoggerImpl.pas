@@ -64,6 +64,7 @@ implementation
     begin
         fActualLogger := nil;
         fLock.free();
+        inherited destroy();
     end;
 
     (*!--------------------------------------

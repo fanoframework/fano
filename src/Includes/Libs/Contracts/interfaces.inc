@@ -56,3 +56,4 @@ EncrypterIntf,
 DecrypterIntf,
 
 {$INCLUDE Socket2/interfaces.inc}
+{$INCLUDE Mailer/interfaces.inc}

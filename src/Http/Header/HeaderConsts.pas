@@ -16,6 +16,7 @@ interface
 resourcestring
 
     sErrHeaderNotSet = 'Header %s is not set';
+    sErrInvalidHeader = 'Invalid header %s';
 
 
 implementation

@@ -371,16 +371,20 @@ uses
         highestHandle : longint;
         terminated : boolean;
     var totDesc : longint;
+        aTimeoutVal : TTimeVal;
     begin
         //find file descriptor with biggest value
         highestHandle := getHighestHandle(listenSocket.fd, termPipeIn);
         origfds := initFileDescSet(listenSocket.fd, termPipeIn);
         terminated := false;
         repeat
+            //need to reset readfds, timeout as they are changed by select()
             readfds := origfds;
+            aTimeoutVal := fTimeoutVal;
+
             //wait until something happen in
             //listenSocket or termPipeIn or client connection or timeout
-            totDesc := fpSelect(highestHandle + 1, @readfds, nil, nil, @fTimeoutVal);
+            totDesc := fpSelect(highestHandle + 1, @readfds, nil, nil, @aTimeoutVal);
             if totDesc > 0 then
             begin
                 //one or more file descriptors is ready for I/O, check further

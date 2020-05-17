@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit ServiceImpl;
+unit EInvalidHeaderImpl;
 
 interface
 
@@ -14,19 +14,16 @@ interface
 
 uses
 
-    ServiceIntf,
-    InjectableObjectImpl;
+    sysutils;
 
 type
 
-    (*!-----------------------------------------------
-     * Base class that can be injected into dependency container
-     * which implements IService
+    (*!------------------------------------------------
+     * Exception that is raised when header line is invalie
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
-     *------------------------------------------------*)
-    TService = class(TInjectableObject, IService)
-    end;
+     *-------------------------------------------------*)
+    EInvalidHeader = class(Exception);
 
 implementation
 

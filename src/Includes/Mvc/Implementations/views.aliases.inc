@@ -24,6 +24,7 @@ TView = ViewImpl.TView;
 TStaticView = StaticViewImpl.TStaticView;
 TCompositeView = CompositeViewImpl.TCompositeView;
 TTemplateView = TemplateViewImpl.TTemplateView;
+TGroupView = GroupViewImpl.TGroupView;
 TNullView = NullViewImpl.TNullView;
 TNullViewFactory = NullViewFactoryImpl.TNullViewFactory;
 TViewPartial = ViewPartialImpl.TViewPartial;

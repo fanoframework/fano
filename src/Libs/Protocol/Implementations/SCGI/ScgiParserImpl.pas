@@ -272,7 +272,7 @@ resourcestring
     begin
         result := -1;
         str := readBufferToStr(buff);
-        if length(str) > 0 then
+        if str <> '' then
         begin
             envLen := 0;
             contentLength := 0;

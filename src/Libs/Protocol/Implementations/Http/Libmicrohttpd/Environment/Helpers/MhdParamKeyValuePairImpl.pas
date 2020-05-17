@@ -205,7 +205,7 @@ uses
 
         queryStr := getValue('QUERY_STRING');
 
-        if (length(queryStr) > 0) then
+        if (queryStr <> '') then
         begin
             reqUri := PChar(mhdData.url) + '?' + queryStr;
         end else

@@ -61,6 +61,13 @@ type
          *-------------------------------------*)
         function body() : IResponseStream;
 
+        (*!------------------------------------
+         * set new response body
+         *-------------------------------------
+         * @return response body
+         *-------------------------------------*)
+        function setBody(const newBody : IResponseStream) : IResponse;
+
         function clone() : ICloneable;
     end;
 
@@ -144,6 +151,17 @@ uses
     function TRedirectResponse.body() : IResponseStream;
     begin
         result := fStream;
+    end;
+
+    (*!------------------------------------
+     * set new response body
+     *-------------------------------------
+     * @return response body
+     *-------------------------------------*)
+    function TRedirectResponse.setBody(const newBody : IResponseStream) : IResponse;
+    begin
+        //intentionally does nothing as redirect response do not need body
+        result := self;
     end;
 
     function TRedirectResponse.clone() : ICloneable;

@@ -14,7 +14,6 @@
  *-----------------------------------------------*)
 
 TDependencyContainer = DependencyContainerImpl.TDependencyContainer;
-TInitializeableContainer = InitializeableContainerImpl.TInitializeableContainer;
 TDependencyList = DependencyListImpl.TDependencyList;
 TInjectableObject = InjectableObjectImpl.TInjectableObject;
 TFactory = FactoryImpl.TFactory;
@@ -23,9 +22,5 @@ EInvalidFactory = EInvalidFactoryImpl.EInvalidFactory;
 EDependencyAlias = EDependencyAliasImpl.EDependencyAlias;
 
 TBasicContainerFactory = BasicContainerFactoryImpl.TBasicContainerFactory;
-
-TService = ServiceImpl.TService;
-TServiceContainer = ServiceContainerImpl.TServiceContainer;
-TServiceContainerFactory = ServiceContainerFactoryImpl.TServiceContainerFactory;
 
 TCompositeServiceProvider = CompositeServiceProviderImpl.TCompositeServiceProvider;

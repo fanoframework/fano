@@ -47,6 +47,16 @@ type
          *-----------------------------------------------*)
         function add(const aKey : shortstring; const item : pointer) : integer;
 
+        (*!------------------------------------------------
+         * delete item by key
+         *-----------------------------------------------
+         * @param aKey name to use to associate item
+         * @return item being removed
+         *-----------------------------------------------
+         * implementor is free to decide whether delete
+         * item in list only or also free item memory
+         *-----------------------------------------------*)
+        function remove(const aKey : shortstring) : pointer;
     end;
 
 implementation

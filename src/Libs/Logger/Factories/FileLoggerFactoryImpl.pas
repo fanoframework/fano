@@ -11,6 +11,7 @@ unit FileLoggerFactoryImpl;
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
     DependencyIntf,

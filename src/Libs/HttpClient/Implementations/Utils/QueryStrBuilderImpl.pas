@@ -98,7 +98,7 @@ implementation
         if (data <> nil) then
         begin
             params := data.serialize();
-            if (length(params) > 0) then
+            if (params <> '') then
             begin
                 result := appendQueryParams(result, params);
             end;

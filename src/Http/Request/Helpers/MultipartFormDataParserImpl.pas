@@ -346,7 +346,7 @@ resourcestring
             contentType := trim(contentType.split([';'])[0]);
         end;
 
-        if (length(dataPart) > 0)then
+        if dataPart <> '' then
         begin
             //if we get here then, form upload contain file input and
             //at least a file is uploaded

@@ -57,7 +57,7 @@ implementation
     function TResponseStream.write(const buffer : string) : int64;
     begin
         result := 0;
-        if (length(buffer) > 0) then
+        if buffer <> '' then
         begin
             result := self.write(buffer[1], length(buffer));
         end;

@@ -15,10 +15,5 @@
 DependencyContainerIntf,
 DependencyIntf,
 DependencyListIntf,
-
-ServiceContainerIntf,
-ServiceIntf,
-ServiceFactoryIntf,
-
 ContainerFactoryIntf,
 ServiceProviderIntf,
