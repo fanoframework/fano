@@ -26,7 +26,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *--------------------------------------------------*)
-    TExceptionSerializeble = class(TInjectableObject, ISerializeable)
+    TExceptionSerializeable = class(TInjectableObject, ISerializeable)
     private
         fExcept : Exception;
     public
@@ -36,12 +36,12 @@ type
 
 implementation
 
-    constructor TExceptionSerializeble.create(const aExcept : Exception);
+    constructor TExceptionSerializeable.create(const aExcept : Exception);
     begin
         fExcept := aExcept;
     end;
 
-    function TExceptionSerializeble.serialize() : string;
+    function TExceptionSerializeable.serialize() : string;
     begin
         result := fExcept.ToString;
     end;
