@@ -15,6 +15,7 @@
 
 NullSerializeableImpl,
 StringSerializeableImpl,
+ExceptionSerializeableImpl,
 
 HashListImpl,
 CompositeListImpl,
