@@ -15,6 +15,7 @@ interface
 
 uses
 
+    StdOutIntf,
     ReadOnlyHeadersIntf;
 
 type
@@ -84,9 +85,10 @@ type
          * Implementor must end with empty blank line
          * after write all headers
          *-------------------------------------
+         * @param astdOut standard output implementation
          * @return header instance
          *-------------------------------------*)
-        function writeHeaders() : IHeaders;
+        function writeHeaders(const aStdOut : IStdOut) : IHeaders;
     end;
 
 implementation

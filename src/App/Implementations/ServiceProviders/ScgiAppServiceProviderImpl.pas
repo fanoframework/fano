@@ -14,6 +14,7 @@ interface
 
 uses
 
+    StdOutIntf,
     DaemonAppServiceProviderIntf,
     ProtocolAppServiceProviderImpl;
 
@@ -26,6 +27,8 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
     TScgiAppServiceProvider = class (TProtocolAppServiceProvider)
+    protected
+        function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
     public
         constructor create(const actualSvc : IDaemonAppServiceProvider);
     end;
@@ -40,7 +43,6 @@ uses
     NonBlockingProtocolProcessorImpl,
     HashListImpl;
 
-
     constructor TScgiAppServiceProvider.create(const actualSvc : IDaemonAppServiceProvider);
     begin
         inherited create(actualSvc);
@@ -48,7 +50,11 @@ uses
             TScgiProcessor.create(TScgiParser.create()),
             THashList.create()
         );
-        fStdOut := TScgiStdOutWriter.create();
+    end;
+
+    function TScgiAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;
+    begin
+        result := TScgiStdOutWriter.create();
     end;
 
 end.

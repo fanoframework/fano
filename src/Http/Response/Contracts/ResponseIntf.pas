@@ -16,7 +16,8 @@ uses
 
     HeadersIntf,
     ResponseStreamIntf,
-    CloneableIntf;
+    CloneableIntf,
+    StdOutIntf;
 
 type
 
@@ -39,9 +40,10 @@ type
         (*!------------------------------------
          * output http response to STDOUT
          *-------------------------------------
+         * @param aStdOut standard output
          * @return current instance
          *-------------------------------------*)
-        function write() : IResponse;
+        function write(const aStdOut : IStdOut) : IResponse;
 
         (*!------------------------------------
          * get response body

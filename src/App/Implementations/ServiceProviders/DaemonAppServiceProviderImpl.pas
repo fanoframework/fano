@@ -43,7 +43,6 @@ type
         fServer : IRunnableWithDataNotif;
         fProtocol : IProtocolProcessor;
         fOutputBuffer : IOutputBuffer;
-        fStdOut : IStdOut;
     protected
 
         function buildServer() : IRunnableWithDataNotif; virtual;
@@ -52,7 +51,7 @@ type
 
         function buildOutputBuffer() : IOutputBuffer; virtual;
 
-        function buildStdOut() : IStdOut; virtual;
+        function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
 
         function buildStdIn(const ctnr : IDependencyContainer) : IStdIn; override;
     public
@@ -64,8 +63,6 @@ type
         function getProtocol() : IProtocolProcessor;
 
         function getOutputBuffer() : IOutputBuffer;
-
-        function getStdOut() : IStdOut;
 
     end;
 
@@ -85,7 +82,6 @@ uses
         inherited create();
         fServer := buildServer();
         fProtocol := buildProtocol();
-        fStdOut := buildStdOut();
         fOutputBuffer := buildOutputBuffer();
     end;
 
@@ -113,7 +109,7 @@ uses
         result := TOutputBuffer.create();
     end;
 
-    function TDaemonAppServiceProvider.buildStdOut() : IStdOut;
+    function TDaemonAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;
     begin
         result := TNullStdOut.create();
     end;

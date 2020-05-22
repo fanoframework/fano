@@ -21,6 +21,7 @@ uses
     DispatcherIntf,
     EnvironmentIntf,
     StdInIntf,
+    StdOutIntf,
     RouteMatcherIntf,
     RouterIntf,
     ConfigIntf;
@@ -41,6 +42,7 @@ type
         fRouter : IRouter;
         fRouteMatcher : IRouteMatcher;
         fStdIn : IStdIn;
+        fStdOut : IStdOut;
         fAppConfig : IAppConfiguration;
     protected
         function getRouteMatcher() : IRouteMatcher; virtual;
@@ -52,6 +54,7 @@ type
         ) : IErrorHandler; virtual;
         function buildEnvironment(const ctnr : IDependencyContainer) : ICGIEnvironment; virtual;
         function buildStdIn(const ctnr : IDependencyContainer) : IStdIn; virtual;
+        function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; virtual;
         function buildRouter(const ctnr : IDependencyContainer) : IRouter; virtual;
         function buildDispatcher(
             const ctnr : IDependencyContainer;
@@ -74,6 +77,7 @@ type
         function getRouter() : IRouter;
 
         function getStdIn() : IStdIn;
+        function getStdOut() : IStdOut;
 
         (*!--------------------------------------------------------
          * register all services
@@ -99,6 +103,7 @@ uses
     SimpleRouterFactoryImpl,
     SimpleDispatcherFactoryImpl,
     StdInReaderImpl,
+    StdOutImpl,
     RequestResponseFactoryImpl,
     EInvalidDispatcherImpl,
     NullConfigFactoryImpl;
@@ -114,6 +119,7 @@ resourcestring
         fEnv := buildEnvironment(fContainer);
         fErrHandler := buildErrorHandler(fContainer, fAppConfig);
         fStdIn := buildStdIn(fContainer);
+        fStdOut := buildStdOut(fContainer);
         fRouter := buildRouter(fContainer);
         fDispatcher := buildDispatcher(fContainer, getRouteMatcher(), fAppConfig);
     end;
@@ -123,6 +129,8 @@ resourcestring
         fContainer := nil;
         fAppConfig := nil;
         fEnv := nil;
+        fStdIn := nil;
+        fStdOut := nil;
         fErrHandler := nil;
         fRouter := nil;
         fRouteMatcher := nil;
@@ -153,6 +161,11 @@ resourcestring
     function TBasicAppServiceProvider.buildStdIn(const ctnr : IDependencyContainer) : IStdIn;
     begin
         result := TStdInReader.create();
+    end;
+
+    function TBasicAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;
+    begin
+        result := TStdOut.create();
     end;
 
     function TBasicAppServiceProvider.buildRouter(
@@ -226,4 +239,8 @@ resourcestring
         result := fStdIn;
     end;
 
+    function TBasicAppServiceProvider.getStdOut() : IStdOut;
+    begin
+        result := fStdOut;
+    end;
 end.

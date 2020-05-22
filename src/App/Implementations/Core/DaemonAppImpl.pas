@@ -263,7 +263,7 @@ uses
      *-----------------------------------------------
      * @param socketStream, original socket stream
      * @param env, CGI environment
-     * @param stdInStream, stream contains POST-ed data
+     * @param stdInStream, stream contains request body data
      * @return true request is handled
      *-----------------------------------------------*)
     function TDaemonWebApplication.ready(
@@ -272,23 +272,17 @@ uses
         const stdInStream : IStreamAdapter
     ) : boolean;
     begin
-        //buffer STDOUT, so any write()/writeln() will be buffered to stream
-        fDaemonAppSvc.outputBuffer.beginBuffering();
-        try
-            //when we get here, CGI environment and any POST data are ready
-            fDaemonAppSvc.stdIn.setStream(stdInStream);
-            execAndHandleExcept(
-                fDaemonAppSvc.container,
-                env,
-                fDaemonAppSvc.stdIn,
-                fDaemonAppSvc.errorHandler,
-                fDaemonAppSvc.dispatcher
-            );
-        finally
-            fDaemonAppSvc.outputBuffer.endBuffering();
-            //write response back to web server (i.e FastCGI client)
-            fDaemonAppSvc.stdOut.setStream(socketStream).write(fDaemonAppSvc.outputBuffer.flush());
-        end;
+        //when we get here, CGI environment and any POST data are ready
+        fDaemonAppSvc.stdIn.setStream(stdInStream);
+        fDaemonAppSvc.stdOut.setStream(socketStream);
+        execAndHandleExcept(
+            fDaemonAppSvc.container,
+            env,
+            fDaemonAppSvc.stdIn,
+            fDaemonAppSvc.stdOut,
+            fDaemonAppSvc.errorHandler,
+            fDaemonAppSvc.dispatcher
+        );
         result := true;
     end;
 end.

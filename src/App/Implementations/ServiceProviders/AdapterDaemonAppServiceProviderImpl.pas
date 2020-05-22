@@ -35,15 +35,12 @@ type
         fServer : IRunnableWithDataNotif;
         fProtocol : IProtocolProcessor;
         fOutputBuffer : IOutputBuffer;
-        fStdOut : IStdOut;
     protected
         function buildServer() : IRunnableWithDataNotif; virtual;
 
         function buildProtocol() : IProtocolProcessor; virtual;
 
         function buildOutputBuffer() : IOutputBuffer; virtual;
-
-        function buildStdOut() : IStdOut; virtual;
 
     public
         constructor create(const actualSvc : IAppServiceProvider);
@@ -54,8 +51,6 @@ type
         function getProtocol() : IProtocolProcessor;
 
         function getOutputBuffer() : IOutputBuffer;
-
-        function getStdOut() : IStdOut;
     end;
 
 implementation
@@ -102,11 +97,6 @@ uses
         result := TOutputBuffer.create();
     end;
 
-    function TAdapterDaemonAppServiceProvider.buildStdOut() : IStdOut;
-    begin
-        result := TNullStdOut.create();
-    end;
-
     function TAdapterDaemonAppServiceProvider.getServer() : IRunnableWithDataNotif;
     begin
         result := fServer;
@@ -120,10 +110,5 @@ uses
     function TAdapterDaemonAppServiceProvider.getOutputBuffer() : IOutputBuffer;
     begin
         result := fOutputBuffer;
-    end;
-
-    function TAdapterDaemonAppServiceProvider.getStdOut() : IStdOut;
-    begin
-        result := fStdOut;
     end;
 end.

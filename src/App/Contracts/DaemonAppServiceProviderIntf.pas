@@ -17,8 +17,7 @@ uses
     AppServiceProviderIntf,
     RunnableWithDataNotifIntf,
     ProtocolProcessorIntf,
-    OutputBufferIntf,
-    StdOutIntf;
+    OutputBufferIntf;
 
 type
 
@@ -39,9 +38,6 @@ type
 
         function getOutputBuffer() : IOutputBuffer;
         property outputBuffer : IOutputBuffer read getOutputBuffer;
-
-        function getStdOut() : IStdOut;
-        property stdOut : IStdOut read getStdOut;
 
     end;
 

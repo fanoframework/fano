@@ -14,6 +14,7 @@ interface
 
 uses
 
+    StdOutIntf,
     DaemonAppServiceProviderIntf,
     ProtocolAppServiceProviderImpl;
 
@@ -26,6 +27,8 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
     TUwsgiAppServiceProvider = class (TProtocolAppServiceProvider)
+    protected
+        function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
     public
         constructor create(const actualSvc : IDaemonAppServiceProvider);
     end;
@@ -47,7 +50,11 @@ uses
             TUwsgiProcessor.create(TUwsgiParser.create()),
             THashList.create()
         );
-        fStdOut := TUwsgiStdOutWriter.create();
+    end;
+
+    function TUwsgiAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;
+    begin
+        result := TUwsgiStdOutWriter.create();
     end;
 
 end.

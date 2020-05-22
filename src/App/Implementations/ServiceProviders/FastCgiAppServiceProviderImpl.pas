@@ -14,6 +14,7 @@ interface
 
 uses
 
+    StdOutIntf,
     DaemonAppServiceProviderIntf,
     ProtocolAppServiceProviderImpl;
 
@@ -27,6 +28,8 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
     TFastCgiAppServiceProvider = class (TProtocolAppServiceProvider)
+    protected
+        function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
     public
         constructor create(const actualSvc : IDaemonAppServiceProvider);
     end;
@@ -54,7 +57,11 @@ uses
             aParserFactory.build(),
             TFcgiRequestManager.create(TStreamAdapterCollectionFactory.create())
         );
-        fStdOut := TFcgiStdOutWriter.create(fProtocol as IFcgiRequestIdAware);
+    end;
+
+    function TFastCgiAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;
+    begin
+        result := TFcgiStdOutWriter.create(fProtocol as IFcgiRequestIdAware);
     end;
 
 end.

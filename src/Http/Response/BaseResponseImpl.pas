@@ -17,7 +17,8 @@ uses
     ResponseIntf,
     HeadersIntf,
     ResponseStreamIntf,
-    CloneableIntf;
+    CloneableIntf,
+    StdOutIntf;
 
 type
     (*!------------------------------------------------
@@ -47,9 +48,10 @@ type
         (*!------------------------------------
          * output http response to STDOUT
          *-------------------------------------
+         * @param aStdOut standard output
          * @return current instance
          *-------------------------------------*)
-        function write() : IResponse;  virtual;
+        function write(const aStdOut : IStdOut) : IResponse;  virtual;
 
         (*!------------------------------------
          * get response body
@@ -106,8 +108,12 @@ const
      * standard output
      *-------------------------------------
      * @param respBody response stream to output
+     * @param aStdOut standard output
      *-------------------------------------*)
-    procedure TBaseResponse.writeToStdOutput(const respBody : IResponseStream);
+    procedure TBaseResponse.writeToStdOutput(
+        const respBody : IResponseStream;
+        const aStdOut : IStdOut
+    );
     var numBytesRead: longint;
         buff : string;
     begin
@@ -124,19 +130,19 @@ const
                 //when we are in end of buffer
                 setLength(buff, numBytesRead);
             end;
-            system.write(buff);
+            aStdOut.write(buff);
         until (numBytesRead < BUFFER_SIZE);
     end;
 
-    function TBaseResponse.write() : IResponse;
+    function TBaseResponse.write(const aStdOut : IStdOut) : IResponse;
     begin
         if (not httpHeaders.has('Content-Type')) then
         begin
             //if not Content-Type header defined assume html
             httpHeaders.setHeader('Content-Type', 'text/html');
         end;
-        httpHeaders.writeHeaders();
-        writeToStdOutput(bodyStream);
+        httpHeaders.writeHeaders(aStdOut);
+        writeToStdOutput(bodyStream, aStdOut);
         result := self;
     end;
 

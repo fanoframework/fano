@@ -20,6 +20,7 @@ uses
     DispatcherIntf,
     EnvironmentIntf,
     StdInIntf,
+    StdOutIntf,
     RouterIntf;
 
 type
@@ -48,6 +49,7 @@ type
         function getRouter() : IRouter; virtual;
 
         function getStdIn() : IStdIn; virtual;
+        function getStdOut() : IStdOut; virtual;
 
         (*!--------------------------------------------------------
          * register all services
@@ -101,6 +103,11 @@ implementation
     function TDecoratorAppServiceProvider.getStdIn() : IStdIn;
     begin
         result := fAppSvc.getStdIn();
+    end;
+
+    function TDecoratorAppServiceProvider.getStdOut() : IStdOut;
+    begin
+        result := fAppSvc.getStdOut();
     end;
 
     (*!--------------------------------------------------------

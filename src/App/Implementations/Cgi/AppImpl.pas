@@ -17,6 +17,7 @@ uses
     DependencyContainerIntf,
     EnvironmentIntf,
     StdInIntf,
+    StdOutIntf,
     DispatcherIntf,
     CoreAppConsts,
     CoreAppImpl;
@@ -35,14 +36,16 @@ type
          *------------------------------------------------
          * @param container dependency container
          * @param env CGI environment
-         * @param stdin stdin instance
+         * @param astdin stdin instance
+         * @param astdout stdout instance
          * @param dispatcher dispatcher instance
          * @return current application instance
          *-----------------------------------------------*)
         function doExecute(
             const container : IDependencyContainer;
             const env : ICGIEnvironment;
-            const stdin : IStdIn;
+            const astdin : IStdIn;
+            const astdout : IStdOut;
             const dispatcher : IDispatcher
         ) : IRunnable; override;
     public
@@ -60,20 +63,22 @@ uses
      *------------------------------------------------
      * @param container dependency container
      * @param env CGI environment
-     * @param stdin stdin instance
+     * @param astdin stdin instance
+     * @param astdout stdout instance
      * @param dispatcher dispatcher instance
      * @return current application instance
      *-----------------------------------------------*)
     function TCgiWebApplication.doExecute(
         const container : IDependencyContainer;
         const env : ICGIEnvironment;
-        const stdin : IStdIn;
+        const astdin : IStdIn;
+        const astdout : IStdOut;
         const dispatcher : IDispatcher
     ) : IRunnable;
     begin
         if (initialize(container)) then
         begin
-            execute(env, stdin, dispatcher);
+            execute(env, astdin, astdout, dispatcher);
         end;
         result := self;
     end;
@@ -89,6 +94,7 @@ uses
             fAppSvc.container,
             fAppSvc.env,
             fAppSvc.stdIn,
+            fAppSvc.stdOut,
             fAppSvc.errorHandler,
             fAppSvc.dispatcher
         );

@@ -20,6 +20,7 @@ uses
     DispatcherIntf,
     EnvironmentIntf,
     StdInIntf,
+    StdOutIntf,
     RouteMatcherIntf,
     RouterIntf;
 
@@ -50,6 +51,10 @@ type
 
         function getStdIn() : IStdIn;
         property stdIn : IStdIn read getStdIn;
+
+        function getStdOut() : IStdOut;
+        property stdOut : IStdOut read getStdOut;
+
     end;
 
 implementation

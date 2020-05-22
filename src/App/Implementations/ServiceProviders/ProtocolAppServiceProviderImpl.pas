@@ -29,12 +29,10 @@ type
      *-----------------------------------------------}
     TProtocolAppServiceProvider = class (TDecoratorDaemonAppServiceProvider)
     protected
-        fStdOut : IStdOut;
         fProtocol : IProtocolProcessor;
     public
         destructor destroy(); override;
         function getProtocol() : IProtocolProcessor; override;
-        function getStdOut() : IStdOut; override;
     end;
 
 implementation
@@ -42,17 +40,11 @@ implementation
     destructor TProtocolAppServiceProvider.destroy();
     begin
         fProtocol := nil;
-        fStdOut := nil;
         inherited destroy();
     end;
 
     function TProtocolAppServiceProvider.getProtocol() : IProtocolProcessor;
     begin
         result := fProtocol;
-    end;
-
-    function TProtocolAppServiceProvider.getStdOut() : IStdOut;
-    begin
-        result := fStdOut;
     end;
 end.

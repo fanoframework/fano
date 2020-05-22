@@ -42,8 +42,6 @@ type
 
         function getOutputBuffer() : IOutputBuffer; virtual;
 
-        function getStdOut() : IStdOut; virtual;
-
     end;
 
 implementation
@@ -82,10 +80,5 @@ uses
     function TDecoratorDaemonAppServiceProvider.getOutputBuffer() : IOutputBuffer;
     begin
         result := fDaemonSvc.getOutputBuffer();
-    end;
-
-    function TDecoratorDaemonAppServiceProvider.getStdOut() : IStdOut;
-    begin
-        result := fDaemonSvc.getStdOut();
     end;
 end.

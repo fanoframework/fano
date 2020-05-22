@@ -18,7 +18,8 @@ uses
     DependencyIntf,
     CloneableIntf,
     ListIntf,
-    HeadersIntf;
+    HeadersIntf,
+    StdOutIntf;
 
 type
 
@@ -104,11 +105,12 @@ type
         function has(const key : shortstring) : boolean;
 
         (*!------------------------------------
-         * output http headers to STDIN
+         * output http headers to STDOUT
          *-------------------------------------
+         * @param astdOut standard output implementation
          * @return header instance
          *-------------------------------------*)
-        function writeHeaders() : IHeaders;
+        function writeHeaders(const aStdOut : IStdOut) : IHeaders;
 
         function clone() : ICloneable;
     end;
@@ -318,9 +320,10 @@ type
     (*!------------------------------------
      * output http headers to STDOUT
      *-------------------------------------
+     * @param astdout standard output
      * @return header instance
      *-------------------------------------*)
-    function THeaders.writeHeaders() : IHeaders;
+    function THeaders.writeHeaders(const aStdOut : IStdOut) : IHeaders;
     var i, len : integer;
         hdr : PHeaderRec;
     begin
@@ -328,11 +331,11 @@ type
         for i :=0 to len-1 do
         begin
             hdr := headerList.get(i);
-            writeln(hdr^.key, ': ', hdr^.value);
+            aStdOut.writeln(hdr^.key, ': ', hdr^.value);
         end;
 
         //CGI protocol requires that header and body are separated by blank line
-        writeln();
+        aStdOut.writeln('');
         result := self;
     end;
 
