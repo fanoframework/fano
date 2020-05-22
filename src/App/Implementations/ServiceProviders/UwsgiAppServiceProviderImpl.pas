@@ -44,7 +44,7 @@ uses
     NonBlockingProtocolProcessorImpl,
     HashListImpl;
 
-    function TUwsgiAppServiceProvider.buildProtocol() : IProtocolProcessor; override;
+    function TUwsgiAppServiceProvider.buildProtocol() : IProtocolProcessor;
     begin
         result := TNonBlockingProtocolProcessor.create(
             TUwsgiProcessor.create(TUwsgiParser.create()),

@@ -48,7 +48,7 @@ uses
     StreamAdapterCollectionFactoryImpl,
     FcgiStdOutWriterImpl;
 
-    function TFastCgiAppServiceProvider.buildProtocol() : IProtocolProcessor; override;
+    function TFastCgiAppServiceProvider.buildProtocol() : IProtocolProcessor;
     var
         aParserFactory : IFcgiFrameParserFactory;
     begin

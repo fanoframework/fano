@@ -44,7 +44,7 @@ uses
     NonBlockingProtocolProcessorImpl,
     HashListImpl;
 
-    function TScgiAppServiceProvider.buildProtocol() : IProtocolProcessor; override;
+    function TScgiAppServiceProvider.buildProtocol() : IProtocolProcessor;
     begin
         result := TNonBlockingProtocolProcessor.create(
             TScgiProcessor.create(TScgiParser.create()),
