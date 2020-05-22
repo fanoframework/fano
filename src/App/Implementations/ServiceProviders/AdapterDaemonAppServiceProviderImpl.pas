@@ -69,7 +69,6 @@ uses
         inherited create(actualSvc);
         fServer := buildServer();
         fProtocol := buildProtocol();
-        fStdOut := buildStdOut();
         fOutputBuffer := buildOutputBuffer();
     end;
 
@@ -77,7 +76,6 @@ uses
     begin
         fServer := nil;
         fProtocol := nil;
-        fStdOut := nil;
         fOutputBuffer := nil;
         inherited destroy();
     end;
