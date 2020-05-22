@@ -238,7 +238,7 @@ uses
         const dispatcher : IDispatcher
     ) : IRunnable;
     begin
-        execute(env, stdin, astdout, dispatcher);
+        execute(env, astdin, astdout, dispatcher);
         result := self;
     end;
 
