@@ -30,7 +30,10 @@ type
     private
         httpHeaders : IHeaders;
         bodyStream : IResponseStream;
-        procedure writeToStdOutput(const respBody : IResponseStream);
+        procedure writeToStdOutput(
+            const respBody : IResponseStream;
+            const aStdOut : IStdOut
+        );
     public
         constructor create(
             const hdrs : IHeaders;
