@@ -59,8 +59,6 @@ type
 
         function getProtocol() : IProtocolProcessor;
 
-        function getOutputBuffer() : IOutputBuffer;
-
     end;
 
 implementation

@@ -36,9 +36,6 @@ type
         function getProtocol() : IProtocolProcessor;
         property protocol : IProtocolProcessor read getProtocol;
 
-        function getOutputBuffer() : IOutputBuffer;
-        property outputBuffer : IOutputBuffer read getOutputBuffer;
-
     end;
 
 implementation
