@@ -89,7 +89,6 @@ uses
     begin
         fServer := nil;
         fProtocol := nil;
-        fStdOut := nil;
         fOutputBuffer := nil;
         inherited destroy();
     end;
