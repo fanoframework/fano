@@ -59,8 +59,8 @@ implementation
 
     destructor TLogErrorHandler.destroy();
     begin
-        inherited destroy();
         logger := nil;
+        inherited destroy();
     end;
 
     function TLogErrorHandler.getStackTrace(

@@ -22,6 +22,7 @@ uses
     EnvironmentEnumeratorIntf,
     ErrorHandlerIntf,
     StdInIntf,
+    StdOutIntf,
     RouterIntf,
     RouteBuilderIntf,
     CoreAppConsts;
@@ -42,13 +43,15 @@ type
          * execute application and write response
          *------------------------------------------------
          * @param env CGI environment
-         * @param stdin stdin instance
+         * @param astdin stdin instance
+         * @param astdout stdout instance
          * @param dispatcher dispatcher instance
          * @return current application instance
          *-----------------------------------------------*)
         function execute(
             const env : ICGIEnvironment;
-            const stdin : IStdIn;
+            const astdin : IStdIn;
+            const astdout : IStdOut;
             const dispatcher : IDispatcher
         ) : IRunnable;
 
@@ -57,7 +60,8 @@ type
          *------------------------------------------------
          * @param container dependency container
          * @param env CGI environment
-         * @param stdin stdin instance
+         * @param astdin stdin instance
+         * @param astdout stdout instance
          * @param errorHandler error handler instance
          * @param dispatcher dispatcher instance
          * @return current application instance
@@ -65,7 +69,8 @@ type
         function execAndHandleExcept(
             const container : IDependencyContainer;
             const env : ICGIEnvironment;
-            const stdin : IStdIn;
+            const astdin : IStdIn;
+            const astdout : IStdOut;
             const errorHandler : IErrorHandler;
             const dispatcher : IDispatcher
         ) : IRunnable;
@@ -75,14 +80,16 @@ type
          *------------------------------------------------
          * @param container dependency container
          * @param env CGI environment
-         * @param stdin stdin instance
+         * @param astdin stdin instance
+         * @param astdin stdout instance
          * @param dispatcher dispatcher instance
          * @return current application instance
          *-----------------------------------------------*)
         function doExecute(
             const container : IDependencyContainer;
             const env : ICGIEnvironment;
-            const stdin : IStdIn;
+            const astdin : IStdIn;
+            const astdout : IStdOut;
             const dispatcher : IDispatcher
         ) : IRunnable; virtual; abstract;
 
@@ -197,14 +204,15 @@ uses
      *-----------------------------------------------*)
     function TCoreWebApplication.execute(
         const env : ICGIEnvironment;
-        const stdin : IStdIn;
+        const astdin : IStdIn;
+        const astdout : IStdOut;
         const dispatcher : IDispatcher
     ) : IRunnable;
     var response : IResponse;
     begin
-        response := dispatcher.dispatchRequest(env, stdIn);
+        response := dispatcher.dispatchRequest(env, astdIn);
         try
-            response.write();
+            response.write(astdout);
             result := self;
         finally
             response := nil;
@@ -224,13 +232,14 @@ uses
     function TCoreWebApplication.execAndHandleExcept(
         const container : IDependencyContainer;
         const env : ICGIEnvironment;
-        const stdin : IStdIn;
+        const astdin : IStdIn;
+        const astdout : IStdOut;
         const errorHandler : IErrorHandler;
         const dispatcher : IDispatcher
     ) : IRunnable;
     begin
         try
-            result := doExecute(container, env, stdin, dispatcher);
+            result := doExecute(container, env, astdin, astdout, dispatcher);
         except
             on e : EInvalidRequest do
             begin

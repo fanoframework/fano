@@ -18,8 +18,9 @@ uses
     sysutils,
     DependencyIntf,
     ErrorHandlerIntf,
+    StdOutIntf,
     EnvironmentEnumeratorIntf,
-    BaseErrorHandlerImpl;
+    StdOutErrorHandlerImpl;
 
 type
 
@@ -29,7 +30,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
-    TAjaxErrorHandler = class(TBaseErrorHandler)
+    TAjaxErrorHandler = class(TStdOutErrorHandler)
     private
         function getStackTrace(const e: Exception) : string;
     public
@@ -97,10 +98,10 @@ implementation
         const msg : string  = 'Internal Server Error'
     ) : IErrorHandler;
     begin
-        writeln('Content-Type: application/json');
-        writeln('Status: ', intToStr(status), ' ', msg);
-        writeln();
-        writeln(getStackTrace(exc));
+        fStdOut.writeln('Content-Type: application/json');
+        fStdOut.writeln('Status: ' + intToStr(status) + ' ' + msg);
+        fStdOut.writeln();
+        fStdOut.writeln(getStackTrace(exc));
         result := self;
     end;
 end.

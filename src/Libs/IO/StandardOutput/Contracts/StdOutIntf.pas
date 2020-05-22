@@ -51,7 +51,7 @@ type
          * @param str, string to write
          * @return current instance
          *-----------------------------------------------*)
-        function writeln(const str : string) : IStdOut;
+        function writeln(const str : string = '') : IStdOut;
     end;
 
 implementation

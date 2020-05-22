@@ -335,7 +335,7 @@ type
         end;
 
         //CGI protocol requires that header and body are separated by blank line
-        aStdOut.writeln('');
+        aStdOut.writeln();
         result := self;
     end;
 

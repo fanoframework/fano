@@ -17,7 +17,7 @@ uses
     sysutils,
     ErrorHandlerIntf,
     EnvironmentEnumeratorIntf,
-    BaseErrorHandlerImpl;
+    StdOutErrorHandlerImpl;
 
 type
 
@@ -25,7 +25,7 @@ type
      default error handler to surpress error message
      @author Zamrony P. Juhara <zamronypj@yahoo.com>
     -----------------------------------------------}
-    TNullErrorHandler = class(TBaseErrorHandler)
+    TNullErrorHandler = class(TStdOutErrorHandler)
     public
         function handleError(
             const env : ICGIEnvironmentEnumerator;
@@ -44,10 +44,10 @@ implementation
         const msg : string  = 'Internal Server Error'
     ) : IErrorHandler;
     begin
-        writeln('Content-Type: text/html');
-        writeln('Status: ', intToStr(status), ' ', msg);
-        writeln();
-        writeln('');
+        fStdOut.writeln('Content-Type: text/html');
+        fStdOut.writeln('Status: ', intToStr(status), ' ', msg);
+        fStdOut.writeln();
+        fStdOut.writeln('');
         result := self;
     end;
 end.

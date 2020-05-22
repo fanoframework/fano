@@ -18,7 +18,7 @@ uses
     sysutils,
     ErrorHandlerIntf,
     EnvironmentEnumeratorIntf,
-    BaseErrorHandlerImpl;
+    StdOutErrorHandlerImpl;
 
 type
 
@@ -27,7 +27,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
-    TFancyErrorHandler = class(TBaseErrorHandler)
+    TFancyErrorHandler = class(TStdOutErrorHandler)
     private
         function getStackTrace(const e: Exception) : string;
         function getEnvTrace(const env: ICGIEnvironmentEnumerator) : string;
@@ -104,13 +104,13 @@ implementation
         const msg : string  = 'Internal Server Error'
     ) : IErrorHandler;
     begin
-        writeln('Content-Type: text/html');
-        writeln('Status: ', intToStr(status), ' ', msg);
-        writeln();
-        writeln(STR_HEAD_HTML);
-        writeln(getStackTrace(exc));
-        writeln(getEnvTrace(env));
-        writeln('</div></body></html>');
+        fStdOut.writeln('Content-Type: text/html');
+        fStdOut.writeln('Status: ' + intToStr(status) + ' ' + msg);
+        fStdOut.writeln();
+        fStdOut.writeln(STR_HEAD_HTML);
+        fStdOut.writeln(getStackTrace(exc));
+        fStdOut.writeln(getEnvTrace(env));
+        fStdOut.writeln('</div></body></html>');
         result := self;
     end;
 end.

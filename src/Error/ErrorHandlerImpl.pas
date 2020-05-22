@@ -27,7 +27,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
-    TErrorHandler = class(TBaseErrorHandler)
+    TErrorHandler = class(TStdOutErrorHandler)
     private
         function getStackTrace(const e: Exception) : string;
         function getEnvTrace(const env: ICGIEnvironmentEnumerator) : string;
@@ -89,17 +89,17 @@ implementation
         const msg : string  = 'Internal Server Error'
     ) : IErrorHandler;
     begin
-        writeln('Content-Type: text/html');
-        writeln('Status: ', intToStr(status), ' ', msg);
-        writeln();
-        writeln(
+        fStdOut.writeln('Content-Type: text/html');
+        fStdOut.writeln('Status: ' + intToStr(status) + ' ' + msg);
+        fStdOut.writeln();
+        fStdOut.writeln(
             '<!DOCTYPE html><html><head>' +
             '<title>Fano Application Error</title></head><body>' +
             '<h2>Fano Application Error</h2>'
         );
-        writeln(getStackTrace(exc));
-        writeln(getEnvTrace(env));
-        writeln('</body></html>');
+        fStdOut.writeln(getStackTrace(exc));
+        fStdOut.writeln(getEnvTrace(env));
+        fStdOut.writeln('</body></html>');
         result := self;
     end;
 end.

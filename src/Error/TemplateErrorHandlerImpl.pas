@@ -18,7 +18,7 @@ uses
     sysutils,
     ErrorHandlerIntf,
     EnvironmentEnumeratorIntf,
-    BaseErrorHandlerImpl;
+    StdOutErrorHandlerImpl;
 
 type
 
@@ -28,7 +28,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TTemplateErrorHandler = class(TBaseErrorHandler)
+    TTemplateErrorHandler = class(TStdOutErrorHandler)
     private
         templateStr : string;
     public
@@ -68,10 +68,10 @@ uses
         const msg : string  = 'Internal Server Error'
     ) : IErrorHandler;
     begin
-        writeln('Content-Type: text/html');
-        writeln('Status: ', intToStr(status), ' ', msg);
-        writeln();
-        writeln(templateStr);
+        fStdOut.writeln('Content-Type: text/html');
+        fStdOut.writeln('Status: ' + intToStr(status) + ' ' + msg);
+        fStdOut.writeln();
+        fStdOut.writeln(templateStr);
         result := self;
     end;
 end.

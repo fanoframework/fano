@@ -97,10 +97,10 @@ implementation
 
     destructor THtmlAjaxErrorHandler.destroy();
     begin
-        inherited destroy();
         ajaxDetector := nil;
         ajaxErrorHandler := nil;
         htmlErrorHandler := nil;
+        inherited destroy();
     end;
 
     (*!---------------------------------------------------
