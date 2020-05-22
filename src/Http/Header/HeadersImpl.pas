@@ -331,7 +331,7 @@ type
         for i :=0 to len-1 do
         begin
             hdr := headerList.get(i);
-            aStdOut.writeln(hdr^.key, ': ', hdr^.value);
+            aStdOut.writeln(hdr^.key + ': ' + hdr^.value);
         end;
 
         //CGI protocol requires that header and body are separated by blank line
