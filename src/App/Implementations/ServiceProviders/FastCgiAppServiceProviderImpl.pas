@@ -61,7 +61,7 @@ uses
 
     function TFastCgiAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;
     begin
-        result := TFcgiStdOutWriter.create(fProtocol as IFcgiRequestIdAware);
+        result := TFcgiStdOutWriter.create(getProtocol() as IFcgiRequestIdAware);
     end;
 
 end.
