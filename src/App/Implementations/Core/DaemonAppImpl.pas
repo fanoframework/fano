@@ -60,14 +60,16 @@ type
          *------------------------------------------------
          * @param container dependency container
          * @param env CGI environment
-         * @param stdin stdin instance
+         * @param astdin stdin instance
+         * @param astdout stdout instance
          * @param dispatcher dispatcher instance
          * @return current application instance
          *-----------------------------------------------*)
         function doExecute(
             const container : IDependencyContainer;
             const env : ICGIEnvironment;
-            const stdin : IStdIn;
+            const astdin : IStdIn;
+            const astdout : IStdOut;
             const dispatcher : IDispatcher
         ) : IRunnable; override;
 
@@ -223,18 +225,20 @@ uses
      *------------------------------------------------
      * @param container dependency container
      * @param env CGI environment
-     * @param stdin stdin instance
+     * @param astdin stdin instance
+     * @param astdout stdout instance
      * @param dispatcher dispatcher instance
      * @return current application instance
      *-----------------------------------------------*)
     function TDaemonWebApplication.doExecute(
         const container : IDependencyContainer;
         const env : ICGIEnvironment;
-        const stdin : IStdIn;
+        const astdin : IStdIn;
+        const astdout : IStdOut;
         const dispatcher : IDispatcher
     ) : IRunnable;
     begin
-        execute(env, stdin, dispatcher);
+        execute(env, stdin, astdout, dispatcher);
         result := self;
     end;
 
