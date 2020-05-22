@@ -106,11 +106,6 @@ uses
         result := TStdInFromStream.create(TNullStreamAdapter.create());
     end;
 
-    function TDaemonAppServiceProvider.getOutputBuffer() : IOutputBuffer;
-    begin
-        result := fOutputBuffer;
-    end;
-
     function TDaemonAppServiceProvider.getServer() : IRunnableWithDataNotif;
     begin
         result := fServer;
