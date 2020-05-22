@@ -134,8 +134,4 @@ uses
         result := fProtocol;
     end;
 
-    function TDaemonAppServiceProvider.getStdOut() : IStdOut;
-    begin
-        result := fStdOut;
-    end;
 end.
