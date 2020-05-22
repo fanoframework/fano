@@ -17,7 +17,7 @@ uses
     DependencyContainerIntf,
     StdOutIntf,
     DaemonAppServiceProviderIntf,
-    ProtocolAppServiceProviderImpl;
+    DaemonAppServiceProviderImpl;
 
 type
 
