@@ -117,9 +117,11 @@ resourcestring
         fContainer := buildContainer();
         fAppConfig := buildAppConfig(fContainer);
         fEnv := buildEnvironment(fContainer);
-        fErrHandler := buildErrorHandler(fContainer, fAppConfig);
         fStdIn := buildStdIn(fContainer);
         fStdOut := buildStdOut(fContainer);
+        //some error handler implementation needs stdout, so
+        //make sure we build after we build stdout
+        fErrHandler := buildErrorHandler(fContainer, fAppConfig);
         fRouter := buildRouter(fContainer);
         fDispatcher := buildDispatcher(fContainer, getRouteMatcher(), fAppConfig);
     end;
@@ -148,7 +150,7 @@ resourcestring
         const config : IAppConfiguration
     ) : IErrorHandler;
     begin
-        result := TFancyErrorHandler.create();
+        result := TFancyErrorHandler.create(fStdOut);
     end;
 
     function TBasicAppServiceProvider.buildEnvironment(
