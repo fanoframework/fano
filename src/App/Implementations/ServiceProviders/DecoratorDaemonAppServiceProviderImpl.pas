@@ -40,8 +40,6 @@ type
 
         function getProtocol() : IProtocolProcessor; virtual;
 
-        function getOutputBuffer() : IOutputBuffer; virtual;
-
     end;
 
 implementation
@@ -77,8 +75,4 @@ uses
         result := fDaemonSvc.getProtocol();
     end;
 
-    function TDecoratorDaemonAppServiceProvider.getOutputBuffer() : IOutputBuffer;
-    begin
-        result := fDaemonSvc.getOutputBuffer();
-    end;
 end.
