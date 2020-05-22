@@ -42,14 +42,11 @@ type
     private
         fServer : IRunnableWithDataNotif;
         fProtocol : IProtocolProcessor;
-        fOutputBuffer : IOutputBuffer;
     protected
 
         function buildServer() : IRunnableWithDataNotif; virtual;
 
         function buildProtocol() : IProtocolProcessor; virtual;
-
-        function buildOutputBuffer() : IOutputBuffer; virtual;
 
         function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
 
@@ -82,14 +79,12 @@ uses
         inherited create();
         fServer := buildServer();
         fProtocol := buildProtocol();
-        fOutputBuffer := buildOutputBuffer();
     end;
 
     destructor TDaemonAppServiceProvider.destroy();
     begin
         fServer := nil;
         fProtocol := nil;
-        fOutputBuffer := nil;
         inherited destroy();
     end;
 
@@ -101,11 +96,6 @@ uses
     function TDaemonAppServiceProvider.buildProtocol() : IProtocolProcessor;
     begin
         result := TNullProtocolProcessor.create();
-    end;
-
-    function TDaemonAppServiceProvider.buildOutputBuffer() : IOutputBuffer;
-    begin
-        result := TOutputBuffer.create();
     end;
 
     function TDaemonAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;

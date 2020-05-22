@@ -30,8 +30,7 @@ type
     TUwsgiAppServiceProvider = class (TProtocolAppServiceProvider)
     protected
         function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
-    public
-        constructor create(const actualSvc : IDaemonAppServiceProvider);
+        function buildProtocol() : IProtocolProcessor; override;
     end;
 
 implementation
@@ -44,10 +43,9 @@ uses
     NonBlockingProtocolProcessorImpl,
     HashListImpl;
 
-    constructor TUwsgiAppServiceProvider.create(const actualSvc : IDaemonAppServiceProvider);
+    function TUwsgiAppServiceProvider.buildProtocol() : IProtocolProcessor; override;
     begin
-        inherited create(actualSvc);
-        fProtocol := TNonBlockingProtocolProcessor.create(
+        result := TNonBlockingProtocolProcessor.create(
             TUwsgiProcessor.create(TUwsgiParser.create()),
             THashList.create()
         );

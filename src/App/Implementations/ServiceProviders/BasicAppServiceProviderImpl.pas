@@ -150,7 +150,7 @@ resourcestring
         const config : IAppConfiguration
     ) : IErrorHandler;
     begin
-        result := TFancyErrorHandler.create(fStdOut);
+        result := TFancyErrorHandler.create(getStdOut());
     end;
 
     function TBasicAppServiceProvider.buildEnvironment(

@@ -28,11 +28,10 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
-    TFastCgiAppServiceProvider = class (TProtocolAppServiceProvider)
+    TFastCgiAppServiceProvider = class (TDaemonAppServiceProvider)
     protected
         function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
-    public
-        constructor create(const actualSvc : IDaemonAppServiceProvider);
+        function buildProtocol() : IProtocolProcessor; override;
     end;
 
 implementation
@@ -48,13 +47,12 @@ uses
     StreamAdapterCollectionFactoryImpl,
     FcgiStdOutWriterImpl;
 
-    constructor TFastCgiAppServiceProvider.create(const actualSvc : IDaemonAppServiceProvider);
+    function TFastCgiAppServiceProvider.buildProtocol() : IProtocolProcessor; override;
     var
         aParserFactory : IFcgiFrameParserFactory;
     begin
-        inherited create(actualSvc);
         aParserFactory := TFcgiFrameParserFactory.create();
-        fProtocol := TFcgiProcessor.create(
+        result := TFcgiProcessor.create(
             aParserFactory.build(),
             TFcgiRequestManager.create(TStreamAdapterCollectionFactory.create())
         );
