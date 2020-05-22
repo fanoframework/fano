@@ -14,6 +14,7 @@ interface
 
 uses
 
+    DependencyContainerIntf,
     StdOutIntf,
     DaemonAppServiceProviderIntf,
     ProtocolAppServiceProviderImpl;
