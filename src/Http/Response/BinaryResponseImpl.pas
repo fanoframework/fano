@@ -18,6 +18,7 @@ uses
     ResponseStreamIntf,
     HeadersIntf,
     CloneableIntf,
+    StdOutIntf,
     BaseResponseImpl;
 
 type
