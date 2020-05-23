@@ -28,7 +28,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
-    TUwsgiAppServiceProvider = class (TProtocolAppServiceProvider)
+    TUwsgiAppServiceProvider = class (TDaemonAppServiceProvider)
     protected
         function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
         function buildProtocol() : IProtocolProcessor; override;
