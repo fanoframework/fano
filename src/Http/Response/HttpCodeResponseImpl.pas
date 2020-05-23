@@ -20,6 +20,7 @@ uses
     HeadersIntf,
     ResponseStreamIntf,
     CloneableIntf,
+    StdOutIntf,
     ResponseImpl;
 
 type
@@ -44,7 +45,7 @@ type
          *-------------------------------------
          * @return current instance
          *-------------------------------------*)
-        function write() : IResponse; override;
+        function write(const astdout : IStdOut) : IResponse; override;
 
     end;
 
@@ -79,10 +80,10 @@ uses
      *-------------------------------------
      * @return current instance
      *-------------------------------------*)
-    function THttpCodeResponse.write() : IResponse;
+    function THttpCodeResponse.write(const astdout : IStdOut) : IResponse;
     begin
         headers().setHeader('Status', fHttpStatus);
-        inherited write();
+        inherited write(astdout);
         result := self;
     end;
 end.

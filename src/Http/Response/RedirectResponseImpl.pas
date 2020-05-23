@@ -18,7 +18,8 @@ uses
     CloneableIntf,
     ResponseIntf,
     ResponseStreamIntf,
-    HeadersIntf;
+    HeadersIntf,
+    StdOutIntf;
 
 type
     (*!------------------------------------------------
@@ -52,7 +53,7 @@ type
          *-------------------------------------*)
         function headers() : IHeaders;
 
-        function write() : IResponse;
+        function write(const astdout : IStdOut) : IResponse;
 
         (*!------------------------------------
          * get response body
@@ -135,11 +136,11 @@ uses
         result := httpHeaders;
     end;
 
-    function TRedirectResponse.write() : IResponse;
+    function TRedirectResponse.write(const astdout : IStdOut) : IResponse;
     begin
         httpHeaders.setHeader('Status', intToStr(fStatus) + ' ' + redirectCodeMessage(fStatus));
         httpHeaders.setHeader('Location', fUrl);
-        httpHeaders.writeHeaders();
+        httpHeaders.writeHeaders(astdout);
         result := self;
     end;
 

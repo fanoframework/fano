@@ -41,7 +41,7 @@ type
          *-------------------------------------
          * @return current instance
          *-------------------------------------*)
-        function write() : IResponse; override;
+        function write(const astdout : IStdOut) : IResponse; override;
 
         function clone() : ICloneable; override;
 
@@ -64,13 +64,13 @@ uses
         contentType := strContentType;
     end;
 
-    function TBinaryResponse.write() : IResponse;
+    function TBinaryResponse.write(const astdout : IStdOut) : IResponse;
     var hdrs : IHeaders;
     begin
         hdrs := headers();
         hdrs.setHeader('Content-Type', contentType);
         hdrs.setHeader('Content-Length', intToStr(body().size()));
-        result := inherited write();
+        result := inherited write(astdout);
     end;
 
     function TBinaryResponse.clone() : ICloneable;

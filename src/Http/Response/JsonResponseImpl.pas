@@ -18,6 +18,7 @@ uses
     ResponseIntf,
     ResponseStreamIntf,
     HeadersIntf,
+    StdOutIntf,
     CloneableIntf;
 
 type
@@ -41,7 +42,7 @@ type
          *-------------------------------------*)
         function headers() : IHeaders;
 
-        function write() : IResponse;
+        function write(const astdout : IStdOut) : IResponse;
         function clone() : ICloneable;
 
         (*!------------------------------------
@@ -91,12 +92,12 @@ uses
         result := httpHeaders;
     end;
 
-    function TJsonResponse.write() : IResponse;
+    function TJsonResponse.write(const astdout : IStdOut) : IResponse;
     begin
         httpHeaders.setHeader('Content-Type', 'application/json');
         httpHeaders.setHeader('Content-Length', intToStr(responseStream.size()));
-        httpHeaders.writeHeaders();
-        writeln(responseStream.read());
+        httpHeaders.writeHeaders(astdout);
+        astdout.writeln(responseStream.read());
         result := self;
     end;
 

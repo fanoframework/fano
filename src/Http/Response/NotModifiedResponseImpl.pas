@@ -19,6 +19,7 @@ uses
     ResponseIntf,
     ResponseStreamIntf,
     HeadersIntf,
+    StdOutIntf,
     HttpCodeResponseImpl;
 
 type
@@ -38,7 +39,7 @@ type
          *-------------------------------------*)
         constructor create(const hdrs : IHeaders);
 
-        function write() : IResponse; override;
+        function write(const astdout : IStdOut) : IResponse; override;
 
         function clone() : ICloneable; override;
     end;
@@ -78,10 +79,10 @@ uses
         ]);
     end;
 
-    function TNotModifiedResponse.write() : IResponse;
+    function TNotModifiedResponse.write(const astdout : IStdOut) : IResponse;
     begin
         excludeHeaders();
-        inherited write();
+        inherited write(astdout);
         result := self;
     end;
 
