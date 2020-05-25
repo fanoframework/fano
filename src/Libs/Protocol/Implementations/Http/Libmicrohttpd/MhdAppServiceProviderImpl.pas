@@ -16,7 +16,7 @@ uses
 
     RunnableWithDataNotifIntf,
     DaemonAppServiceProviderIntf,
-    ProtocolAppServiceProviderImpl,
+    DaemonAppServiceProviderImpl,
     MhdSvrConfigTypes;
 
 type
@@ -28,9 +28,15 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
-    TMhdAppServiceProvider = class (TProtocolAppServiceProvider)
+    TMhdAppServiceProvider = class (TDaemonAppServiceProvider)
     private
-        fServer : IRunnableWithDataNotif;
+        fSvrConfig : TMhdSvrConfig
+    protected
+        function buildServer() : IRunnableWithDataNotif; override;
+
+        function buildProtocol() : IProtocolProcessor; override;
+
+        function buildStdOut(const ctnr : IDependencyContainer) : IStdOut; override;
     public
         constructor create(
             const actualSvc : IDaemonAppServiceProvider;
@@ -49,26 +55,29 @@ uses
     MhdStdOutWriterImpl;
 
     constructor TMhdAppServiceProvider.create(
-        const actualSvc : IDaemonAppServiceProvider;
         const svrConfig : TMhdSvrConfig
     );
     begin
-        inherited create(actualSvc);
-        fStdOut := TMhdStdOutWriter.create();
-        fProtocol := TMhdProcessor.create(fStdOut as IMhdConnectionAware, svrConfig);
+        inherited create();
+        fSvrConfig := svrConfig;
+    end;
+
+    function TMhdAppServiceProvider.buildServer() : IRunnableWithDataNotif;
+    begin
         //TMhdProcessor also act as server
-        fServer := fProtocol as IRunnableWithDataNotif;
+        result := fProtocol as IRunnableWithDataNotif;
     end;
 
-    destructor TMhdAppServiceProvider.destroy();
+    function TMhdAppServiceProvider.buildProtocol() : IProtocolProcessor;
     begin
-        fServer := nil;
-        inherited destroy();
+        result := TMhdProcessor.create(fStdOut as IMhdConnectionAware, svrConfig);
+        //TMhdProcessor also act as server
+        fServer := result as IRunnableWithDataNotif;
     end;
 
-    function TMhdAppServiceProvider.getServer() : IRunnableWithDataNotif;
+    function TMhdAppServiceProvider.buildStdOut(const ctnr : IDependencyContainer) : IStdOut;
     begin
-        result := fServer;
+        result := TMhdStdOutWriter.create();
     end;
 
 end.
