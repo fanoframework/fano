@@ -58,18 +58,6 @@ Fano Framework is not yet supported on Windows.
 
 ## Roadmap
 
-- Secure file upload support (in progress)
-- FastCGI protocol support (in progress)
-- Cookie and session support
-- Run application with built-in web server
-- Run application as Apache module
-- Improve route matching performance
-- MongoDb database support (in progress)
-- Redis database support (in progress)
-- Elasticsearch database support
-- Improve data validation and sanitation
-- Unit test
-
 See [Projects](https://github.com/orgs/fanoframework/projects) for more information about what is currently being developed or planed.
 
 ## Copyright Notice
