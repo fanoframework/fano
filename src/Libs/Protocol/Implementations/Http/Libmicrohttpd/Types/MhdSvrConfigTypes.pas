@@ -24,6 +24,13 @@ type
         serverSignature : string;
         serverAdmin : string;
         timeout : longword;
+
+        //set to true if using https
+        useTLS : boolean;
+        //SSL certificate key file path
+        tlsKey : string;
+        //SSL certificate file path
+        tlsCert : string;
     end;
 
 implementation

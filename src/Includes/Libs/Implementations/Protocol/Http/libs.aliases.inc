@@ -7,8 +7,10 @@
  *}
 
 {------------ Begin libmicrohttpd-related------------------}
+{$IFDEF LIBMICROHTTPD}
 TMhdSvrConfig = MhdSvrConfigTypes.TMhdSvrConfig;
 TMhdAppServiceProvider = MhdAppServiceProviderImpl.TMhdAppServiceProvider;
 TMhdStdOutWriter = MhdStdOutWriterImpl.TMhdStdOutWriter;
 TMhdProcessor = MhdProcessorImpl.TMhdProcessor;
+{$ENDIF}
 {------------ End libmicrohttpd-related------------------}

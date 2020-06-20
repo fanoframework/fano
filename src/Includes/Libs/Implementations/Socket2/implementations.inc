@@ -29,11 +29,28 @@ EpollIoHandlerImpl,
 
 SelectIoHandlerImpl,
 
+{$IFDEF FREEBSD}
+    {$IFDEF USE_KQUEUE}
+    KQueueIoHandlerImpl,
+    {$ENDIF}
+{$ENDIF}
+
 SocketOptsImpl,
 
 InetSvrFactoryImpl,
 UnixSvrFactoryImpl,
 BoundSvrFactoryImpl,
+
+{$IFDEF LINUX}
 EpollInetSvrFactoryImpl,
 EpollUnixSvrFactoryImpl,
 EpollBoundSvrFactoryImpl,
+{$ENDIF}
+
+{$IFDEF FREEBSD}
+    {$IFDEF USE_KQUEUE}
+    KQueueInetSvrFactoryImpl,
+    KQueueUnixSvrFactoryImpl,
+    KQueueBoundSvrFactoryImpl,
+    {$ENDIF}
+{$ENDIF}

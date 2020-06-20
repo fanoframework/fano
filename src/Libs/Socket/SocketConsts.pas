@@ -30,6 +30,10 @@ resourcestring
     rsEpollInitFailed = 'Fail to initialize epoll';
     rsEpollAddFileDescriptorFailed = 'Fail to add file descriptor';
 
+    rsKqueueInitFailed = 'Fail to initialize kqueue';
+    rsKqueueAddFileDescriptorFailed = 'Fail to add file descriptor';
+    rsKqueueDeleteFileDescriptorFailed = 'Fail to add file descriptor';
+
     rsSocketError = 'Socket error: %s (%d)';
     rsSocketReadFailed = 'Read socket failed, error: %s (%d)';
     rsSocketWriteFailed = 'Write socket failed, error: %s (%d)';

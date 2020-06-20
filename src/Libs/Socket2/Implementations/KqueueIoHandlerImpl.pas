@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit EpollIoHandlerImpl;
+unit KqueueIoHandlerImpl;
 
 interface
 
@@ -23,56 +23,58 @@ uses
     AbstractIoHandlerImpl,
     BaseUnix,
     Unix,
-    Linux;
+    Bsd;
 
 type
 
     (*!-----------------------------------------------
-     * I/O handler implementation using Linux epoll API
+     * I/O handler implementation using BSD kqueue API
      * to monitor file descriptors
      *------------------------------------------------
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TEpollIoHandler = class(TAbstractIoHandler)
+    TKqueueIoHandler = class(TAbstractIoHandler)
     private
+        fTimeoutVal : TTimeSpec;
+
         (*!-----------------------------------------------
          * accept all incoming connection until no more pending
          * connection available
          *-------------------------------------------------
-         * @param epollFd, file descriptor returned from epoll_create()
+         * @param kqFd, file descriptor returned from kqueue()
          * @param listenSocket, listen socket
          *-----------------------------------------------*)
         procedure acceptAllConnections(
-            const epollFd : longint;
+            const kqFd : longint;
             const listenSocket : IListenSocket
         );
 
         (*!-----------------------------------------------
          * wait for connection
          *-------------------------------------------------
-         * @param epollFd, file descriptor returned from epoll_create()
+         * @param kqFd, file descriptor returned from kqueue()
          * @param termPipeIn, terminate pipe in
          * @param listenSocket, listen socket
          * @param events, array of TEpoll_Event contained file descriptors
          * @param maxEvent, total item in events array
          *-----------------------------------------------*)
         procedure waitForConnection(
-            const epollFd : longint;
+            const kqFd : longint;
             const termPipeIn : longint;
             const listenSocket : IListenSocket;
-            const events : PEpoll_Event;
+            const events : PKEvent;
             const maxEvents : longint
         );
 
         (*!-----------------------------------------------
          * run wait for connection loop
          *-------------------------------------------------
-         * @param epollFd, file descriptor returned from epoll_create()
+         * @param kqFd, file descriptor returned from kqueue()
          * @param listenSocket, listen socket
          * @param termPipeIn, terminate pipe in
          *-----------------------------------------------*)
         procedure runWaitConnection(
-            const epollFd : longint;
+            const kqFd : longint;
             const listenSocket :IListenSocket;
             const termPipeIn : longint
         );
@@ -80,51 +82,55 @@ type
         (*!-----------------------------------------------
          * called when client connection is established
          *-------------------------------------------------
-         * @param epollFd, file descriptor returned from epoll_create()
+         * @param kqFd, file descriptor returned from kqueue()
          * @param clientSocket, socket handle where data can be read
          *-----------------------------------------------*)
         function handleClientConnection(
-            const epollFd : longint;
+            const kqFd : longint;
             const clientSocket : longint
         ) : boolean;
 
         (*!-----------------------------------------------
          * handle when one or more file descriptor is ready for I/O
          *-------------------------------------------------
-         * @param epollFd, file descriptor returned from epoll_create()
+         * @param kqFd, file descriptor returned from kqueue()
          * @param listenSocket, listen socket handle
          * @param pipeIn, terminate pipe input handle
          * @param totFd, total file descriptor ready for I/O
-         * @param events, array of TEpoll_Event contained file descriptors
+         * @param events, array of TKEvent contained file descriptors
          * @param terminated, set true if we should terminate
          *-----------------------------------------------*)
         procedure handleFileDescriptorIOReady(
-            const epollFd : longint;
+            const kqFd : longint;
             const listenSocket : IListenSocket;
             const pipeIn : longint;
             const totFd : longint;
-            const events : PEpoll_Event;
+            const events : PKEvent;
             var terminated : boolean
         );
 
         (*!-----------------------------------------------
          * add file descriptor to monitored set
          *-------------------------------------------------
-         * @param epollFd, file descriptor returned from epoll_create
+         * @param kqFd, file descriptor returned from kqueue()
          * @param fd, file descriptor to be added
-         * @param flag, operation flag
          *-----------------------------------------------*)
-        procedure addToMonitoredSet(const epollFd : longint; const fd : longint; const flag : cardinal);
+        procedure addToMonitoredSet(const kqFd : longint; const fd : longint);
 
         (*!-----------------------------------------------
          * remove file descriptor from monitored set
          *-------------------------------------------------
-         * @param epollFd, file descriptor returned from epoll_create()
+         * @param kqFd, file descriptor returned from kqueue()
          * @param fd, file descriptor to be removed
          *-----------------------------------------------*)
-        procedure removeFromMonitoredSet(const epollFd : longint; const fd : longint);
+        procedure removeFromMonitoredSet(const kqFd : longint; const fd : longint);
 
     public
+        constructor create(
+            const sockOpts : ISocketOpts;
+            const timeoutInMs : integer = 30000
+        );
+
         (*!-----------------------------------------------
          * handle incoming connection until terminated
          *------------------------------------------------
@@ -141,12 +147,10 @@ uses
 
     CloseableIntf,
     ESockWouldBlockImpl,
-    EEpollCreateImpl,
     StreamAdapterImpl,
     SockStreamImpl,
-    CloseableStreamImpl,
-    EpollCloseableImpl,
-    EEpollCtlImpl,
+    NullCloseableImpl,
+    EKqueueImpl,
     SocketConsts,
     DateUtils,
     SysUtils,
@@ -154,57 +158,75 @@ uses
     StreamIdIntf;
 
     (*!-----------------------------------------------
+     * convert timeout in millisecond to TTimeSpec record
+     *-------------------------------------------------
+     * @param timeoutInMs, timeout in millisecond
+     *-----------------------------------------------*)
+    function getTimeout(const timeoutInMs : integer) : TTimeSpec;
+    begin
+        result.tv_sec := timeoutInMs div 1000;
+        result.tv_nsec = (timeoutInMs mod 1000) * 1000000;
+    end;
+
+    constructor TKqueueIoHandler.create(
+        const sockOpts : ISocketOpts;
+        const timeoutInMs : integer = 30000
+    );
+    begin
+        inherited create(sockOpts, timeoutInMs);
+        fTimeoutVal := getTimeOut(timeoutInMs);
+    end;
+
+    (*!-----------------------------------------------
      * add file descriptor to monitored set
      *-------------------------------------------------
-     * @param epollFd, file descriptor returned from epoll_create
+     * @param kqFd, file descriptor returned from kqueue
      * @param fd, file descriptor to be added
      *-----------------------------------------------*)
-    procedure TEpollIoHandler.addToMonitoredSet(
-        const epollFd : longint;
-        const fd : longint;
-        const flag : cardinal
+    procedure TKqueueIoHandler.addToMonitoredSet(
+        const kqFd : longint;
+        const fd : longint
     );
-    var ev : TEpoll_Event;
+    var ev : TKEvent;
         res : longint;
     begin
-        ev.events := flag;
-        ev.data.fd := fd;
-        res := epoll_ctl(epollFd, EPOLL_CTL_ADD, fd, @ev);
+        EV_SET(@ev, fd, EVFILT_READ, EV_ADD, 0, nil, nil);
+        res := kevent(kqFd, @ev, 1, nil, 0, nil);
         if (res < 0) then
         begin
-            raise EEpollCtl.create(rsEpollAddFileDescriptorFailed);
+            raise EKqueue.create(rsKqueueAddFileDescriptorFailed);
         end;
     end;
 
     (*!-----------------------------------------------
      * remove file descriptor from monitored set
      *-------------------------------------------------
-     * @param epollFd, file descriptor returned from epoll_create()
+     * @param kqFd, file descriptor returned from kqueue()
      * @param fd, file descriptor to be removed
      *-----------------------------------------------*)
-    procedure TEpollIoHandler.removeFromMonitoredSet(
-        const epollFd : longint;
+    procedure TKqueueIoHandler.removeFromMonitoredSet(
+        const kqFd : longint;
         const fd : longint
     );
-    var ev : TEpoll_Event;
+    var ev : TKEvent;
     begin
-        //for EPOLL_CTRL_DEL, epoll_event is ignored but
-        //due to bug, Linux kernel < 2.6.9 requires non-NULL,
-        //here we just give them although not used.
-        ev.events := EPOLLIN;
-        ev.data.fd := fd;
-        epoll_ctl(epollFd, EPOLL_CTL_DEL, fd, @ev);
+        EV_SET(@ev, fd, EVFILT_READ, EV_DELETE, 0, nil, nil);
+        res := kevent(kqFd, @ev, 1, nil, 0, nil);
+        if (res < 0) then
+        begin
+            raise EKqueue.create(rsKqueueDeleteFileDescriptorFailed);
+        end;
     end;
 
     (*!-----------------------------------------------
      * accept all incoming connection until no more pending
      * connection available
      *-------------------------------------------------
-     * @param epollFd, file descriptor returned from epoll_create()
+     * @param kqFd, file descriptor returned from kqueue()
      * @param listenSocket, listen socket handle
      *-----------------------------------------------*)
-    procedure TEpollIoHandler.acceptAllConnections(
-        const epollFd : longint;
+    procedure TKqueueIoHandler.acceptAllConnections(
+        const kqFd : longint;
         const listenSocket : IListenSocket
     );
     var clientSocket : longint;
@@ -227,7 +249,7 @@ uses
                 //add client socket to be monitored for I/O read
                 //note that before client socket is closed,
                 //we will remove it from monitored set (see TEpollCloseable class)
-                addToMonitoredSet(epollFd, clientSocket, EPOLLIN or EPOLLET);
+                addToMonitoredSet(kqFd, clientSocket);
             end;
         until (clientSocket < 0);
     end;
@@ -235,26 +257,26 @@ uses
     (*!-----------------------------------------------
      * handle when one or more file descriptor is ready for I/O
      *-------------------------------------------------
-     * @param epollFd, file descriptor returned from epoll_create()
+     * @param kqFd, file descriptor returned from kqueue()
      * @param listenSocket, listen socket handle
      * @param pipeIn, terminate pipe input handle
      * @param totFd, total file descriptor ready for I/O
      * @param events, array of TEpoll_Event contained file descriptors
      * @param terminated, set true if we should terminate
      *-----------------------------------------------*)
-    procedure TEpollIoHandler.handleFileDescriptorIOReady(
-        const epollFd : longint;
+    procedure TKqueueIoHandler.handleFileDescriptorIOReady(
+        const kqFd : longint;
         const listenSocket : IListenSocket;
         const pipeIn : longint;
         const totFd : longint;
-        const events : PEpoll_Event;
+        const events : PKEvent;
         var terminated : boolean
     );
     var i, fd : longint;
     begin
         for i := 0 to totFd -1  do
         begin
-            fd := events[i].data.fd;
+            fd := events[i].ident;
             if (fd = pipeIn) then
             begin
                 readPipe(pipeIn);
@@ -265,12 +287,17 @@ uses
             begin
                 //we have something with listening socket, it means there is
                 //new connection coming, accept it
-                acceptAllConnections(epollFd, listenSocket);
+                acceptAllConnections(kqFd, listenSocket);
             end else
             begin
                 //if we get here then it must be from one or
                 //more client connections
-                handleClientConnection(epollFd, fd);
+                handleClientConnection(kqFd, fd);
+            end;
+
+            if (events[i].flags and EV_EOF = EV_EOF) then
+            begin
+                closeSocket(fd);
             end;
         end;
     end;
@@ -278,34 +305,34 @@ uses
     (*!-----------------------------------------------
      * wait for connection
      *-------------------------------------------------
-     * @param epollFd, file descriptor returned from epoll_create()
+     * @param kqFd, file descriptor returned from kqueue()
      * @param termPipeIn, terminate pipe in
      * @param listenSocket, listen socket
      * @param events, array of TEpoll_Event contained file descriptors
      * @param maxEvent, total item in events array
      *-----------------------------------------------*)
-    procedure TEpollIoHandler.waitForConnection(
-        const epollFd : longint;
+    procedure TKqueueIoHandler.waitForConnection(
+        const kqFd : longint;
         const termPipeIn : longint;
         const listenSocket : IListenSocket;
-        const events : PEpoll_Event;
+        const events : PKEvent;
         const maxEvents : longint
     );
     var terminated : boolean;
         totFd : longint;
     begin
-        addToMonitoredSet(epollFd, termPipeIn, EPOLLIN);
-        addToMonitoredSet(epollFd, listenSocket.fd, EPOLLIN);
+        addToMonitoredSet(kqFd, termPipeIn);
+        addToMonitoredSet(kqFd, listenSocket.fd);
         try
             terminated := false;
             repeat
-                //wait until something happen in fListenSocket or epollTerminatePipeIn
-                totFd := epoll_wait(epollFd, events, maxEvents, fTimeoutInMs);
+                //wait indefinitely until something happen in fListenSocket or epollTerminatePipeIn
+                totFd := kevent(kqFd, nil, 0, events, maxEvents, fTimeoutVal);
                 if totFd > 0 then
                 begin
                     //one or more file descriptors is ready for I/O, check further
                     handleFileDescriptorIOReady(
-                        epollFd,
+                        kqFd,
                         listenSocket,
                         termPipeIn,
                         totFd,
@@ -325,28 +352,28 @@ uses
                 end;
             until terminated;
         finally
-            removeFromMonitoredSet(epollFd, termPipeIn);
-            removeFromMonitoredSet(epollFd, listenSocket.fd);
+            removeFromMonitoredSet(kqFd, termPipeIn);
+            removeFromMonitoredSet(kqFd, listenSocket.fd);
         end;
     end;
 
     (*!-----------------------------------------------
      * run wait for connection loop
      *-------------------------------------------------
-     * @param epollFd, file descriptor returned from epoll_create()
+     * @param kqFd, file descriptor returned from kqueue()
      *-----------------------------------------------*)
-    procedure TEpollIoHandler.runWaitConnection(
-        const epollFd : longint;
+    procedure TKqueueIoHandler.runWaitConnection(
+        const kqFd : longint;
         const listenSocket : IListenSocket;
         const termPipeIn : longint
     );
     const MAX_EVENTS = 64;
-    var events : PEpoll_event;
+    var events : PKEvent;
     begin
-        getmem(events, MAX_EVENTS * sizeof(TEpoll_Event));
+        getmem(events, MAX_EVENTS * sizeof(TKEvent));
         try
             waitForConnection(
-                epollFd,
+                kqFd,
                 termPipeIn, //global pipe for terminate
                 listenSocket,
                 events,
@@ -360,33 +387,33 @@ uses
     (*!-----------------------------------------------
      * handle incoming connection until terminated
      *-------------------------------------------------
-     * @throws EEpollCreate exception
+     * @throws EKQueue exception
      *-----------------------------------------------*)
-    procedure TEpollIoHandler.handleConnection(const listenSocket : IListenSocket; termPipeIn : longint);
-    var epollFd : longint;
+    procedure TKqueueIoHandler.handleConnection(const listenSocket : IListenSocket; termPipeIn : longint);
+    var kqFd : longint;
     begin
-        epollFd := epoll_create(1024);
+        kqFd := kqueue();
 
-        if (epollFd < 0) then
+        if (kqFd < 0) then
         begin
-            raise EEpollCreate.create(rsEpollInitFailed);
+            raise EKqueue.create(rsKqueueInitFailed);
         end;
 
         try
-            runWaitConnection(epollFd, listenSocket, termPipeIn);
+            runWaitConnection(kqFd, listenSocket, termPipeIn);
         finally
-            fpClose(epollFd);
+            fpClose(kqFd);
         end;
     end;
 
     (*!-----------------------------------------------
      * called when client connection is allowed
      *-------------------------------------------------
-     * @param epollFd, file descriptor returned from epoll_create()
+     * @param kqFd, file descriptor returned from kqueue()
      * @param clientSocket, socket handle where data can be read
      *-----------------------------------------------*)
-    function TEpollIoHandler.handleClientConnection(
-        const epollFd : longint;
+    function TKqueueIoHandler.handleClientConnection(
+        const kqFd : longint;
         const clientSocket : longint
     ) : boolean;
     var astream : IStreamAdapter;
@@ -399,7 +426,7 @@ uses
             try
                 //create instance which can remove client socket
                 //from epoll monitoring and after that close socket
-                streamCloser := TEpollCloseable.create(epollFd, clientSocket);
+                streamCloser := TNullCloseable.create(clientSocket);
                 try
                     fDataAvailListener.handleData(
                         astream,

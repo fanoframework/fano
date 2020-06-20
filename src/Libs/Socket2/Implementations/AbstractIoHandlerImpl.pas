@@ -33,6 +33,7 @@ type
      *-----------------------------------------------*)
     TAbstractIoHandler = class abstract (TInterfacedObject, IIoHandler)
     protected
+        fTimeoutInMs : integer;
         fSockOpts : ISocketOpts;
         fDataAvailListener : IDataAvailListener;
 
@@ -53,7 +54,10 @@ type
         function getSockStream(clientSocket : longint) : IStreamAdapter; virtual;
 
     public
-        constructor create(const sockOpts : ISocketOpts);
+        constructor create(
+            const sockOpts : ISocketOpts;
+            const timeoutInMs : integer = 30000
+        );
         destructor destroy(); override;
 
         (*!-----------------------------------------------
@@ -87,10 +91,14 @@ uses
     SockStreamImpl,
     DateUtils;
 
-    constructor TAbstractIoHandler.create(const sockOpts : ISocketOpts);
+    constructor TAbstractIoHandler.create(
+        const sockOpts : ISocketOpts;
+        const timeoutInMs : integer = 30000
+    );
     begin
         fSockOpts := sockOpts;
         fDataAvailListener := nil;
+        fTimeoutInMs := timeoutInMs;
     end;
 
     destructor TAbstractIoHandler.destroy();

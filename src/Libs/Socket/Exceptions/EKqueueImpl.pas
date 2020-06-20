@@ -6,11 +6,22 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-{------------ Begin libmicrohttpd-related------------------}
-{$IFDEF LIBMICROHTTPD}
-MhdSvrConfigTypes,
-MhdAppServiceProviderImpl,
-MhdStdOutWriterImpl,
-MhdProcessorImpl,
-{$ENDIF}
-{------------ End libmicrohttpd-related------------------}
+unit EKqueueImpl;
+
+interface
+
+{$MODE OBJFPC}
+{$H+}
+
+uses
+
+    ESockErrorImpl;
+
+type
+
+    EKqueue = class(ESockError)
+    end;
+
+implementation
+
+end.

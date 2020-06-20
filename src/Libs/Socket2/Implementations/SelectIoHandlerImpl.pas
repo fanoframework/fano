@@ -166,7 +166,7 @@ uses
         const timeoutInMs : integer = 30000
     );
     begin
-        inherited create(sockOpts);
+        inherited create(sockOpts, timeoutInMs);
         fTimeoutVal := getTimeOut(timeoutInMs);
     end;
 
