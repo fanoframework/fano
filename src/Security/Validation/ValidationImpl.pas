@@ -138,6 +138,7 @@ type
     var i, len, numFailValidation : integer;
         valRec : PValidatorRec;
     begin
+        result := default(TValidationResult);
         result.isValid := true;
         len := validatorList.count();
 

@@ -234,8 +234,7 @@ uses
     function TArgon2iPasswordHash.hash(const plainPassw : string) : string;
     var
         LGenerator: IPBKDF_Argon2;
-        LActual: String;
-        LAdditional, LSecret, LSalt, LPassword: TBytes;
+        LSecret, LSalt, LPassword: TBytes;
         LArgon2Parameter: IArgon2Parameters;
     begin
 

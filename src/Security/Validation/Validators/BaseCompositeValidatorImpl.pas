@@ -57,6 +57,7 @@ implementation
     function initValidators(const avalidators : array of IValidator) : TValidatorArray;
     var i, len : integer;
     begin
+        result := default(TValidatorArray);
         len := high(avalidators) - low(avalidators) + 1;
         setLength(result, len);
         for i := 0 to len -1 do

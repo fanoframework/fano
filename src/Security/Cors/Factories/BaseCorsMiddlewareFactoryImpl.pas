@@ -58,6 +58,7 @@ implementation
     function makeStringArray(const arr : array of string) : TStringArray;
     var i, len: Integer;
     begin
+        result := default(TStringArray);
         len := high(arr) - low(arr) + 1;
         setLength(result, len);
         for i:= 0 to len - 1 do

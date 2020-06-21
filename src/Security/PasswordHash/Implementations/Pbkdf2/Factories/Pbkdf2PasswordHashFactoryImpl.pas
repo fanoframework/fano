@@ -52,7 +52,8 @@ uses
 
     HlpIHash,
     HlpHashFactory,
-    Pbkdf2PasswordHashImpl;
+    Pbkdf2PasswordHashImpl,
+    EPasswordHashImpl;
 
     constructor TPbkdf2PasswordHashFactory.create(const hf : THashFunc = hfSHA1);
     begin
@@ -62,6 +63,7 @@ uses
     function TPbkdf2PasswordHashFactory.withHash(const hf : THashFunc) : TPbkdf2PasswordHashFactory;
     begin
         fHashFunc := hf;
+        result := self;
     end;
 
     function buildHash(const hf : THashFunc) : IHash;
@@ -74,6 +76,8 @@ uses
             hfSHA3_256 : result:= THashFactory.TCrypto.CreateSHA3_256();
             hfSHA3_384 : result:= THashFactory.TCrypto.CreateSHA3_384();
             hfSHA3_512 : result:= THashFactory.TCrypto.CreateSHA3_512();
+        else
+            raise EPasswordHash.create('Unknown hash function');
         end;
     end;
 

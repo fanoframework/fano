@@ -126,6 +126,7 @@ implementation
     function TCompositeEncrypter.initEncrypters(const encrypters : array of IEncrypter) : TEncrypterArray;
     var i, totEncrypters : integer;
     begin
+        result := default(TEncrypterArray);
         totEncrypters := high(encrypters) - low(encrypters) + 1;
         setLength(result, totEncrypters);
         for i := 0 to totEncrypters - 1 do
@@ -149,6 +150,7 @@ implementation
     function TCompositeEncrypter.initDecrypters(const decrypters : array of IDecrypter) : TDecrypterArray;
     var i, totDecrypters : integer;
     begin
+        result := default(TDecrypterArray);
         totDecrypters := high(decrypters) - low(decrypters) + 1;
         setLength(result, totDecrypters);
         for i := 0 to totDecrypters - 1 do

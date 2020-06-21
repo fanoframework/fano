@@ -66,6 +66,7 @@ uses
     begin
         if (ansiMatchStr('*', arr)) then
         begin
+            result := default(TStringArray);
             //wildcard means all
             setLength(result, 1);
             result[0] := '*';
@@ -78,6 +79,7 @@ uses
     function makeUpperCase(const arr : TStringArray) : TStringArray;
     var i, len : integer;
     begin
+        result := default(TStringArray);
         len := length(arr);
         setLength(result, len);
         for i:= 0 to len-1 do
@@ -89,6 +91,7 @@ uses
     function makeLowerCase(const arr : TStringArray) : TStringArray;
     var i, len : integer;
     begin
+        result := default(TStringArray);
         len := length(arr);
         setLength(result, len);
         for i:= 0 to len-1 do

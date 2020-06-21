@@ -123,6 +123,7 @@ uses
     ) : TRegexMatchResult;
     var re : TRegExpr;
     begin
+        result := default(TRegexMatchResult);
         re := TRegExpr.create(regexPattern);
         try
             setLength(result.matches, 0);
@@ -145,6 +146,7 @@ uses
     var re : TRegExpr;
         actualElement : integer;
     begin
+        result := default(TRegexMatchResult);
         re := TRegExpr.create(regexPattern);
         try
             re.modifierG := true;

@@ -69,6 +69,7 @@ uses
     function TCompositeMiddleware.initMiddlewares(const middlewares : array of IMiddleware) : TMiddlewareArray;
     var i, totMiddlewares : integer;
     begin
+        result := default(TMiddlewareArray);
         totMiddlewares := high(middlewares) - low(middlewares) + 1;
         setLength(result, totMiddlewares);
         if (totMiddlewares > 0) then

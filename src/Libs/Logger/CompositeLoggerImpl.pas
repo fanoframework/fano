@@ -87,6 +87,7 @@ implementation
     function TCompositeLogger.initLoggers(const loggers : array of ILogger) : TLoggerArray;
     var i, totLoggers : integer;
     begin
+        result := default(TLoggerArray);
         totLoggers := high(loggers) - low(loggers) + 1;
         setLength(result, totLoggers);
         for i := 0 to totLoggers - 1 do

@@ -67,6 +67,7 @@ resourcestring
     function initValidValues(const validValues : array of integer) : TIntArray;
     var i, tot : integer;
     begin
+        result := default(TIntArray);
         tot := high(validValues) - low(validValues) + 1;
         setLength(result, tot);
         for i := 0 to tot-1 do

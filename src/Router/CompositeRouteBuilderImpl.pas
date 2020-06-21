@@ -51,6 +51,7 @@ implementation
     function initBuilders(const aBuilders : array of IRouteBuilder) : TRouteBuilderArray;
     var i, len : integer;
     begin
+        result := default(TRouteBuilderArray);
         len := high(aBuilders) - low(aBuilders) + 1;
         setLength(result, len);
         for i := 0 to len -1 do

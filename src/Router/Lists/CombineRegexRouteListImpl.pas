@@ -197,6 +197,7 @@ const
     var matches : TRegexMatchResult;
         i, totalPlaceholder : integer;
     begin
+        result := default(TArrayOfPlaceholders);
         matches := regex.greedyMatch(
             ROUTE_PLACEHOLDER_REGEX,
             originalRouteWithRegex

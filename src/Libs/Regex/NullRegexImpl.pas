@@ -69,8 +69,7 @@ uses
         const source : string
     ) : TRegexMatchResult;
     begin
-        result.matched := false;
-        setLength(result.matches, 0);
+        result := default(TRegexMatchResult);
     end;
 
     function TNullRegex.greedyMatch(
@@ -78,7 +77,6 @@ uses
         const source : string
     ) : TRegexMatchResult;
     begin
-        result.matched := false;
-        setLength(result.matches, 0);
+        result := default(TRegexMatchResult);
     end;
 end.

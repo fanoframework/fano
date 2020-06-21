@@ -64,6 +64,7 @@ implementation
     function initViews(const views : array of IView) : TViewArray;
     var i : integer;
     begin
+        result := default(TViewArray);
         setLength(result, high(views) - low(views) + 1);
         for i := low(views) to high(views) do
         begin

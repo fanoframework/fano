@@ -54,6 +54,7 @@ implementation
         result := '';
         for i := 0 to tot-2 do
         begin
+            //TODO: improve as this is cause many memory reallocation
             result := result + values[i] + delimiter;
         end;
         result := result + values[tot-1];
@@ -67,6 +68,7 @@ implementation
     function toStringArray(const values : array of string) : TStringArray;
     var i, len : integer;
     begin
+        result := default(TStringArray);
         len := high(values) - low(values) + 1;
         setLength(result, len);
         for i := 0 to len -1 do
