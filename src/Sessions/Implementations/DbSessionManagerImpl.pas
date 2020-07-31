@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit FileSessionManagerImpl;
+unit DbSessionManagerImpl;
 
 interface
 
@@ -20,35 +20,63 @@ uses
     SessionManagerIntf,
     SessionFactoryIntf,
     RequestIntf,
-    FileReaderIntf,
+    RdbmsIntf,
     ListIntf,
     AbstractSessionManagerImpl;
 
 type
 
     (*!------------------------------------------------
+     * Data structure for session table information
+     *-----------------------------------------------*)
+    TSessionTableInfo = record
+        //name of session table
+        tableName : string;
+
+        //name of session id column
+        sessionIdColumn : string;
+
+        //name of session data column
+        dataColumn : string;
+
+        //name of expired at column
+        expiredAtColumn : string;
+    end;
+
+    (*!------------------------------------------------
      * class having capability to manage
-     * session variables in file
-     *
-     * TODO: Current implementation is not thread safe.
-     *       Need to rethink when dealing multiple threads
+     * session variables in RDBMS database
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TFileSessionManager = class(TAbstractSessionManager)
+    TDbSessionManager = class(TAbstractSessionManager)
     private
-        fSessionFilename : string;
-        fFileReader : IFileReader;
-
-        //TODO : Do we need to keep session data in memory?
-        //This maybe speedup finding session but requires additional resources
-        //Need to rethink if we can removed it
-        fSessionList : IList;
-
-        fCurrentSession : ISession;
+        fRdbms : IRdbms;
+        fSessTableInfo : TSessionTableInfo;
         fSessionFactory : ISessionFactory;
+        fCurrentSession : ISession;
 
-        procedure writeSessionFile(const sessFile : string; const sessData : string);
+        function isSessionExistDb(const sessId : string) : boolean;
+
+        function getSessionDb(
+            const sessId : string;
+            out sessData : string;
+            out expiredAt : TDateTime
+        ) : boolean;
+
+        function createSessionDb(
+            const sessId : string;
+            const sessData : string;
+            const expiredAt : TDateTime
+        ) : boolean;
+
+        function updateSessionDb(
+            const sessId : string;
+            const sessData : string;
+            const expiredAt : TDateTime
+        ) : boolean;
+
+        function deleteSessionDb(const sessId : string) : boolean;
 
         (*!------------------------------------
          * create session from session id
@@ -106,7 +134,6 @@ type
             const session : ISession
         ) : ISessionManager;
 
-        procedure cleanUpSessionList();
     public
 
         (*!------------------------------------
@@ -117,20 +144,15 @@ type
          * @param sessionFactory helper class
          *           which create ISession object
          * @param cookieName name of cookie to use
-         * @param fileReader helper class
-         *           which can read file to string
-         * @param baseDir base directory where
-         *                session files store
-         * @param prefix string to be prefix to
-         *                session filename
+         * @param rbmds rdbms instance
+         * @param sessTableInfo session table information
          *-------------------------------------*)
         constructor create(
             const sessionIdGenerator : ISessionIdGenerator;
             const sessionFactory : ISessionFactory;
             const cookieName : string;
-            const fileReader : IFileReader;
-            const baseDir : string;
-            const prefix : string
+            const rdbms : IRdbms;
+            const sessTableInfo : TSessionTableInfo
         );
 
         (*!------------------------------------
@@ -175,87 +197,152 @@ implementation
 
 uses
 
-    Classes,
     SysUtils,
     DateUtils,
     SessionConsts,
     HashListImpl,
+    RdbmsStatementIntf,
+    RdbmsResultSetIntf,
     ESessionExpiredImpl,
     ESessionInvalidImpl;
 
-type
-
-    TSessionItem = record
-        sessionObj : ISession;
-    end;
-    PSessionItem = ^TSessionItem;
 
     (*!------------------------------------
      * constructor
      *-------------------------------------
      * @param sessionIdGenerator helper class
      *           which can generate session id
+     * @param sessionFactory helper class
+     *           which create ISession object
      * @param cookieName name of cookie to use
-     * @param fileReader helper class
-     *           which can read file to string
-     * @param baseDir base directory where
-     *                session files store
-     * @param prefix strung to be prefix to
-     *                session filename
+     * @param rbmds rdbms instance
+     * @param sessTableInfo session table information
      *-------------------------------------*)
-    constructor TFileSessionManager.create(
+    constructor TDbSessionManager.create(
         const sessionIdGenerator : ISessionIdGenerator;
         const sessionFactory : ISessionFactory;
         const cookieName : string;
-        const fileReader : IFileReader;
-        const baseDir : string;
-        const prefix : string
+        const rdbms : IRdbms;
+        const sessTableInfo : TSessionTableInfo
     );
     begin
         inherited create(sessionIdGenerator, cookieName);
         fSessionFactory := sessionFactory;
-        fSessionFilename := baseDir + prefix;
-        fFileReader := fileReader;
-        fSessionList := THashList.create();
+        fRdbms := rdbms;
+        fSessTableInfo := sessTableInfo;
         fCurrentSession := nil;
     end;
 
     (*!------------------------------------
      * destructor
      *-------------------------------------*)
-    destructor TFileSessionManager.destroy();
+    destructor TDbSessionManager.destroy();
     begin
-        fCurrentSession := nil;
-        cleanUpSessionList();
-        fFileReader := nil;
-        fSessionList := nil;
+        fRdbms := nil;
         fSessionFactory := nil;
+        fCurrentSession := nil;
         inherited destroy();
     end;
 
-    procedure TFileSessionManager.cleanUpSessionList();
-    var indx : integer;
-        item : PSessionItem;
+    function TDbSessionManager.isSessionExistDb(const sessId : string) : boolean;
+    var sts : IRdbmsStatement;
     begin
-        for indx := fSessionList.count()-1  downto 0 do
+        sts := fRdbms.prepare(
+            'SELECT 1 FROM `' + fSessTableInfo.tableName + '` ' +
+            'WHERE `' + fSessTableInfo.sessionIdColumn + '` = :sessId'
+        );
+        sts.paramStr('sessId', sessId);
+        result := sts.execute().resultCount <> 0;
+    end;
+
+    function TDbSessionManager.getSessionDb(
+        const sessId : string;
+        out sessData : string;
+        out expiredAt : TDateTime
+    ) : boolean;
+    var sts : IRdbmsStatement;
+        res : IRdbmsResultSet;
+    begin
+        result := false;
+        sts := fRdbms.prepare(
+            'SELECT ' +
+                '`' + fSessTableInfo.dataColumn + '`, ' +
+                '`' +fSessTableInfo.expiredAtColumn + '`' +
+            ' FROM `' + fSessTableInfo.tableName + '` ' +
+            'WHERE `' + fSessTableInfo.sessionIdColumn + '` = :sessId'
+        );
+        sts.paramStr('sessId', sessId);
+        res := sts.execute();
+        if res.resultCount <> 0 then
         begin
-            item := fSessionList.get(indx);
-            item^.sessionObj := nil;
-            dispose(item);
-            fSessionList.delete(indx);
+            result := true;
+            sessData := res.fields.fieldByName(fSessTableInfo.dataColumn).asString;
+            expiredAt := res.fields.fieldByName(fSessTableInfo.expiredAtColumn).asDateTime;
         end;
     end;
 
-    procedure TFileSessionManager.writeSessionFile(const sessFile : string; const sessData : string);
-    var fs : TFileStream;
+    function TDbSessionManager.createSessionDb(
+        const sessId : string;
+        const sessData : string;
+        const expiredAt : TDateTime
+    ) : boolean;
+    var sts : IRdbmsStatement;
+        res : IRdbmsResultSet;
     begin
-        fs := TFileStream.create(sessFile, fmCreate);
-        try
-            fs.seek(0, soFromBeginning);
-            fs.writeBuffer(sessData[1], length(sessData));
-        finally
-            fs.free();
-        end;
+        sts := fRdbms.prepare(
+            'INSERT INTO `' + fSessTableInfo.tableName + '` ' +
+            '( ' +
+                '`' + fSessTableInfo.sessionIdColumn + '`,' +
+                '`' + fSessTableInfo.dataColumn + '`, ' +
+                '`' + fSessTableInfo.expiredAtColumn + '`' +
+            ') VALUES (:sessId, :sessData, :expiredAt)'
+        );
+        sts.paramStr('sessId', sessId);
+        sts.paramDateTime('expiredAt', expiredAt);
+        sts.paramStr('sessData', sessData);
+        res := sts.execute();
+        //SqlDb ALWAYS implicitly start transaction so commit() is required
+        fRdbms.commit();
+        result := res.resultCount() <> 0;
+    end;
+
+    function TDbSessionManager.updateSessionDb(
+        const sessId : string;
+        const sessData : string;
+        const expiredAt : TDateTime
+    ) : boolean;
+    var sts : IRdbmsStatement;
+        res : IRdbmsResultSet;
+    begin
+        sts := fRdbms.prepare(
+            'UPDATE `' + fSessTableInfo.tableName + '` ' +
+            'SET ' +
+            fSessTableInfo.dataColumn + ' = :sessData, ' +
+            fSessTableInfo.expiredAtColumn + '= :expiredAt ' +
+            'WHERE `' + fSessTableInfo.sessionIdColumn + '` = :sessId'
+        );
+        sts.paramStr('sessId', sessId);
+        sts.paramDateTime('expiredAt', expiredAt);
+        sts.paramStr('sessData', sessData);
+        res := sts.execute();
+        //SqlDb ALWAYS implicitly start transaction so commit() is required
+        fRdbms.commit();
+        result := res.resultCount() <> 0;
+    end;
+
+    function TDbSessionManager.deleteSessionDb(const sessId : string) : boolean;
+    var sts : IRdbmsStatement;
+        res : IRdbmsResultSet;
+    begin
+        sts := fRdbms.prepare(
+            'DELETE FROM `' + fSessTableInfo.tableName + '` ' +
+            'WHERE ' + fSessTableInfo.sessionIdColumn + ' = :sessId'
+        );
+        sts.paramStr('sessId', sessId);
+        res := sts.execute();
+        //SqlDb ALWAYS implicitly start transaction so commit() is required
+        fRdbms.commit();
+        result := res.resultCount() <> 0;
     end;
 
     (*!------------------------------------
@@ -271,24 +358,23 @@ type
      * if sessionId is empty string or invalid
      * or expired, return nil
      *-------------------------------------*)
-    function TFileSessionManager.findSession(const sessionId : string) : ISession;
-    var sessFile : string;
+    function TDbSessionManager.findSession(const sessionId : string) : ISession;
+    var sessData : string;
+        expiry : TDateTime;
     begin
         result := nil;
-        sessFile := fSessionFilename + sessionId;
-        if (sessionId <> '') and (fileExists(sessFile)) then
+        if (sessionId <> '') and (getSessionDb(sessionId, sessData, expiry)) then
         begin
             try
                 result := fSessionFactory.createSession(
                     fCookieName,
                     sessionId,
-                    fFileReader.readFile(sessFile)
+                    sessData
                 );
             except
                 on ESessionExpired do
                 begin
                     freeAndNil(result);
-                    deleteFile(sessFile);
                 end;
             end;
         end;
@@ -309,7 +395,7 @@ type
      * or expired, new ISession is created with empty
      * data, session life time is set to lifeTime value
      *-------------------------------------*)
-    function TFileSessionManager.createSession(
+    function TDbSessionManager.createSession(
         const request : IRequest;
         const sessionId : string;
         const lifeTimeInSec : integer
@@ -325,6 +411,8 @@ type
                 fSessionIdGenerator.getSessionId(request),
                 incSecond(now(), lifeTimeInSec)
             );
+            //this is new session, persist it first to storage
+            persistSession(sess);
         end;
 
         result := sess;
@@ -335,25 +423,18 @@ type
      *-------------------------------------
      * @param request current request instance
      * @param lifeTimeInSec life time of session in seconds
-     * @return session instance
+     * @return session instansce
      *-------------------------------------*)
-    function TFileSessionManager.beginSession(
+    function TDbSessionManager.beginSession(
         const request : IRequest;
         const lifeTimeInSec : integer
     ) : ISession;
     var sessionId : string;
-        sess : ISession;
-        item : PSessionItem;
     begin
         try
             sessionId := request.getCookieParam(fCookieName);
-            sess := createSession(request, sessionId, lifeTimeInSec);
-
-            new(item);
-            item^.sessionObj := sess;
-            fSessionList.add(sess.id(), item);
-            fCurrentSession := sess;
-            result := sess;
+            fCurrentSession := createSession(request, sessionId, lifeTimeInSec);
+            result := fCurrentSession;
         except
             on e: ESessionExpired do
             begin
@@ -369,25 +450,30 @@ type
      * @param request current request instance
      * @return session instance or nil if not found
      *-------------------------------------*)
-    function TFileSessionManager.getSession(const request : IRequest) : ISession;
+    function TDbSessionManager.getSession(const request : IRequest) : ISession;
     var sessionId : shortstring;
-        item : PSessionItem;
     begin
+        result := nil;
         sessionId := request.getCookieParam(fCookieName);
-        item := fSessionList.find(sessionId);
-        //it is assumed that getSession will be called between
-        //beginSession() and endSession()
-        //so fCurrentSession MUST NOT nil
-        if (item = nil) and (fCurrentSession <> nil) then
+
+        if (fCurrentSession <> nil) then
         begin
-            //if we get here, it means, this is the first request
-            //so cookie is not yet set but it is initialized
-            result := fCurrentSession;
+            if (sessionId = '') or (fCurrentSession.id() = sessionId) then
+            begin
+                //if sessionId is empty string, it means first request
+                //TODO: need to re-think because in multi-threaded without proper synchronization,
+                //this may cause other user's session is hijacked
+                result := fCurrentSession;
+            end else
+            begin
+                result := findSession(sessionId);
+            end;
         end else
-        if (item <> nil) then
         begin
-            result := item^.sessionObj;
-        end else
+            result := findSession(sessionId);
+        end;
+
+        if result = nil then
         begin
             raise ESessionInvalid.create('Invalid session. Cannot get valid session');
         end;
@@ -400,9 +486,7 @@ type
      * @param session session instance
      * @return current instance
      *-------------------------------------*)
-    function TFileSessionManager.endSession(const session : ISession) : ISessionManager;
-    var indx : integer;
-        item : PSessionItem;
+    function TDbSessionManager.endSession(const session : ISession) : ISessionManager;
     begin
         if session.expired() then
         begin
@@ -411,15 +495,7 @@ type
         begin
             persistSession(session);
         end;
-
-        indx := fSessionList.indexOf(session.id());
-        item := fSessionList.get(indx);
-        item^.sessionObj := nil;
-        dispose(item);
-        fSessionList.delete(indx);
-
         fCurrentSession := nil;
-
         result := self;
     end;
 
@@ -430,12 +506,17 @@ type
      * @param session session instance
      * @return current instance
      *-------------------------------------*)
-    function TFileSessionManager.persistSession(const session : ISession) : ISessionManager;
-    var sessFilename : string;
+    function TDbSessionManager.persistSession(const session : ISession) : ISessionManager;
+    var sessId : string;
     begin
-        sessFilename := fSessionFilename + session.id();
-        writeSessionFile(sessFilename, session.serialize());
-        session.clear();
+        sessId := session.id();
+        if isSessionExistDb(sessId) then
+        begin
+            updateSessionDb(sessId, session.serialize(), session.expiresAt());
+        end else
+        begin
+            createSessionDb(sessId, session.serialize(), session.expiresAt());
+        end;
         result := self;
     end;
 
@@ -446,14 +527,13 @@ type
      * @param session session instance
      * @return current instance
      *-------------------------------------*)
-    function TFileSessionManager.destroySession(const session : ISession) : ISessionManager;
-    var sessFilename : string;
+    function TDbSessionManager.destroySession(const session : ISession) : ISessionManager;
+    var sessId : string;
     begin
-        session.clear();
-        sessFilename := fSessionFilename + session.id();
-        if (fileExists(sessFilename)) then
+        sessId := session.id();
+        if isSessionExistDb(sessId) then
         begin
-            deleteFile(sessFilename);
+            deleteSessionDb(sessId);
         end;
         result := self;
     end;

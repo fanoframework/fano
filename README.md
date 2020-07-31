@@ -5,19 +5,18 @@ Web application framework for modern Pascal programming language.
 
 ## Requirement
 
+- Linux or FreeBSD.
 - [Free Pascal](https://www.freepascal.org/) >= 3.0
-- Web Server (Apache, nginx)
-- [libcurl development](https://curl.haxx.se/libcurl/) (optional)
-- [ezthreads library](https://github.com/mr-highball/ezthreads)
+- Web Server (Apache, nginx).
+- [libcurl development](https://curl.haxx.se/libcurl/) (optional).
+- [libmicrohttpd development](https://www.gnu.org/software/libmicrohttpd/) (optional).
+- [ezthreads library](https://github.com/mr-highball/ezthreads).
 
 ## Installation
 
-Fano is standalone library, and basically, is not very useful on its own.
-It depends on an application to bootstrap.
-
 ### Install from Fano Command Line tool
 
-[Fano Cli](https://github.com/fanoframework/fano-cli) is command line tool intended to simplify
+[Fano CLI](https://github.com/fanoframework/fano-cli) is command line tool intended to simplify
 [scaffolding web application](https://fanoframework.github.io/scaffolding-with-fano-cli/), creating controllers, views, models, etc. It is recommended way to setup web application skeleton with Fano Framework.
 
     $ fanocli --project-cgi=my-cool-app
@@ -51,6 +50,10 @@ Free Pascal, directory where to search Fano units.
 
 This approach, however, has disadvantage. When you update your Fano repository,
 all your applications that depends on Fano will be affected. If newer version of Fano repository introduces breaking changes, application that requires older version of Fano repository may fail.
+
+## Versioning Number
+
+Fano Framework follows [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200).
 
 ## Windows User
 
