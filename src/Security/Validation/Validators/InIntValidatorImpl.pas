@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -67,6 +67,7 @@ resourcestring
     function initValidValues(const validValues : array of integer) : TIntArray;
     var i, tot : integer;
     begin
+        result := default(TIntArray);
         tot := high(validValues) - low(validValues) + 1;
         setLength(result, tot);
         for i := 0 to tot-1 do

@@ -36,3 +36,10 @@ Original Delphi-Redis
 https://bitbucket.org/Gloegg/delphi-redis
 
 Copyright Nils Achterholt (Gloegg)
+
+
+HashLib4Pascal
+https://github.com/Xor-el/HashLib4Pascal
+Copyright (c) 2016 - 2019 Ugochukwu Mmaduekwe
+See LICENSE
+https://github.com/Xor-el/HashLib4Pascal/blob/master/LICENSE

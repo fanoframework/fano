@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -87,6 +87,7 @@ implementation
     function TCompositeLogger.initLoggers(const loggers : array of ILogger) : TLoggerArray;
     var i, totLoggers : integer;
     begin
+        result := default(TLoggerArray);
         totLoggers := high(loggers) - low(loggers) + 1;
         setLength(result, totLoggers);
         for i := 0 to totLoggers - 1 do

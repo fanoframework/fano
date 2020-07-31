@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -24,11 +24,13 @@ TMd5SessionIdGenerator = Md5SessionIdGeneratorImpl.TMd5SessionIdGenerator;
 TSha1SessionIdGenerator = Sha1SessionIdGeneratorImpl.TSha1SessionIdGenerator;
 TKeySessionIdGenerator = KeySessionIdGeneratorImpl.TKeySessionIdGenerator;
 TIpTimeSessionIdGenerator = IpTimeSessionIdGeneratorImpl.TIpTimeSessionIdGenerator;
+TSha2SessionIdGenerator = Sha2SessionIdGeneratorImpl.TSha2SessionIdGenerator;
 
 TKeyGuidSessionIdGeneratorFactory = KeyGuidSessionIdGeneratorFactoryImpl.TKeyGuidSessionIdGeneratorFactory;
 TKeyRandSessionIdGeneratorFactory = KeyRandSessionIdGeneratorFactoryImpl.TKeyRandSessionIdGeneratorFactory;
 TGuidSessionIdGeneratorFactory = GuidSessionIdGeneratorFactoryImpl.TGuidSessionIdGeneratorFactory;
 TIpKeyGuidSessionIdGeneratorFactory = IpKeyGuidSessionIdGeneratorFactoryImpl.TIpKeyGuidSessionIdGeneratorFactory;
+TSha2KeyRandSessionIdGeneratorFactory = Sha2KeyRandSessionIdGeneratorFactoryImpl.TSha2KeyRandSessionIdGeneratorFactory;
 
 TFileSessionManager = FileSessionManagerImpl.TFileSessionManager;
 
@@ -48,6 +50,13 @@ TCookieSessionManagerFactory = CookieSessionManagerFactoryImpl.TCookieSessionMan
 
 TCookieSession = CookieSessionImpl.TCookieSession;
 TCookieSessionFactory = CookieSessionFactoryImpl.TCookieSessionFactory;
+
+TSessionTableInfo = DbSessionManagerImpl.TSessionTableInfo;
+TDbSessionManager = DbSessionManagerImpl.TDbSessionManager;
+
+TDbSessionManagerFactory = DbSessionManagerFactoryImpl.TDbSessionManagerFactory;
+TJsonDbSessionManagerFactory = JsonDbSessionManagerFactoryImpl.TJsonDbSessionManagerFactory;
+TIniDbSessionManagerFactory= IniDbSessionManagerFactoryImpl.TIniDbSessionManagerFactory;
 
 TSessionMiddlewareExecutor = SessionMiddlewareExecutorImpl.TSessionMiddlewareExecutor;
 

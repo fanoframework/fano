@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -35,8 +35,6 @@ type
      *-----------------------------------------------*)
     TEpollIoHandler = class(TAbstractIoHandler)
     private
-        fTimeoutVal : longint;
-
         (*!-----------------------------------------------
          * accept all incoming connection until no more pending
          * connection available
@@ -301,8 +299,8 @@ uses
         try
             terminated := false;
             repeat
-                //wait indefinitely until something happen in fListenSocket or epollTerminatePipeIn
-                totFd := epoll_wait(epollFd, events, maxEvents, fTimeoutVal);
+                //wait until something happen in fListenSocket or epollTerminatePipeIn
+                totFd := epoll_wait(epollFd, events, maxEvents, fTimeoutInMs);
                 if totFd > 0 then
                 begin
                     //one or more file descriptors is ready for I/O, check further

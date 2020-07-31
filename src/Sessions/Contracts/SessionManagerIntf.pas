@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -31,7 +31,7 @@ type
         ['{F6526BF2-538B-46CC-AF49-D5F373B6E2F5}']
 
         (*!------------------------------------
-         * create session from request
+         * begin session from request
          *-------------------------------------
          * @param request current request instance
          * @param lifeTimeInSec life time of session in seconds
@@ -47,7 +47,7 @@ type
          * persistent storage if not expired or
          * if expired destroy its storage
          *-------------------------------------
-         * @param session session instance
+         * @param session session instance returned by beginSession()
          * @return current instance
          *-------------------------------------*)
         function endSession(const session : ISession) : ISessionManager;
