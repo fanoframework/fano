@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -15,7 +15,6 @@ interface
 
 uses
 
-    Classes,
     SessionIntf,
     SessionIdGeneratorIntf,
     SessionManagerIntf,
@@ -31,13 +30,21 @@ type
      * class having capability to manage
      * session variables in file
      *
+     * TODO: Current implementation is not thread safe.
+     *       Need to rethink when dealing multiple threads
+     *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
     TFileSessionManager = class(TAbstractSessionManager)
     private
         fSessionFilename : string;
         fFileReader : IFileReader;
+
+        //TODO : Do we need to keep session data in memory?
+        //This maybe speedup finding session but requires additional resources
+        //Need to rethink if we can removed it
         fSessionList : IList;
+
         fCurrentSession : ISession;
         fSessionFactory : ISessionFactory;
 
@@ -168,6 +175,7 @@ implementation
 
 uses
 
+    Classes,
     SysUtils,
     DateUtils,
     SessionConsts,
@@ -344,7 +352,6 @@ type
             new(item);
             item^.sessionObj := sess;
             fSessionList.add(sess.id(), item);
-
             fCurrentSession := sess;
             result := sess;
         except

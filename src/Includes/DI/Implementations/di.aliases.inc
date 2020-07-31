@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -14,7 +14,6 @@
  *-----------------------------------------------*)
 
 TDependencyContainer = DependencyContainerImpl.TDependencyContainer;
-TInitializeableContainer = InitializeableContainerImpl.TInitializeableContainer;
 TDependencyList = DependencyListImpl.TDependencyList;
 TInjectableObject = InjectableObjectImpl.TInjectableObject;
 TFactory = FactoryImpl.TFactory;
@@ -23,9 +22,5 @@ EInvalidFactory = EInvalidFactoryImpl.EInvalidFactory;
 EDependencyAlias = EDependencyAliasImpl.EDependencyAlias;
 
 TBasicContainerFactory = BasicContainerFactoryImpl.TBasicContainerFactory;
-
-TService = ServiceImpl.TService;
-TServiceContainer = ServiceContainerImpl.TServiceContainer;
-TServiceContainerFactory = ServiceContainerFactoryImpl.TServiceContainerFactory;
 
 TCompositeServiceProvider = CompositeServiceProviderImpl.TCompositeServiceProvider;

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -126,7 +126,10 @@ uses
     begin
         c:=#0;
         repeat
-            c := getLongOpts('', @fOpts[0], optionIndex);
+            //shortopts must not empty string, otherwise access violation
+            //we do not use short option. Here we just use space.
+            //see https://bugs.freepascal.org/view.php?id=37233
+            c := getLongOpts(' ', @fOpts[0], optionIndex);
             if c = #0 then
             begin
                 //optionIndex will be start from 1 instead of zero
@@ -250,7 +253,7 @@ uses
     var currLen : integer;
     begin
         currLen := length(fOpts);
-        if (fOptCount < currLen - 1) then
+        if (fOptCount = currLen) then
         begin
             setLength(fOpts, currLen + 10);
         end;

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -122,7 +122,13 @@ uses
     jsonParser,
     DateUtils,
     SessionConsts,
-    ESessionExpiredImpl;
+    ESessionExpiredImpl,
+    ESessionKeyNotFoundImpl,
+    ESessionInvalidImpl;
+
+resourcestring
+
+    sErrKeyNotFound = 'Session data "%s" not found';
 
     (*!------------------------------------
      * constructor
@@ -138,7 +144,17 @@ uses
     );
     begin
         inherited create(sessName, sessId);
-        fSessionData := getJSON(sessData);
+
+        try
+            fSessionData := getJSON(sessData);
+        except
+            on e: EParserError do
+            begin
+                //change exception to not show misleading error message
+                raise ESessionInvalid.create(rsSessionInvalid);
+            end;
+        end;
+
         raiseExceptionIfExpired();
     end;
 
@@ -202,8 +218,9 @@ uses
         except
             on e : EJson do
             begin
-               e.message := e.message + fSessionData.asJson;
-               raise;
+                raise ESessionKeyNotFound.createFmt(
+                   sErrKeyNotFound, [ sessionVar ]
+                );
             end;
         end;
         result := sessValue.asString;

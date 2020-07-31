@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -39,6 +39,17 @@ type
         function add(const aKey : shortstring; const data : pointer) : integer;
         function find(const aKey : shortstring) : pointer;
         function keyOfIndex(const indx : integer) : shortstring;
+
+        (*!------------------------------------------------
+         * delete item by key
+         *-----------------------------------------------
+         * @param aKey name to use to associate item
+         * @return item being removed
+         *-----------------------------------------------
+         * implementor is free to decide whether delete
+         * item in list only or also free item memory
+         *-----------------------------------------------*)
+        function remove(const aKey : shortstring) : pointer;
 
         (*!------------------------------------------------
          * get index by key name
@@ -85,6 +96,15 @@ implementation
     function THashList.find(const aKey : shortstring) : pointer;
     begin
         result := hashes.find(aKey);
+    end;
+
+    function THashList.remove(const aKey : shortstring) : pointer;
+    begin
+        result := find(aKey);
+        if result <> nil then
+        begin
+            hashes.remove(result);
+        end;
     end;
 
     function THashList.keyOfIndex(const indx : integer) : shortstring;

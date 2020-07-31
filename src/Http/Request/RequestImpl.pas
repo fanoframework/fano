@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -113,7 +113,7 @@ type
          * @return string value
          *------------------------------------------------*)
         function getSingleParam(
-            const src :IList;
+            const src :IReadOnlyList;
             const key: string;
             const defValue : string = ''
         ) : string;
@@ -461,7 +461,7 @@ resourcestring
     );
     var amethod : string;
     begin
-        amethod := upperCase(env.requestMethod());
+        amethod := env.requestMethod();
         if (amethod = 'POST') or (amethod = 'PUT') or (amethod = 'PATCH') then
         begin
             initPostBodyParamsFromStdInput(env, body);
@@ -490,7 +490,7 @@ resourcestring
      * @return string value
      *------------------------------------------------*)
     function TRequest.getSingleParam(
-        const src : IList;
+        const src : IReadOnlyList;
         const key: string;
         const defValue : string = ''
     ) : string;

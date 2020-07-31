@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -18,7 +18,7 @@ uses
     ReadOnlyListIntf,
     ValidatorIntf,
     RequestIntf,
-    BaseValidatorImpl;
+    CompareIntValidatorImpl;
 
 type
 
@@ -28,20 +28,11 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TMaxIntegerValidator = class(TBaseValidator)
-    private
-        fMaximumValue : integer;
+    TMaxIntegerValidator = class(TCompareIntValidator)
     protected
-        (*!------------------------------------------------
-         * actual data validation
-         *-------------------------------------------------
-         * @param dataToValidate input data
-         * @return true if data is valid otherwise false
-         *-------------------------------------------------*)
-        function isValidData(
-            const dataToValidate : string;
-            const dataCollection : IReadOnlyList;
-            const request : IRequest
+        function compareIntWithRef(
+            const aInt: integer;
+            const refInt : integer
         ) : boolean; override;
     public
         (*!------------------------------------------------
@@ -60,30 +51,25 @@ uses
 
 resourcestring
 
-    sErrFieldMustBeIntegerWithMaxValue = 'Field %s must be integer with maximum value of ';
+    sErrFieldMustBeIntegerWithMaxValue = 'Field %%s must be integer with maximum value of %d';
 
     (*!------------------------------------------------
      * constructor
      *-------------------------------------------------*)
     constructor TMaxIntegerValidator.create(const maxValue : integer);
     begin
-        inherited create(sErrFieldMustBeIntegerWithMaxValue + intToStr(maxValue));
-        fMaximumValue := maxValue;
+        inherited create(
+            format(sErrFieldMustBeIntegerWithMaxValue, [ maxValue ]),
+            maxValue
+        );
     end;
 
-    (*!------------------------------------------------
-     * actual data validation
-     *-------------------------------------------------
-     * @param dataToValidate input data
-     * @return true if data is valid otherwise false
-     *-------------------------------------------------*)
-    function TMaxIntegerValidator.isValidData(
-        const dataToValidate : string;
-        const dataCollection : IReadOnlyList;
-        const request : IRequest
+    function TMaxIntegerValidator.compareIntWithRef(
+        const aInt: integer;
+        const refInt : integer
     ) : boolean;
-    var intValue : integer;
     begin
-        result := tryStrToInt(dataToValidate, intValue) and (intValue <= fMaximumValue);
+        result := (aInt <= refInt);
     end;
+
 end.

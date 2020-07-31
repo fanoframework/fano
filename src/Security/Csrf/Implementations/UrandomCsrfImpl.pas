@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -20,6 +20,10 @@ uses
     RandomIntf,
     SessionIntf,
     CsrfImpl;
+
+const
+
+    DEFAULT_RANDOM_BYTES_LEN = 32;
 
 type
 
@@ -45,7 +49,7 @@ type
         constructor create(
             const secretKey : string;
             const randomInst : IRandom;
-            const strength : integer = 32
+            const strength : integer = DEFAULT_RANDOM_BYTES_LEN
         );
 
         destructor destroy(); override;
@@ -77,7 +81,7 @@ uses
     constructor TUrandomCsrf.create(
         const secretKey : string;
         const randomInst : IRandom;
-        const strength : integer = 32
+        const strength : integer = DEFAULT_RANDOM_BYTES_LEN
     );
     begin
         inherited create(secretKey);
