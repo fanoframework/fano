@@ -3,20 +3,22 @@
 Web application framework for modern Pascal programming language.
 [Learn more](https://fanoframework.github.io).
 
+[![MIT License](https://img.shields.io/github/license/fanoframework/fano.svg)](https://github.com/fanoframework/fano/blob/master/LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/fanoframework/fano.svg)](https://github.com/fanoframework/fano/releases)
+
 ## Requirement
 
+- Linux or FreeBSD
 - [Free Pascal](https://www.freepascal.org/) >= 3.0
 - Web Server (Apache, nginx)
 - [libcurl development](https://curl.haxx.se/libcurl/) (optional)
+- [libmicrohttpd development](https://www.gnu.org/software/libmicrohttpd/) (optional)
 
 ## Installation
 
-Fano is standalone library, and basically, is not very useful on its own.
-It depends on an application to bootstrap.
-
 ### Install from Fano Command Line tool
 
-[Fano Cli](https://github.com/fanoframework/fano-cli) is command line tool intended to simplify
+[Fano CLI](https://github.com/fanoframework/fano-cli) is command line tool intended to simplify
 [scaffolding web application](https://fanoframework.github.io/scaffolding-with-fano-cli/), creating controllers, views, models, etc. It is recommended way to setup web application skeleton with Fano Framework.
 
     $ fanocli --project-cgi=my-cool-app
@@ -51,23 +53,15 @@ Free Pascal, directory where to search Fano units.
 This approach, however, has disadvantage. When you update your Fano repository,
 all your applications that depends on Fano will be affected. If newer version of Fano repository introduces breaking changes, application that requires older version of Fano repository may fail.
 
+## Versioning Number
+
+Fano Framework follows [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200).
+
 ## Windows User
 
 Fano Framework is not yet supported on Windows.
 
 ## Roadmap
-
-- Secure file upload support (in progress)
-- FastCGI protocol support (in progress)
-- Cookie and session support
-- Run application with built-in web server
-- Run application as Apache module
-- Improve route matching performance
-- MongoDb database support (in progress)
-- Redis database support (in progress)
-- Elasticsearch database support
-- Improve data validation and sanitation
-- Unit test
 
 See [Projects](https://github.com/orgs/fanoframework/projects) for more information about what is currently being developed or planed.
 

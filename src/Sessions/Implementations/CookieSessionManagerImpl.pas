@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -15,7 +15,6 @@ interface
 
 uses
 
-    Classes,
     SessionIntf,
     SessionIdGeneratorIntf,
     SessionManagerIntf,
@@ -30,6 +29,9 @@ type
     (*!------------------------------------------------
      * class having capability to manage
      * session variables in encrypted cookie
+     *
+     * TODO: Current implementation is not thread safe.
+     *       Need to rethink when dealing multiple threads
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
@@ -115,6 +117,7 @@ implementation
 
 uses
 
+    Classes,
     SysUtils,
     DateUtils,
     SessionConsts,
