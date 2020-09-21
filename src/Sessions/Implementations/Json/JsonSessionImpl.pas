@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -123,7 +123,8 @@ uses
     DateUtils,
     SessionConsts,
     ESessionExpiredImpl,
-    ESessionKeyNotFoundImpl;
+    ESessionKeyNotFoundImpl,
+    ESessionInvalidImpl;
 
 resourcestring
 
@@ -143,7 +144,17 @@ resourcestring
     );
     begin
         inherited create(sessName, sessId);
-        fSessionData := getJSON(sessData);
+
+        try
+            fSessionData := getJSON(sessData);
+        except
+            on e: EParserError do
+            begin
+                //change exception to not show misleading error message
+                raise ESessionInvalid.create(rsSessionInvalid);
+            end;
+        end;
+
         raiseExceptionIfExpired();
     end;
 
