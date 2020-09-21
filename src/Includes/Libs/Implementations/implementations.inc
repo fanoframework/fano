@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -37,9 +37,11 @@ KeyValuePairFactoryImpl,
 {$INCLUDE Socket2/implementations.inc}
 {$INCLUDE Logger/implementations.inc}
 {$INCLUDE Regex/implementations.inc}
-{$INCLUDE LibCurl/implementations.inc}
+{$INCLUDE HttpClient/implementations.inc}
 {$INCLUDE Protocol/implementations.inc}
 {$INCLUDE Random/implementations.inc}
 {$INCLUDE Cli/implementations.inc}
 {$INCLUDE Encrypter/implementations.inc}
 {$INCLUDE Antivirus/implementations.inc}
+{$INCLUDE Mailer/implementations.inc}
+{$INCLUDE UserAgent/implementations.inc}

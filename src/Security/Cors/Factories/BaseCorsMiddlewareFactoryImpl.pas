@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -58,6 +58,7 @@ implementation
     function makeStringArray(const arr : array of string) : TStringArray;
     var i, len: Integer;
     begin
+        result := default(TStringArray);
         len := high(arr) - low(arr) + 1;
         setLength(result, len);
         for i:= 0 to len - 1 do

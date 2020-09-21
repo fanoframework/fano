@@ -186,93 +186,6 @@ STR_HEAD_HTML =
     '				padding: 1em 1.5em;' + LineEnding +
     '				overflow-x: auto;' + LineEnding +
     '			}' + LineEnding +
-    '		.align-left {' + LineEnding +
-    '			text-align: left;' + LineEnding +
-    '		}' + LineEnding +
-    '		.align-center {' + LineEnding +
-    '			text-align: center;' + LineEnding +
-    '		}' + LineEnding +
-    '		.align-right {' + LineEnding +
-    '			text-align: right;' + LineEnding +
-    '		}' + LineEnding +
-    '		.row {' + LineEnding +
-    '			display: flex;' + LineEnding +
-    '			flex-wrap: wrap;' + LineEnding +
-    '			box-sizing: border-box;' + LineEnding +
-    '			align-items: stretch;' + LineEnding +
-    '		}' + LineEnding +
-    '			.row > * {' + LineEnding +
-    '				box-sizing: border-box;' + LineEnding +
-    '			}' + LineEnding +
-    '			@media screen and (max-width: 1680px) {' + LineEnding +
-    '				.row {' + LineEnding +
-    '					display: flex;' + LineEnding +
-    '					flex-wrap: wrap;' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '					align-items: stretch;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row > * {' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row {' + LineEnding +
-    '					margin-top: 0;' + LineEnding +
-    '					margin-left: -1.5em;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row > * {' + LineEnding +
-    '					padding: 0 0 0 1.5em;' + LineEnding +
-    '				}' + LineEnding +
-    '			}' + LineEnding +
-    '			@media screen and (max-width: 1280px) {' + LineEnding +
-    '				.row {' + LineEnding +
-    '					display: flex;' + LineEnding +
-    '					flex-wrap: wrap;' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '					align-items: stretch;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row > * {' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '				}' + LineEnding +
-    '			}' + LineEnding +
-    '			@media screen and (max-width: 980px) {' + LineEnding +
-    '				.row {' + LineEnding +
-    '					display: flex;' + LineEnding +
-    '					flex-wrap: wrap;' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '					align-items: stretch;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row > * {' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row {' + LineEnding +
-    '					margin-top: 0;' + LineEnding +
-    '					margin-left: -1.5em;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row > * {' + LineEnding +
-    '					padding: 0 0 0 1.5em;' + LineEnding +
-    '				}' + LineEnding +
-    '			}' + LineEnding +
-    '			@media screen and (max-width: 736px) {' + LineEnding +
-    '				.row {' + LineEnding +
-    '					display: flex;' + LineEnding +
-    '					flex-wrap: wrap;' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '					align-items: stretch;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row > * {' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '				}' + LineEnding +
-    '			}' + LineEnding +
-    '			@media screen and (max-width: 480px) {' + LineEnding +
-    '				.row {' + LineEnding +
-    '					display: flex;' + LineEnding +
-    '					flex-wrap: wrap;' + LineEnding +
-    '					box-sizing: border-box;' + LineEnding +
-    '					align-items: stretch;' + LineEnding +
-    '				}' + LineEnding +
-    '				.row > * {' + LineEnding +
-    '						box-sizing: border-box;' + LineEnding +
-    '					}' + LineEnding +
-    '			}' + LineEnding +
     '		ol {' + LineEnding +
     '			list-style: decimal;' + LineEnding +
     '			margin: 0 0 2em 0;' + LineEnding +
@@ -333,7 +246,7 @@ STR_HEAD_HTML =
     '		}' + LineEnding +
     '		@media screen and (max-width: 1680px) {' + LineEnding +
     '			.wrapper > .inner {' + LineEnding +
-    '				padding: 4em 4em 2em 4em ;' + LineEnding +
+    '				padding: 1.5em 2em 1.5em 2em ;' + LineEnding +
     '			}' + LineEnding +
     '		}' + LineEnding +
     '' + LineEnding +

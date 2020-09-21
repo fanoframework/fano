@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -57,7 +57,7 @@ implementation
     function TResponseStream.write(const buffer : string) : int64;
     begin
         result := 0;
-        if (length(buffer) > 0) then
+        if buffer <> '' then
         begin
             result := self.write(buffer[1], length(buffer));
         end;

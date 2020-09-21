@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -57,6 +57,7 @@ implementation
     function initValidators(const avalidators : array of IValidator) : TValidatorArray;
     var i, len : integer;
     begin
+        result := default(TValidatorArray);
         len := high(avalidators) - low(avalidators) + 1;
         setLength(result, len);
         for i := 0 to len -1 do

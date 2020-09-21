@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -65,11 +65,11 @@ uses
     begin
         raiseExceptionIfCurlNotInitialized();
         streamInst.reset();
-        curl_easy_setopt(hCurl, CURLOPT_URL, [ PChar(url) ]);
+        curl_easy_setopt(hCurl, CURLOPT_URL, [ pchar(url) ]);
         if (data <> nil) then
         begin
             params := data.serialize();
-            curl_easy_setopt(hCurl, CURLOPT_POSTFIELDS, [ PChar(params) ]);
+            curl_easy_setopt(hCurl, CURLOPT_POSTFIELDS, [ pchar(params) ]);
         end;
         executeCurl(hCurl);
         result := streamInst;

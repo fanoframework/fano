@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -195,7 +195,7 @@ uses
      * if you set fvalue = 'csrf_token' then
      * request is expected to have that field
      * <form method="post">
-     *    <input type="hidden" name="csrf_value" value="some_random_token" >
+     *    <input type="hidden" name="csrf_token" value="some_random_token" >
      *    ...
      * </form>
      *----------------------------------------*)

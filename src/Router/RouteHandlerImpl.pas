@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -17,6 +17,7 @@ uses
 
     RequestIntf,
     ResponseIntf,
+    MiddlewareListItemIntf,
     MiddlewareListIntf,
     MiddlewareLinkListIntf,
     MiddlewareIntf,
@@ -37,8 +38,7 @@ type
      * -----------------------------------------------*)
     TRouteHandler = class(TInjectableObject, IRouteHandler, IRequestHandler, IRouteArgsReader, IRouteArgsWriter, IRoute)
     private
-        fMiddlewares : IMiddlewareList;
-        fMiddlewareLinkList : IMiddlewareLinkList;
+        fMiddlewares : IMiddlewareListItem;
         varPlaceholders : TArrayOfPlaceholders;
         fActualHandler : IRequestHandler;
         fRouteName : shortstring;
@@ -55,10 +55,10 @@ type
          * constructor
          *--------------------------------------------
          * @param amiddlewares object represent middlewares
+         * @param actualHandler actual request handler
          *--------------------------------------------*)
         constructor create(
-            const amiddlewares : IMiddlewareList;
-            const amiddlewareLinkList : IMiddlewareLinkList;
+            const amiddlewares : IMiddlewareListItem;
             const actualHandler : IRequestHandler
         );
 
@@ -177,18 +177,16 @@ uses
      * constructor
      *--------------------------------------------
      * @param amiddlewares object represent middlewares
-     * @param viewInst view instance to use
-     * @param viewParamsInt view parameters
+     * @param amiddlewareLinkList object represent middleware linked list
+     * @param actualHandler actual request handler
      *--------------------------------------------*)
     constructor TRouteHandler.create(
-        const amiddlewares : IMiddlewareList;
-        const amiddlewareLinkList : IMiddlewareLinkList;
+        const amiddlewares : IMiddlewareListItem;
         const actualHandler : IRequestHandler
     );
     begin
         inherited create();
         fMiddlewares := amiddlewares;
-        fMiddlewareLinkList := amiddlewareLinkList;
         fActualHandler := actualHandler;
         varPlaceholders := nil;
     end;
@@ -196,7 +194,6 @@ uses
     destructor TRouteHandler.destroy();
     begin
         fMiddlewares := nil;
-        fMiddlewareLinkList := nil;
         fActualHandler := nil;
         varPlaceholders := nil;
         inherited destroy();
@@ -296,7 +293,7 @@ uses
      *--------------------------------------------*)
     function TRouteHandler.add(const amiddleware : IMiddleware) : IRoute;
     begin
-        fMiddlewares.add(amiddleware);
+        fMiddlewares.asList().add(amiddleware);
         result := self;
     end;
 
@@ -347,6 +344,6 @@ uses
      *--------------------------------------------*)
     function TRouteHandler.middlewares() : IMiddlewareLinkList;
     begin
-        result := fMiddlewareLinkList;
+        result := fMiddlewares.asLinkList();
     end;
 end.

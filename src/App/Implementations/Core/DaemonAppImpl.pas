@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit DaemonAppImpl;
@@ -55,7 +55,22 @@ type
 
         procedure cleanUp();
     protected
-        procedure executeRequest(const env : ICGIEnvironment);
+        (*!-----------------------------------------------
+         * execute application
+         *------------------------------------------------
+         * @param container dependency container
+         * @param env CGI environment
+         * @param stdin stdin instance
+         * @param dispatcher dispatcher instance
+         * @return current application instance
+         *-----------------------------------------------*)
+        function doExecute(
+            const container : IDependencyContainer;
+            const env : ICGIEnvironment;
+            const stdin : IStdIn;
+            const dispatcher : IDispatcher
+        ) : IRunnable; override;
+
     public
         (*!-----------------------------------------------
          * constructor
@@ -86,7 +101,7 @@ type
         ) : boolean;
 
         (*!------------------------------------------------
-         * FastCGI request is ready
+         * request is ready
          *-----------------------------------------------
          * @param socketStream, original socket stream
          * @param env, CGI environment
@@ -106,10 +121,6 @@ uses
 
     SysUtils,
     EnvironmentEnumeratorIntf,
-    ERouteHandlerNotFoundImpl,
-    EMethodNotAllowedImpl,
-    EInvalidMethodImpl,
-    EInvalidRequestImpl,
     ESockBindImpl,
     ESockCreateImpl,
     ESockListenImpl;
@@ -161,15 +172,21 @@ uses
                     //TODO add better exception handling for ESockBind, ESockListen, ESockCreate
                     on e : ESockCreate do
                     begin
-                        writeln(e.message);
+                        writeln('Fail to create socket.');
+                        writeln('Exception: ', e.ClassName);
+                        writeln('Message: ', e.Message);
                     end;
                     on e : ESockBind do
                     begin
-                        writeln(e.message);
+                        writeln('Fail to bind socket.');
+                        writeln('Exception: ', e.ClassName);
+                        writeln('Message: ', e.Message);
                     end;
                     on e : ESockListen do
                     begin
-                        writeln(e.message);
+                        writeln('Fail to listen socket.');
+                        writeln('Exception: ', e.ClassName);
+                        writeln('Message: ', e.Message);
                     end;
                 end;
             finally
@@ -202,41 +219,23 @@ uses
     end;
 
     (*!-----------------------------------------------
-     * execute request
+     * execute application
      *------------------------------------------------
-     * @param env, CGI environment
+     * @param container dependency container
+     * @param env CGI environment
+     * @param stdin stdin instance
+     * @param dispatcher dispatcher instance
+     * @return current application instance
      *-----------------------------------------------*)
-    procedure TDaemonWebApplication.executeRequest(const env : ICGIEnvironment);
+    function TDaemonWebApplication.doExecute(
+        const container : IDependencyContainer;
+        const env : ICGIEnvironment;
+        const stdin : IStdIn;
+        const dispatcher : IDispatcher
+    ) : IRunnable;
     begin
-        try
-            execute(env);
-        except
-            on e : EInvalidRequest do
-            begin
-                fAppSvc.errorHandler.handleError(fAppSvc.env.enumerator, e, 400, sHttp400Message);
-                reset();
-            end;
-
-            on e : ERouteHandlerNotFound do
-            begin
-                fDaemonAppSvc.errorHandler.handleError(env.enumerator, e, 404, sHttp404Message);
-            end;
-
-            on e : EMethodNotAllowed do
-            begin
-                fDaemonAppSvc.errorHandler.handleError(env.enumerator, e, 405, sHttp405Message);
-            end;
-
-            on e : EInvalidMethod do
-            begin
-                fDaemonAppSvc.errorHandler.handleError(env.enumerator, e, 501, sHttp501Message);
-            end;
-
-            on e : Exception do
-            begin
-                fDaemonAppSvc.errorHandler.handleError(env.enumerator, e);
-            end;
-        end;
+        execute(env, stdin, dispatcher);
+        result := self;
     end;
 
     (*!-----------------------------------------------
@@ -278,7 +277,13 @@ uses
         try
             //when we get here, CGI environment and any POST data are ready
             fDaemonAppSvc.stdIn.setStream(stdInStream);
-            executeRequest(env);
+            execAndHandleExcept(
+                fDaemonAppSvc.container,
+                env,
+                fDaemonAppSvc.stdIn,
+                fDaemonAppSvc.errorHandler,
+                fDaemonAppSvc.dispatcher
+            );
         finally
             fDaemonAppSvc.outputBuffer.endBuffering();
             //write response back to web server (i.e FastCGI client)

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -76,7 +76,11 @@ implementation
         for i := 0 to len - 1 do
         begin
             result := result or fValidators[i].isValid(fieldName, dataToValidate, request);
-            if (not result) then
+            if (result) then
+            begin
+                //one of validation rules is satisfied so exit early
+                exit;
+            end else
             begin
                 if (totFail > 0) then
                 begin

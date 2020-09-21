@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -27,11 +27,28 @@ TEpollIoHandler = EpollIoHandlerImpl.TEpollIoHandler;
 {$ENDIF}
 TSelectIoHandler = SelectIoHandlerImpl.TSelectIoHandler;
 
+{$IFDEF FREEBSD}
+    {$IFDEF USE_KQUEUE}
+    TKQueueIoHandler = KQueueIoHandlerImpl.TKQueueIoHandler;
+    {$ENDIF}
+{$ENDIF}
+
 TSocketOpts = SocketOptsImpl.TSocketOpts;
 
 TInetSvrFactory = InetSvrFactoryImpl.TInetSvrFactory;
 TUnixSvrFactory = UnixSvrFactoryImpl.TUnixSvrFactory;
 TBoundSvrFactory = BoundSvrFactoryImpl.TBoundSvrFactory;
+
+{$IFDEF LINUX}
 TEpollInetSvrFactory = EpollInetSvrFactoryImpl.TEpollInetSvrFactory;
 TEpollUnixSvrFactory = EpollUnixSvrFactoryImpl.TEpollUnixSvrFactory;
 TEpollBoundSvrFactory = EpollBoundSvrFactoryImpl.TEpollBoundSvrFactory;
+{$ENDIF}
+
+{$IFDEF FREEBSD}
+    {$IFDEF USE_KQUEUE}
+    TKQueueInetSvrFactory = KQueueInetSvrFactoryImpl.TKQueueInetSvrFactory;
+    TKQueueUnixSvrFactory = KQueueUnixSvrFactoryImpl.TKQueueUnixSvrFactory;
+    TKQueueBoundSvrFactory = KQueueBoundSvrFactoryImpl.TKQueueBoundSvrFactory;
+    {$ENDIF}
+{$ENDIF}

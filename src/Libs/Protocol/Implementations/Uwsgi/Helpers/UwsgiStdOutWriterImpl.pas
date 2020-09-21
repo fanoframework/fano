@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit UwsgiStdOutWriterImpl;
@@ -76,7 +76,7 @@ uses
     var tmpStr, statusLine : string;
     begin
         statusLine := extractStatusLineHeaderIfAny(str);
-        if length(statusLine) = 0 then
+        if statusLine = '' then
         begin
             tmpStr := 'HTTP/1.1 200 OK' + LineEnding + str;
         end else

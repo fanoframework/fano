@@ -1,3 +1,11 @@
+{*!
+ * Fano Web Framework (https://fanoframework.github.io)
+ *
+ * @link      https://github.com/fanoframework/fano
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
+ *}
+
 TSimpleTemplateParserFactory = SimpleTemplateParserFactoryImpl.TSimpleTemplateParserFactory;
 TTemplateParserFactory = TemplateParserFactoryImpl.TTemplateParserFactory;
 TNullTemplateParserFactory = NullTemplateParserFactoryImpl.TNullTemplateParserFactory;
@@ -16,6 +24,7 @@ TView = ViewImpl.TView;
 TStaticView = StaticViewImpl.TStaticView;
 TCompositeView = CompositeViewImpl.TCompositeView;
 TTemplateView = TemplateViewImpl.TTemplateView;
+TGroupView = GroupViewImpl.TGroupView;
 TNullView = NullViewImpl.TNullView;
 TNullViewFactory = NullViewFactoryImpl.TNullViewFactory;
 TViewPartial = ViewPartialImpl.TViewPartial;
