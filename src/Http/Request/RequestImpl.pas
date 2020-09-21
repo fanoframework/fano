@@ -301,7 +301,11 @@ resourcestring
             cookieParams,
             bodyParams
         );
-        queryAndBodyParams := TCompositeList.create(queryParams, bodyParams);
+
+        //make parameters in body take more precedence over query string
+        //to reduce risk of HTTP parameters pollution with cross-channel pollution
+        //see http://www.madlab.it/slides/BHEU2011/whitepaper-bhEU2011.pdf
+        queryAndBodyParams := TCompositeList.create(bodyParams, queryParams);
     end;
 
     destructor TRequest.destroy();
@@ -442,14 +446,14 @@ resourcestring
         end
         else if (pos('multipart/form-data', contentType) > 0) then
         begin
-            multipartFormDataParser.parse(contentType, bodyStr, body, uploadedFilesWriter);
+            multipartFormDataParser.parse(env.contentType(), bodyStr, body, uploadedFilesWriter);
             uploadedFiles := uploadedFilesWriter as IUploadedFileCollection;
         end else
         begin
             //if POST/PUT/PATCH but different contentType such as 'application/json'
             //save it as it is with its contentType as key and let developer deals with it
             new(param);
-            param^.key := contentType;
+            param^.key := env.contentType();
             param^.value := bodyStr;
             body.add(param^.key, param);
         end;
@@ -580,17 +584,25 @@ resourcestring
      *-------------------------------------------------
      * @param string key name of key
      * @return instance of IUploadedFileArray or nil if is not
-     *         exists
+     *         exists or request is not multipart/form-data
      *------------------------------------------------*)
     function TRequest.getUploadedFile(const key: string) : IUploadedFileArray;
     begin
-        result := uploadedFiles.getUploadedFile(key);
+        if (uploadedFiles <> nil) then
+        begin
+            result := uploadedFiles.getUploadedFile(key);
+        end else
+        begin
+            //if we get here, it means request is not multipart/form-data
+            result := nil;
+        end;
     end;
 
     (*!------------------------------------------------
      * get all uploaded files
      *-------------------------------------------------
-     * @return IUploadedFileCollection
+     * @return IUploadedFileCollection or nil if
+     *         request is not multipart/form-data
      *------------------------------------------------*)
     function TRequest.getUploadedFiles() : IUploadedFileCollection;
     begin
