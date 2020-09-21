@@ -57,3 +57,4 @@ DecrypterIntf,
 
 {$INCLUDE Socket2/interfaces.inc}
 {$INCLUDE Mailer/interfaces.inc}
+{$INCLUDE UserAgent/interfaces.inc}
