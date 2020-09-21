@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -18,7 +18,7 @@ uses
     ReadOnlyListIntf,
     ValidatorIntf,
     RequestIntf,
-    BaseValidatorImpl;
+    CompareIntValidatorImpl;
 
 type
 
@@ -28,20 +28,11 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TMinIntegerValidator = class(TBaseValidator)
-    private
-        fMinimumValue : integer;
+    TMinIntegerValidator = class(TCompareIntValidator)
     protected
-        (*!------------------------------------------------
-         * actual data validation
-         *-------------------------------------------------
-         * @param dataToValidate input data
-         * @return true if data is valid otherwise false
-         *-------------------------------------------------*)
-        function isValidData(
-            const dataToValidate : string;
-            const dataCollection : IReadOnlyList;
-            const request : IRequest
+        function compareIntWithRef(
+            const aInt: integer;
+            const refInt : integer
         ) : boolean; override;
     public
         (*!------------------------------------------------
@@ -60,30 +51,25 @@ uses
 
 resourcestring
 
-    sErrFieldMustBeIntegerWithMinValue = 'Field %s must be integer with minimum value of ';
+    sErrFieldMustBeIntegerWithMinValue = 'Field %%s must be integer with minimum value of %d';
 
     (*!------------------------------------------------
      * constructor
      *-------------------------------------------------*)
     constructor TMinIntegerValidator.create(const minValue : integer);
     begin
-        inherited create(sErrFieldMustBeIntegerWithMinValue + intToStr(minValue));
-        fMinimumValue := minValue;
+        inherited create(
+            format(sErrFieldMustBeIntegerWithMinValue, [ minValue ]),
+            minValue
+        );
     end;
 
-    (*!------------------------------------------------
-     * actual data validation
-     *-------------------------------------------------
-     * @param dataToValidate input data
-     * @return true if data is valid otherwise false
-     *-------------------------------------------------*)
-    function TMinIntegerValidator.isValidData(
-        const dataToValidate : string;
-        const dataCollection : IReadOnlyList;
-        const request : IRequest
+    function TMinIntegerValidator.compareIntWithRef(
+        const aInt: integer;
+        const refInt : integer
     ) : boolean;
-    var intValue : integer;
     begin
-        result := tryStrToInt(dataToValidate, intValue) and (intValue >= fMinimumValue);
+        result := (aInt >= refInt);
     end;
+
 end.

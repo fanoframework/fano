@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -13,6 +13,19 @@
  *-----------------------------------------------*)
 
 TRdbms = RdbmsImpl.TRdbms;
+TRdbmsPool = RdbmsPoolImpl.TRdbmsPool;
+TThreadSafeRdbmsPool = ThreadSafeRdbmsPoolImpl.TThreadSafeRdbmsPool;
+TRdbmsPoolFactory = RdbmsPoolFactoryImpl.TRdbmsPoolFactory;
+TThreadSafeRdbmsPoolFactory = ThreadSafeRdbmsPoolFactoryImpl.TThreadSafeRdbmsPoolFactory;
+
 TMySqlDb = MySqlDbImpl.TMySqlDb;
 TMySQLDbFactory = MySqlDbFactoryImpl.TMySQLDbFactory;
+
 TPostgreSqlDb = PostgreSqlDbImpl.TPostgreSqlDb;
+TPostgreSqlDbFactory = PostgreSqlDbFactoryImpl.TPostgreSqlDbFactory;
+
+TFirebirdDb = FirebirdDbImpl.TFirebirdDb;
+TFirebirdDbFactory = FirebirdDbFactoryImpl.TFirebirdDbFactory;
+
+TSQLiteDb = SQLiteDbImpl.TSQLiteDb;
+TSQLiteDbFactory = SQLiteDbFactoryImpl.TSQLiteDbFactory;

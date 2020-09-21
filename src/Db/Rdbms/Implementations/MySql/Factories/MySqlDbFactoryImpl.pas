@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -15,9 +15,13 @@ interface
 
 uses
 
-    DependencyIntf,
-    DependencyContainerIntf,
-    FactoryImpl;
+    RdbmsIntf,
+    RdbmsFactoryIntf,
+    AbstractDbFactoryImpl;
+
+const
+
+    MYSQL_DEFAULT_PORT = 3306;
 
 type
 
@@ -27,7 +31,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TMySqlDbFactory = class(TFactory)
+    TMySqlDbFactory = class(TAbstractDbFactory)
     private
         mysqlVersion : string;
         databaseHostname : string;
@@ -40,12 +44,12 @@ type
         (*!------------------------------------------------
          * create connection to RDBMS server
          *-------------------------------------------------
+         * @param version MySQL version
          * @param host hostname/ip where RDBMS server run
          * @param dbname database name to use
          * @param username user name credential to login
          * @param password password credential to login
          * @param port TCP port where RDBMS listen
-         * @return current instance
          *-------------------------------------------------*)
         constructor create(
             const version : string;
@@ -53,33 +57,32 @@ type
             const dbname : string;
             const username : string;
             const password : string;
-            const port : word = 3306
+            const port : word = MYSQL_DEFAULT_PORT
         );
 
-        (*!---------------------------------------------------
-         * build class instance
-         *----------------------------------------------------
-         * @param container dependency container instance
-         *---------------------------------------------------*)
-        function build(const container : IDependencyContainer) : IDependency; override;
+        (*!------------------------------------------------
+         * create rdbms instance
+         *-------------------------------------------------
+         * @return database connection instance
+         *-------------------------------------------------*)
+        function build() : IRdbms; override;
     end;
 
 implementation
 
 uses
 
-    RdbmsIntf,
     MySqlDbImpl;
 
     (*!------------------------------------------------
      * create connection to RDBMS server
      *-------------------------------------------------
+     * @param version MySQL version
      * @param host hostname/ip where RDBMS server run
      * @param dbname database name to use
      * @param username user name credential to login
      * @param password password credential to login
      * @param port TCP port where RDBMS listen
-     * @return current instance
      *-------------------------------------------------*)
     constructor TMySqlDbFactory.create(
         const version : string;
@@ -87,7 +90,7 @@ uses
         const dbname : string;
         const username : string;
         const password : string;
-        const port : word = 3306
+        const port : word = MYSQL_DEFAULT_PORT
     );
     begin
         mysqlVersion := version;
@@ -98,24 +101,21 @@ uses
         databasePort := port;
     end;
 
-
-    (*!---------------------------------------------------
-     * build class instance
-     *----------------------------------------------------
-     * @param container dependency container instance
-     *---------------------------------------------------*)
-    function TMySqlDbFactory.build(const container : IDependencyContainer) : IDependency;
-    var db : IRdbms;
+    (*!------------------------------------------------
+     * create rdbms instance
+     *-------------------------------------------------
+     * @return database connection instance
+     *-------------------------------------------------*)
+    function TMySqlDbFactory.build() : IRdbms;
     begin
-        db := TMySqlDb.create(mysqlVersion);
-        db.connect(
+        result := TMySqlDb.create(mysqlVersion);
+        result.connect(
             databaseHostname,
             databaseName,
             databaseUsername,
             databasePassword,
             databasePort
         );
-        result := db as IDependency;
     end;
 
 end.

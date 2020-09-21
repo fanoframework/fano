@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -25,7 +25,7 @@ uses
 type
 
     (*!------------------------------------------------
-     * View that can render from a HTML template to string
+     * View that can render from a HTML template file to string
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
@@ -58,8 +58,8 @@ uses
 
     destructor TViewPartialFactory.destroy();
     begin
-        inherited destroy();
         parser := nil;
+        inherited destroy();
     end;
 
     (*!---------------------------------------------------

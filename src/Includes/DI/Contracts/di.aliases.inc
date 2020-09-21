@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -17,11 +17,5 @@ IDependencyContainer = DependencyContainerIntf.IDependencyContainer;
 IDependencyFactory = DependencyContainerIntf.IDependencyFactory;
 IDependency = DependencyIntf.IDependency;
 IDependencyList = DependencyListIntf.IDependencyList;
-
-IServiceContainer = ServiceContainerIntf.IServiceContainer;
-IServiceFactory = ServiceFactoryIntf.IServiceFactory;
-IService = ServiceIntf.IService;
-
 IContainerFactory = ContainerFactoryIntf.IContainerFactory;
-
 IServiceProvider = ServiceProviderIntf.IServiceProvider;

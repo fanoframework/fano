@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -31,8 +31,8 @@ type
      *-----------------------------------------------*)
     TController = class(TAbstractController)
     protected
-        gView : IView;
-        viewParams : IViewParameters;
+        fView : IView;
+        fViewParams : IViewParameters;
     public
 
         (*!-------------------------------------------
@@ -80,8 +80,8 @@ implementation
         const viewParamsInst : IViewParameters
     );
     begin
-        gView := viewInst;
-        viewParams := viewParamsInst;
+        fView := viewInst;
+        fViewParams := viewParamsInst;
     end;
 
     (*!-------------------------------------------
@@ -89,8 +89,8 @@ implementation
      *--------------------------------------------*)
     destructor TController.destroy();
     begin
-        gView := nil;
-        viewParams := nil;
+        fView := nil;
+        fViewParams := nil;
         inherited destroy();
     end;
 
@@ -107,7 +107,7 @@ implementation
         const args : IRouteArgsReader
     ) : IResponse;
     begin
-        result := gView.render(viewParams, response);
+        result := fView.render(fViewParams, response);
     end;
 
 end.

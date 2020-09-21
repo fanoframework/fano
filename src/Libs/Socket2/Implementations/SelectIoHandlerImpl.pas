@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -166,7 +166,7 @@ uses
         const timeoutInMs : integer = 30000
     );
     begin
-        inherited create(sockOpts);
+        inherited create(sockOpts, timeoutInMs);
         fTimeoutVal := getTimeOut(timeoutInMs);
     end;
 
@@ -295,7 +295,7 @@ uses
 
             if (clientSocket < 0) then
             begin
-                raiseExceptionIfAny();
+                handleAcceptError();
             end else
             begin
                 fSockOpts.makeNonBlocking(clientSocket);
@@ -323,8 +323,7 @@ uses
         var origFds : TFDSet;
         var terminated : boolean
     );
-    var ch : char;
-        fds : longint;
+    var fds : longint;
     begin
         for fds := 0 to maxHandle do
         begin
@@ -334,7 +333,7 @@ uses
                 begin
                     //we get termination signal, just read until no more
                     //bytes and quit
-                    fpRead(pipeIn, @ch, 1);
+                    readPipe(pipeIn);
                     terminated := true;
                     break;
                 end else
@@ -372,16 +371,20 @@ uses
         highestHandle : longint;
         terminated : boolean;
     var totDesc : longint;
+        aTimeoutVal : TTimeVal;
     begin
         //find file descriptor with biggest value
         highestHandle := getHighestHandle(listenSocket.fd, termPipeIn);
         origfds := initFileDescSet(listenSocket.fd, termPipeIn);
         terminated := false;
         repeat
+            //need to reset readfds, timeout as they are changed by select()
             readfds := origfds;
+            aTimeoutVal := fTimeoutVal;
+
             //wait until something happen in
             //listenSocket or termPipeIn or client connection or timeout
-            totDesc := fpSelect(highestHandle + 1, @readfds, nil, nil, @fTimeoutVal);
+            totDesc := fpSelect(highestHandle + 1, @readfds, nil, nil, @aTimeoutVal);
             if totDesc > 0 then
             begin
                 //one or more file descriptors is ready for I/O, check further

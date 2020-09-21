@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit FcgiStdOutWriterImpl;
@@ -105,7 +105,7 @@ uses
     var arecord : IFcgiRecord;
         strStream : IStreamAdapter;
     begin
-        if (length(str) > 0) then
+        if (str <> '') then
         begin
             strStream := TStreamAdapter.create(TStringStream.create(str));
             strStream.seek(0);
