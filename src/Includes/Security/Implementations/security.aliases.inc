@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -13,8 +13,11 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-{$INCLUDE validations.aliases.inc}
-{$INCLUDE sanitations.aliases.inc}
-{$INCLUDE cors.aliases.inc}
-{$INCLUDE csrf.aliases.inc}
-{$INCLUDE auth.aliases.inc}
+{$INCLUDE Validations/aliases.inc}
+{$INCLUDE Sanitations/aliases.inc}
+{$INCLUDE Cors/aliases.inc}
+{$INCLUDE Csrf/aliases.inc}
+{$INCLUDE Auth/aliases.inc}
+{$INCLUDE Xss/aliases.inc}
+{$INCLUDE FrameGuard/aliases.inc}
+{$INCLUDE PasswordHash/aliases.inc}

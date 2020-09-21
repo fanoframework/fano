@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -33,15 +33,19 @@ type
         fGetClientFactory : IDependencyFactory;
         fPostClientFactory : IDependencyFactory;
         fPutClientFactory : IDependencyFactory;
+        fPatchClientFactory : IDependencyFactory;
         fDeleteClientFactory : IDependencyFactory;
         fHeadClientFactory : IDependencyFactory;
+        fOptionsClientFactory : IDependencyFactory;
     public
         constructor create(
             getClientFactory : IDependencyFactory;
             postClientFactory : IDependencyFactory;
             putClientFactory : IDependencyFactory;
+            patchClientFactory : IDependencyFactory;
             deleteClientFactory : IDependencyFactory;
-            headClientFactory : IDependencyFactory
+            headClientFactory : IDependencyFactory;
+            optionsClientFactory : IDependencyFactory
         );
 
         destructor destroy(); override;
@@ -63,8 +67,10 @@ uses
     HttpGetClientIntf,
     HttpPostClientIntf,
     HttpPutClientIntf,
+    HttpPatchClientIntf,
     HttpDeleteClientIntf,
     HttpHeadClientIntf,
+    HttpOptionsClientIntf,
 
     HttpClientImpl;
 
@@ -72,15 +78,19 @@ uses
         getClientFactory : IDependencyFactory;
         postClientFactory : IDependencyFactory;
         putClientFactory : IDependencyFactory;
+        patchClientFactory : IDependencyFactory;
         deleteClientFactory : IDependencyFactory;
-        headClientFactory : IDependencyFactory
+        headClientFactory : IDependencyFactory;
+        optionsClientFactory : IDependencyFactory
     );
     begin
         fGetClientFactory := getClientFactory;
         fPostClientFactory := postClientFactory;
         fPutClientFactory := putClientFactory;
+        fPatchClientFactory := patchClientFactory;
         fDeleteClientFactory := deleteClientFactory;
         fHeadClientFactory := headClientFactory;
+        fOptionsClientFactory := optionsClientFactory;
     end;
 
     destructor THttpClientFactory.destroy();
@@ -89,8 +99,10 @@ uses
         fGetClientFactory := nil;
         fPostClientFactory := nil;
         fPutClientFactory := nil;
+        fPatchClientFactory := nil;
         fDeleteClientFactory := nil;
         fHeadClientFactory := nil;
+        fOptionsClientFactory := nil;
     end;
 
     (*!---------------------------------------------------
@@ -104,8 +116,10 @@ uses
             fGetClientFactory.build(container) as IHttpGetClient,
             fPostClientFactory.build(container) as IHttpPostClient,
             fPutClientFactory.build(container) as IHttpPutClient,
+            fPatchClientFactory.build(container) as IHttpPatchClient,
             fDeleteClientFactory.build(container) as IHttpDeleteClient,
-            fHeadClientFactory.build(container) as IHttpHeadClient
+            fHeadClientFactory.build(container) as IHttpHeadClient,
+            fOptionsClientFactory.build(container) as IHttpOptionsClient
         );
     end;
 end.

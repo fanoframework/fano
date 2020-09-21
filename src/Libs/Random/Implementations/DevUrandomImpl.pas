@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -21,8 +21,11 @@ uses
 type
 
     (*!------------------------------------------------
-     * interface for any class having capability to
-     * get random value
+     * class having capability to get random value
+     * from /dev/urandom
+     *
+     * TODO: This is UNIX only, need to add conditional
+     * defines for UNIX
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
@@ -40,6 +43,7 @@ uses
     function TDevUrandom.randomBytes(const totalBytes : integer) : TBytes;
     var fstream : TFileStream;
     begin
+        result := default(TBytes);
         fstream := TFileStream.create('/dev/urandom', fmOpenRead);
         try
             setLength(result, totalBytes);

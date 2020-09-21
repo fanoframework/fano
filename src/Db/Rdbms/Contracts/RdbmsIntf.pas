@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -55,14 +55,18 @@ type
         function beginTransaction() : IRdbms;
 
         (*!------------------------------------------------
-         * end a transaction
+         * rollback a transaction
          *-------------------------------------------------
          * @return database connection instance
-         *-------------------------------------------------
-         * This is provided to make it easy to auto commit or
-         * rollback
          *-------------------------------------------------*)
-        function endTransaction() : IRdbms;
+        function rollback() : IRdbms;
+
+        (*!------------------------------------------------
+         * commit a transaction
+         *-------------------------------------------------
+         * @return database connection instance
+         *-------------------------------------------------*)
+        function commit() : IRdbms;
 
         (*!------------------------------------------------
          * created prepared sql statement
@@ -70,6 +74,13 @@ type
          * @return result set
          *-------------------------------------------------*)
         function prepare(const sql : string) : IRdbmsStatement;
+
+        (*!------------------------------------------------
+         * get current database name
+         *-------------------------------------------------
+         * @return database name
+         *-------------------------------------------------*)
+        function getDbName() : string;
     end;
 
 implementation

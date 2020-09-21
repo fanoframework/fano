@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -69,6 +69,13 @@ type
         ) : IRdbms;
 
         (*!------------------------------------------------
+        * get current database name
+        *-------------------------------------------------
+        * @return database name
+        *-------------------------------------------------*)
+        function getDbName() : string;
+
+        (*!------------------------------------------------
          * initiate a transaction
          *-------------------------------------------------
          * @param connectionString
@@ -77,14 +84,18 @@ type
         function beginTransaction() : IRdbms;
 
         (*!------------------------------------------------
-         * end a transaction
+         * rollback a transaction
          *-------------------------------------------------
          * @return database connection instance
-         *-------------------------------------------------
-         * This is provided to make it easy to auto commit or
-         * rollback
          *-------------------------------------------------*)
-        function endTransaction() : IRdbms;
+        function rollback() : IRdbms;
+
+        (*!------------------------------------------------
+         * commit a transaction
+         *-------------------------------------------------
+         * @return database connection instance
+         *-------------------------------------------------*)
+        function commit() : IRdbms;
 
         (*!------------------------------------------------
          * total data in result set
@@ -267,6 +278,14 @@ resourcestring
         begin
             dbInstance := TSQLConnector.create(nil);
             dbInstance.transaction := TSQLTransaction.create(dbInstance);
+
+            //by default SqlDb TSQLConnection will start transaction as needed
+            //we do not want that. let developer decide for themselves
+            //but somehow SqlDb always want to use transaction so following
+            //line will cause EDatabaseError
+            //"Error: attempt to implicitly start a transaction on Connection..."
+            //dbInstance.Transaction.Options := [stoExplicitStart];
+
             fQuery := TSQLQuery.create(nil);
             fQuery.database := dbInstance;
         end;
@@ -276,6 +295,16 @@ resourcestring
         dbInstance.UserName := username;
         dbInstance.Password := password;
         result := self;
+    end;
+
+    (*!------------------------------------------------
+     * get current database name
+     *-------------------------------------------------
+     * @return database name
+     *-------------------------------------------------*)
+    function TRdbms.getDbName() : string;
+    begin
+        result := dbInstance.DatabaseName;
     end;
 
     procedure TRdbms.raiseExceptionIfInvalidConnection();
@@ -308,14 +337,26 @@ resourcestring
     end;
 
     (*!------------------------------------------------
-     * commit or rollback and end a transaction
+     * rollback a transaction
      *-------------------------------------------------
      * @return database connection instance
      *-------------------------------------------------*)
-    function TRdbms.endTransaction() : IRdbms;
+    function TRdbms.rollback() : IRdbms;
     begin
         raiseExceptionIfInvalidConnection();
-        dbInstance.endTransaction();
+        dbInstance.transaction.rollback();
+        result := self;
+    end;
+
+    (*!------------------------------------------------
+     * commit a transaction
+     *-------------------------------------------------
+     * @return database connection instance
+     *-------------------------------------------------*)
+    function TRdbms.commit() : IRdbms;
+    begin
+        raiseExceptionIfInvalidConnection();
+        dbInstance.transaction.commit();
         result := self;
     end;
 

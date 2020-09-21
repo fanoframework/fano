@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -99,7 +99,12 @@ resourcestring
     var val : PKeyValue;
     begin
         val := dataToValidate.find(fieldName);
-        result := (val <> nil) and isValidData(val^.value, dataToValidate, request);
+        result := ((val <> nil) and isValidData(val^.value, dataToValidate, request)) or
+            //required validator that validates against uploaded files
+            //will fail above test because dataToValidate does not include uploaded files
+            //so we need to make sure that if there
+            //is entry in uploaded file, assume pass validation
+            request.uploadedFiles.has(fieldName);
     end;
 
     (*!------------------------------------------------

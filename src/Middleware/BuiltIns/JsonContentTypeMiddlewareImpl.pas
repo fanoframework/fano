@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -58,7 +58,8 @@ uses
     begin
         method := request.method;
         isJsonRequest := ((method = 'POST') or (method = 'PUT') or
-            (method = 'DELETE')) and (request.env.contentType = 'application/json');
+            (method = 'PATCH') or (method = 'DELETE')) and
+            (request.env.contentType = 'application/json');
 
         if isJsonRequest then
         begin

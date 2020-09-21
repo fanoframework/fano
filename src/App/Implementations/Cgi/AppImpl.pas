@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit AppImpl;
@@ -14,6 +14,10 @@ interface
 uses
 
     RunnableIntf,
+    DependencyContainerIntf,
+    EnvironmentIntf,
+    StdInIntf,
+    DispatcherIntf,
     CoreAppConsts,
     CoreAppImpl;
 
@@ -25,6 +29,22 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
     TCgiWebApplication = class(TCoreWebApplication)
+    protected
+        (*!-----------------------------------------------
+         * execute application
+         *------------------------------------------------
+         * @param container dependency container
+         * @param env CGI environment
+         * @param stdin stdin instance
+         * @param dispatcher dispatcher instance
+         * @return current application instance
+         *-----------------------------------------------*)
+        function doExecute(
+            const container : IDependencyContainer;
+            const env : ICGIEnvironment;
+            const stdin : IStdIn;
+            const dispatcher : IDispatcher
+        ) : IRunnable; override;
     public
         function run() : IRunnable; override;
     end;
@@ -33,62 +53,44 @@ implementation
 
 uses
 
-    SysUtils,
+    SysUtils;
 
-    ///exception-related units
-    ERouteHandlerNotFoundImpl,
-    EMethodNotAllowedImpl,
-    EInvalidMethodImpl,
-    EInvalidRequestImpl,
-    EDependencyNotFoundImpl,
-    EInvalidDispatcherImpl,
-    EInvalidFactoryImpl;
+    (*!-----------------------------------------------
+     * execute application
+     *------------------------------------------------
+     * @param container dependency container
+     * @param env CGI environment
+     * @param stdin stdin instance
+     * @param dispatcher dispatcher instance
+     * @return current application instance
+     *-----------------------------------------------*)
+    function TCgiWebApplication.doExecute(
+        const container : IDependencyContainer;
+        const env : ICGIEnvironment;
+        const stdin : IStdIn;
+        const dispatcher : IDispatcher
+    ) : IRunnable;
+    begin
+        if (initialize(container)) then
+        begin
+            execute(env, stdin, dispatcher);
+        end;
+        result := self;
+    end;
 
     (*!-----------------------------------------------
      * execute application and handle exception
      *------------------------------------------------
      * @return current application instance
-     *-----------------------------------------------
-     * TODO: need to think about how to execute when
-     * application is run as daemon.
      *-----------------------------------------------*)
     function TCgiWebApplication.run() : IRunnable;
     begin
-        try
-            if (initialize(fAppSvc.container)) then
-            begin
-                result := execute(fAppSvc.env);
-            end;
-        except
-            on e : EInvalidRequest do
-            begin
-                fAppSvc.errorHandler.handleError(fAppSvc.env.enumerator, e, 400, sHttp400Message);
-                reset();
-            end;
-
-            on e : ERouteHandlerNotFound do
-            begin
-                fAppSvc.errorHandler.handleError(fAppSvc.env.enumerator, e, 404, sHttp404Message);
-                reset();
-            end;
-
-            on e : EMethodNotAllowed do
-            begin
-                fAppSvc.errorHandler.handleError(fAppSvc.env.enumerator, e, 405, sHttp405Message);
-                reset();
-            end;
-
-            on e : EInvalidMethod do
-            begin
-                fAppSvc.errorHandler.handleError(fAppSvc.env.enumerator, e, 501, sHttp501Message);
-                reset();
-            end;
-
-            on e : Exception do
-            begin
-                fAppSvc.errorHandler.handleError(fAppSvc.env.enumerator, e);
-                reset();
-            end;
-        end;
+        result := execAndHandleExcept(
+            fAppSvc.container,
+            fAppSvc.env,
+            fAppSvc.stdIn,
+            fAppSvc.errorHandler,
+            fAppSvc.dispatcher
+        );
     end;
 end.

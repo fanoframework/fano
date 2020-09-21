@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -19,7 +19,8 @@ uses
     InjectableObjectImpl,
     ResponseStreamIntf,
     HttpClientHeadersIntf,
-    HttpClientHandleAwareIntf;
+    HttpClientHandleAwareIntf,
+    QueryStrBuilderIntf;
 
 type
 
@@ -30,7 +31,7 @@ type
      *-----------------------------------------------*)
     THttpMethod = class(TInjectableObject, IHttpClientHeaders)
     private
-        httpHeader : IHttpClientHeaders;
+        fHttpHeader : IHttpClientHeaders;
 
         (*!------------------------------------------------
          * raise exception if curl operation fail
@@ -40,12 +41,14 @@ type
         procedure raiseExceptionIfError(const errCode : CurlCode);
 
         (*!------------------------------------------------
-        * initialize callback
-        *-----------------------------------------------
-        * @return curl handle
-        *-----------------------------------------------*)
+         * initialize callback
+         *-----------------------------------------------
+         * @return curl handle
+         *-----------------------------------------------*)
         procedure initCallback(const hndCurl : pCurl);
     protected
+        fQueryStrBuilder : IQueryStrBuilder;
+
         (*!------------------------------------------------
          * internal variable that holds curl handle
          *-----------------------------------------------*)
@@ -88,7 +91,8 @@ type
         constructor create(
             const curlHandle : IHttpClientHandleAware;
             const headersInst : IHttpClientHeaders;
-            const fStream : IResponseStream
+            const fStream : IResponseStream;
+            const queryStrBuilder : IQueryStrBuilder
         );
 
         (*!------------------------------------------------
@@ -99,10 +103,11 @@ type
         (*!------------------------------------------------
          *  add header
          *-----------------------------------------------
-         * @param headerLine string contain header
+         * @param aheader string contain header name
+         * @param avalue string contain header value
          * @return current instance
          *-----------------------------------------------*)
-        function add(const headerLine : string) : IHttpClientHeaders;
+        function add(const aheader : string; const avalue : string) : IHttpClientHeaders;
 
         (*!------------------------------------------------
          *  apply added header
@@ -173,7 +178,8 @@ resourcestring
     constructor THttpMethod.create(
         const curlHandle : IHttpClientHandleAware;
         const headersInst : IHttpClientHeaders;
-        const fStream : IResponseStream
+        const fStream : IResponseStream;
+        const queryStrBuilder : IQueryStrBuilder
     );
     begin
         //libcurl only knows raw pointer, so we use raw pointer to hold
@@ -186,8 +192,8 @@ resourcestring
         streamInst := fStream;
 
         hCurl := curlHandle.handle();
-        initCallback(hCurl);
-        httpHeader := headersInst;
+        fHttpHeader := headersInst;
+        fQueryStrBuilder := queryStrBuilder;
     end;
 
     (*!------------------------------------------------
@@ -195,7 +201,6 @@ resourcestring
      *-----------------------------------------------*)
     destructor THttpMethod.destroy();
     begin
-        inherited destroy();
 
         //libcurl only knows raw pointer, so we use raw pointer to hold
         //instance of IResponseStream interface. But because typecast interface
@@ -206,17 +211,21 @@ resourcestring
 
         streamInst := nil;
         hCurl := nil;
+        fHttpHeader := nil;
+        fQueryStrBuilder := nil;
+        inherited destroy();
     end;
 
     (*!------------------------------------------------
      *  add header
      *-----------------------------------------------
-     * @param headerLine string contain header
+     * @param aheader string contain header name
+     * @param avalue string contain header value
      * @return current instance
      *-----------------------------------------------*)
-    function THttpMethod.add(const headerLine : string) : IHttpClientHeaders;
+    function THttpMethod.add(const aheader : string; const avalue : string) : IHttpClientHeaders;
     begin
-        httpHeader.add(headerLine);
+        fHttpHeader.add(aheader, avalue);
         result := self;
     end;
 
@@ -227,7 +236,7 @@ resourcestring
      *-----------------------------------------------*)
     function THttpMethod.apply() : IHttpClientHeaders;
     begin
-        httpHeader.apply();
+        fHttpHeader.apply();
         result := self;
     end;
 
@@ -266,6 +275,7 @@ resourcestring
      *---------------------------------------------------*)
     function THttpMethod.executeCurl(const hndCurl : pCurl) : CurlCode;
     begin
+        initCallback(hndCurl);
         result := curl_easy_perform(hndCurl);
         raiseExceptionIfError(result);
     end;

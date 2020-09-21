@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -272,7 +272,7 @@ resourcestring
     begin
         result := -1;
         str := readBufferToStr(buff);
-        if length(str) > 0 then
+        if str <> '' then
         begin
             envLen := 0;
             contentLength := 0;
