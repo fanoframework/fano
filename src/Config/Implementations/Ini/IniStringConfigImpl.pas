@@ -15,10 +15,11 @@ interface
 
 uses
 
+    Classes,
     IniFiles,
     DependencyIntf,
     ConfigIntf,
-    JsonConfigImpl;
+    IniConfigImpl;
 
 type
 
@@ -33,15 +34,15 @@ type
     protected
         function buildIniData() : TIniFile; override;
     public
-        constructor create(const configStr : string);
+        constructor create(const configStr : string; const defaultSection : string);
         destructor destroy(); override;
     end;
 
 implementation
 
 uses
-    sysutils,
-    classes;
+
+    SysUtils;
 
     function TIniStringConfig.buildIniData() : TIniFile;
     begin

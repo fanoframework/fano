@@ -21,3 +21,4 @@
 {$INCLUDE Xss/implementations.inc}
 {$INCLUDE FrameGuard/implementations.inc}
 {$INCLUDE PasswordHash/implementations.inc}
+{$INCLUDE Jwt/implementations.inc}
