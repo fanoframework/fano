@@ -14,3 +14,5 @@
  *-----------------------------------------------*)
 
 IAuth = AuthIntf.IAuth;
+ITokenVerifier = TokenVerifierIntf.ITokenVerifier;
+ITokenGenerator = TokenGeneratorIntf.ITokenGenerator;
