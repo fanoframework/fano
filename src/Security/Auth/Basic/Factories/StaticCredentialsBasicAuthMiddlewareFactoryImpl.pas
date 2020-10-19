@@ -11,6 +11,7 @@ unit StaticCredentialsBasicAuthMiddlewareFactoryImpl;
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
 

@@ -15,5 +15,21 @@
 
 JsonFileConfigImpl,
 JsonFileConfigFactoryImpl,
+
 IniFileConfigImpl,
 IniFileConfigFactoryImpl,
+
+JsonStringConfigImpl,
+JsonStringConfigFactoryImpl,
+
+IniStringConfigImpl,
+IniStringConfigFactoryImpl,
+
+EnvConfigImpl,
+EnvConfigFactoryImpl,
+
+NullConfigImpl,
+NullConfigFactoryImpl,
+
+CompositeConfigImpl,
+CompositeConfigFactoryImpl,

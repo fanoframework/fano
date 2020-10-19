@@ -87,7 +87,7 @@ implementation
             valPos := pos('=' + value, key);
             if valPos <> 0 then
             begin
-                //key in CGI sometime include is value too, strip that if any
+                //key in CGI sometimes include its value too, strip that if any
                 key := copy(key, 1, valPos - 1);
             end;
             result := result + '<li><h5>' + key + '</h5>'+

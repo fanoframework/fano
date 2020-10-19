@@ -21,7 +21,7 @@ type
 
     (*!------------------------------------------------
      * interface for any class having capability to
-     * handle Cross-Origin Resource Sharing request
+     * authenticate credential
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
