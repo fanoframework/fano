@@ -97,7 +97,10 @@ type
          * @param serviceFactory factory instance
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function add(const serviceName : shortstring; const serviceFactory : IDependencyFactory) : IDependencyContainer;
+        function add(
+            const serviceName : shortstring;
+            const serviceFactory : IDependencyFactory
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * Add factory instance to service registration as
@@ -107,7 +110,10 @@ type
          * @param serviceFactory factory instance
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function factory(const serviceName : shortstring; const serviceFactory : IDependencyFactory) : IDependencyContainer;
+        function factory(
+            const serviceName : shortstring;
+            const serviceFactory : IDependencyFactory
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * Add alias name to existing service
@@ -116,7 +122,10 @@ type
          * @param serviceName actual name of service
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function alias(const aliasName: shortstring; const serviceName : shortstring) : IDependencyContainer;
+        function alias(
+            const aliasName: shortstring;
+            const serviceName : shortstring
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * get instance from service registration using its name.
@@ -151,9 +160,10 @@ uses
 
 resourcestring
 
-    sDependencyNotFound = 'Dependency %s not found';
-    sInvalidFactory = 'Factory %s is invalid';
-    sUnsupportedMultiLevelAlias = 'Unsupported multiple level alias %s to %s';
+    sDependencyNotFound = 'Dependency "%s" not found';
+    sInvalidFactory = 'Factory "%s" is invalid';
+    sUnsupportedMultiLevelAlias = 'Unsupported multiple level alias "%s" to "%s"';
+    sSameAlias = 'Cannot create alias to itself ("%s" to "%s")';
 
 type
 
@@ -296,6 +306,12 @@ type
     function TDependencyContainer.alias(const aliasName: shortstring; const serviceName : shortstring) : IDependencyContainer;
     var actualDepRec : PDependencyRec;
     begin
+        if (aliasName = serviceName) then
+        begin
+            //Cannot alias to itself as it will cause infinite recursion
+            raise EDependencyAlias.CreateFmt(sSameAlias, [aliasName, serviceName]);
+        end;
+
         actualDepRec := getDepRecordOrExcept(serviceName);
 
         if actualDepRec^.aliased then
@@ -303,7 +319,7 @@ type
             //TODO: Should we allow alias to other alias?
             //Allowing this may cause deep recursion when we need to get actual
             //instance. Current implementation does not support it
-            raise EDependencyAlias.createFmt(sUnsupportedMultiLevelAlias, [aliasName, serviceName])
+            raise EDependencyAlias.createFmt(sUnsupportedMultiLevelAlias, [aliasName, serviceName]);
         end;
 
         result := addDependency(aliasName, nil, false, true, serviceName);
