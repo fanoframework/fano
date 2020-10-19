@@ -16,13 +16,18 @@ uses
 
     DependencyIntf,
     DependencyContainerIntf,
-    FactoryImpl,
-    RequestHandlerIntf;
+    FactoryImpl;
 
 type
-    THashFunc = (hfSHA1,
-        hfSHA2_256, hfSHA2_384, hfSHA2_512,
-        hfSHA3_256, hfSHA3_384, hfSHA3_512
+
+    THashFunc = (
+        hfSHA1,
+        hfSHA2_256,
+        hfSHA2_384,
+        hfSHA2_512,
+        hfSHA3_256,
+        hfSHA3_384,
+        hfSHA3_512
     );
 
     (*!------------------------------------------------
@@ -33,9 +38,16 @@ type
     TPbkdf2PasswordHashFactory = class(TFactory, IDependencyFactory)
     private
         fHashFunc : THashFunc;
+        fSalt : string;
+        fCost : integer;
+        fLen : integer;
     public
         constructor create(const hf : THashFunc = hfSHA1);
         function withHash(const hf : THashFunc) : TPbkdf2PasswordHashFactory;
+
+        function salt(const asalt : string) : TPbkdf2PasswordHashFactory;
+        function cost(const acost : integer) : TPbkdf2PasswordHashFactory;
+        function len(const alen : integer) : TPbkdf2PasswordHashFactory;
 
         (*!---------------------------------------
          * build password hash instance
@@ -57,7 +69,11 @@ uses
 
     constructor TPbkdf2PasswordHashFactory.create(const hf : THashFunc = hfSHA1);
     begin
+        //set default values
         fHashFunc := hf;
+        fSalt := '';
+        fCost := 1000;
+        fLen := 64;
     end;
 
     function TPbkdf2PasswordHashFactory.withHash(const hf : THashFunc) : TPbkdf2PasswordHashFactory;
@@ -79,6 +95,24 @@ uses
         else
             raise EPasswordHash.create('Unknown hash function');
         end;
+    end;
+
+    function TPbkdf2PasswordHashFactory.salt(const asalt : string) : TPbkdf2PasswordHashFactory;
+    begin
+        fSalt := asalt;
+        result := self;
+    end;
+
+    function TPbkdf2PasswordHashFactory.cost(const acost : integer) : TPbkdf2PasswordHashFactory;
+    begin
+        fCost := acost;
+        result := self;
+    end;
+
+    function TPbkdf2PasswordHashFactory.len(const alen : integer) : TPbkdf2PasswordHashFactory;
+    begin
+        fLen := alen;
+        result := self;
     end;
 
     function TPbkdf2PasswordHashFactory.build(const container : IDependencyContainer) : IDependency;

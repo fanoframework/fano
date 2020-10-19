@@ -12,17 +12,10 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-ValidatorIntf,
-RequestValidatorIntf,
-ValidationRulesIntf,
-ValidatorCollectionIntf,
-
-SanitizerIntf,
-
-CsrfIntf,
-
-CorsIntf,
-CorsConfigIntf,
-
-AuthIntf,
-PasswordHashIntf,
+{$INCLUDE Validations/interfaces.inc}
+{$INCLUDE Sanitations/interfaces.inc}
+{$INCLUDE Csrf/interfaces.inc}
+{$INCLUDE Cors/interfaces.inc}
+{$INCLUDE Auth/interfaces.inc}
+{$INCLUDE PasswordHash/interfaces.inc}
+{$INCLUDE Jwt/interfaces.inc}
