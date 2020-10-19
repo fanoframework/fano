@@ -13,13 +13,10 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-ICsrf = CsrfIntf.ICsrf;
-ISanitizer = SanitizerIntf.ISanitizer;
-IValidator = ValidatorIntf.IValidator;
-IValidatorCollection = ValidatorCollectionIntf.IValidatorCollection;
-IValidationRules = ValidationRulesIntf.IValidationRules;
-IRequestValidator = RequestValidatorIntf.IRequestValidator;
-
+{$INCLUDE Csrf/aliases.inc}
+{$INCLUDE Sanitations/aliases.inc}
+{$INCLUDE Validations/aliases.inc}
 {$INCLUDE Cors/aliases.inc}
 {$INCLUDE Auth/aliases.inc}
 {$INCLUDE PasswordHash/aliases.inc}
+{$INCLUDE Jwt/aliases.inc}

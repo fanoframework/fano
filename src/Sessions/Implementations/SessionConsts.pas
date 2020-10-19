@@ -27,6 +27,7 @@ resourcestring
 
     rsSessionExpired = 'Session is expired. Id : %s';
     rsSessionInvalid = 'Session is invalid';
+    rsEmptyCookieName = 'Cookie name cannot be empty';
 
 implementation
 

@@ -21,3 +21,4 @@
 {$INCLUDE Xss/aliases.inc}
 {$INCLUDE FrameGuard/aliases.inc}
 {$INCLUDE PasswordHash/aliases.inc}
+{$INCLUDE Jwt/aliases.inc}

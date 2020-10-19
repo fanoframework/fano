@@ -44,6 +44,8 @@ type
          * @param sessionIdGenerator helper class
          *           which can generate session id
          * @param cookieName name of cookie to use
+         * @raise ESessionInvalid when cookie name
+         *        is empty
          *-------------------------------------*)
         constructor create(
             const sessionIdGenerator : ISessionIdGenerator;
@@ -90,13 +92,19 @@ type
 
 implementation
 
+uses
+
+    SessionConsts,
+    ESessionInvalidImpl;
+
     (*!------------------------------------
      * constructor
      *-------------------------------------
-     * @param baseDir base directory where
-     *                session files store
-     * @param prefix strung to be prefix to
-     *                session filename
+     * @param sessionIdGenerator helper class
+     *           which can generate session id
+     * @param cookieName name of cookie to use
+     * @raise ESessionInvalid when cookie name
+     *        is empty
      *-------------------------------------*)
     constructor TAbstractSessionManager.create(
         const sessionIdGenerator : ISessionIdGenerator;
@@ -106,6 +114,10 @@ implementation
         inherited create();
         fSessionIdGenerator := sessionIdGenerator;
         fCookieName := cookieName;
+        if fCookieName = '' then
+        begin
+            raise ESessionInvalid.create(rsEmptyCookieName);
+        end;
     end;
 
     (*!------------------------------------

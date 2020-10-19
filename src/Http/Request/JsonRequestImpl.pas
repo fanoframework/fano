@@ -174,6 +174,7 @@ uses
 
     procedure TJsonRequest.init(const respBody : string);
     begin
+        //TODO: Should we decouple this?
         fBodyList := THashList.create();
         try
             fBodyJson := getJSON(respBody);
@@ -248,8 +249,9 @@ uses
     function TJsonRequest.getParam(const key: string; const defValue : string = '') : string;
     begin
         result := inherited getParam(key, defValue);
-        if (result = '') then
+        if (result = defValue) then
         begin
+            //if we get here, key not found, try JSON body
             result := getParsedBodyParam(key, defValue);
         end;
     end;

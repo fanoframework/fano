@@ -41,7 +41,10 @@ type
          * @param serviceFactory factory instance
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function add(const serviceName : shortstring; const serviceFactory : IDependencyFactory) : IDependencyContainer;
+        function add(
+            const serviceName : shortstring;
+            const serviceFactory : IDependencyFactory
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * Add factory instance to service registration as
@@ -51,7 +54,10 @@ type
          * @param serviceFactory factory instance
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function factory(const serviceName : shortstring; const serviceFactory : IDependencyFactory) : IDependencyContainer;
+        function factory(
+            const serviceName : shortstring;
+            const serviceFactory : IDependencyFactory
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * Add alias name to existing service
@@ -60,7 +66,10 @@ type
          * @param serviceName actual name of service
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function alias(const aliasName: shortstring; const serviceName : shortstring) : IDependencyContainer;
+        function alias(
+            const aliasName: shortstring;
+            const serviceName : shortstring
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * get instance from service registration using its name.

@@ -36,6 +36,15 @@ type
         function getString(const configName : string; const defaultValue : string = '') : string;
         function getInt(const configName : string; const defaultValue : integer = 0) : integer;
         function getBool(const configName : string; const defaultValue : boolean = false) : boolean;
+        function getFloat(const configName : string; const defaultValue : double = 0.0) : double;
+
+        (*!------------------------------------------------
+         * test if config name is exists in configuration
+         *-------------------------------------------------
+         * @param configName name of config to check
+         * @return true if configName is exists otherwise false
+         *-------------------------------------------------*)
+        function has(const configName : string) : boolean;
     end;
 
 implementation
@@ -92,6 +101,30 @@ uses
         begin
             result := jsonData.asBoolean;
         end;
+    end;
+
+    function TJsonConfig.getFloat(const configName : string; const defaultValue : double = 0.0) : double;
+    var jsonData : TJSONData;
+    begin
+        jsonData := json.findPath(configName);
+        if (jsonData = nil) then
+        begin
+            result := defaultValue;
+        end else
+        begin
+            result := jsonData.asFloat;
+        end;
+    end;
+
+    (*!------------------------------------------------
+     * test if config name is exists in configuration
+     *-------------------------------------------------
+     * @param configName name of config to check
+     * @return true if configName is exists otherwise false
+     *-------------------------------------------------*)
+    function TJsonConfig.has(const configName : string) : boolean;
+    begin
+        result := json.findPath(configName) <> nil;
     end;
 
 end.

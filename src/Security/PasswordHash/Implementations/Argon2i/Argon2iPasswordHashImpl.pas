@@ -101,7 +101,7 @@ type
          * generate password hash
          *-----------------------------------------------
          * @param plainPassw input password
-         * @return password hash
+         * @return password hash in lowercase hex string
          *-----------------------------------------------*)
         function hash(const plainPassw : string) : string;
 
@@ -109,7 +109,7 @@ type
          * verify plain password against password hash
          *-----------------------------------------------
          * @param plainPassw input password
-         * @param hashedPassw password hash
+         * @param hashedPassw password hash in hex string
          * @return true if password match password hash
          *-----------------------------------------------*)
         function verify(
@@ -143,7 +143,7 @@ uses
         fHashLen := defLen;
         fMemoryAsKB := defMemAsKb;
         fParallelism := defParallel;
-        fArgon2Version := TArgon2Version.a2vARGON2_VERSION_10;
+        fArgon2Version := TArgon2Version.a2vARGON2_VERSION_13;
         fArgon2ParametersBuilder := TArgon2iParametersBuilder.Builder();
     end;
 
@@ -229,7 +229,9 @@ uses
      * generate password hash
      *-----------------------------------------------
      * @param plainPassw input password
-     * @return password hash
+     * @return password hash in lowercase hex string
+     *-----------------------------------------------
+     * @credit https://github.com/Xor-el/HashLib4Pascal/blob/master/HashLib.Tests/src/PBKDF_Argon2Tests.pas
      *-----------------------------------------------*)
     function TArgon2iPasswordHash.hash(const plainPassw : string) : string;
     var
@@ -238,16 +240,26 @@ uses
         LArgon2Parameter: IArgon2Parameters;
     begin
 
-        LSecret := TConverters.ConvertHexStringToBytes(fSecret);
-        LSalt := TConverters.ConvertHexStringToBytes(fSalt);
-        LPassword := TConverters.ConvertHexStringToBytes(plainPassw);
-
         fArgon2ParametersBuilder.WithVersion(fArgon2Version)
             .WithIterations(fCost)
             .WithMemoryAsKB(fMemoryAsKB)
-            .WithParallelism(fParallelism)
-            .WithSecret(LSecret)
-            .WithSalt(LSalt);
+            .WithParallelism(fParallelism);
+
+        if (fSecret <> '') then
+        begin
+            //use secret
+            LSecret := TConverters.ConvertStringToBytes(fSecret, TEncoding.ASCII);
+            fArgon2ParametersBuilder.WithSecret(LSecret);
+        end;
+
+        if (fSalt <> '') then
+        begin
+            //use salt
+            LSalt := TConverters.ConvertStringToBytes(fSalt, TEncoding.ASCII);
+            fArgon2ParametersBuilder.WithSalt(LSalt);
+        end;
+
+        LPassword := TConverters.ConvertStringToBytes(plainPassw, TEncoding.ASCII);
 
         //
         // Set the password.
@@ -259,10 +271,12 @@ uses
             LArgon2Parameter
         );
 
-        result := TConverters.ConvertBytesToHexString(
+        //ConvertBytesToHexString output uppercase hex string
+        //many argon2 tools output lower case. For easier comparison make it lower
+        result := lowercase(TConverters.ConvertBytesToHexString(
             LGenerator.GetBytes(fHashLen),
             false
-        );
+        ));
 
         LArgon2Parameter.Clear();
         LGenerator.Clear();
@@ -272,7 +286,7 @@ uses
      * verify plain password against password hash
      *-----------------------------------------------
      * @param plainPassw input password
-     * @param hashedPassw password hash
+     * @param hashedPassw password hash in hex string
      * @return true if password match password hash
      *-----------------------------------------------*)
     function TArgon2iPasswordHash.verify(
@@ -280,6 +294,7 @@ uses
         const hashedPasswd : string
     ) : boolean;
     begin
-        result := (hash(plainPassw) = hashedPasswd);
+        //compare with lowercase hex string to make comparison consistent
+        result := (hash(plainPassw) = lowercase(hashedPasswd));
     end;
 end.
