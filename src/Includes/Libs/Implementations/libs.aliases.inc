@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -27,13 +27,14 @@ TKeyValuePair = KeyValuePairImpl.TKeyValuePair;
 TKeyValuePairFactory = KeyValuePairFactoryImpl.TKeyValuePairFactory;
 
 {$INCLUDE Socket/libs.aliases.inc}
+{$INCLUDE Socket2/libs.aliases.inc}
 {$INCLUDE Logger/libs.aliases.inc}
 {$INCLUDE Regex/libs.aliases.inc}
-{$INCLUDE LibCurl/libs.aliases.inc}
-{$INCLUDE FastCGI/libs.aliases.inc}
-{$INCLUDE SCGI/libs.aliases.inc}
-{$INCLUDE Uwsgi/libs.aliases.inc}
+{$INCLUDE HttpClient/libs.aliases.inc}
+{$INCLUDE Protocol/libs.aliases.inc}
 {$INCLUDE Random/libs.aliases.inc}
 {$INCLUDE Cli/libs.aliases.inc}
 {$INCLUDE Encrypter/libs.aliases.inc}
 {$INCLUDE Antivirus/libs.aliases.inc}
+{$INCLUDE Mailer/libs.aliases.inc}
+{$INCLUDE UserAgent/libs.aliases.inc}

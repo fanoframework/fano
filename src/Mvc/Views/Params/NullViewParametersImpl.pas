@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -41,7 +41,7 @@ type
          * Note: caller MUST not modify or destroy TStrings
          * instance and should read only
          *-----------------------------------------------*)
-        function vars() : TStrings;
+        function asStrings() : TStrings;
 
         (*!------------------------------------------------
          * get variable value by name
@@ -59,6 +59,22 @@ type
          * @return current class instance
          *-----------------------------------------------*)
         function setVar(const varName : shortstring; const valueData :string) : IViewParameters;
+
+        (*!------------------------------------------------
+         * set variable value by name. Alias to setVar()
+         *-----------------------------------------------
+         * @param varName name of variable
+         * @param valueData value to be store
+         *-----------------------------------------------*)
+        procedure putVar(const varName : shortstring; const valueData :string);
+
+        (*!------------------------------------------------
+         * test if variable name is set
+         *-----------------------------------------------
+         * @param varName name of variable
+         * @return boolean
+         *-----------------------------------------------*)
+        function has(const varName : shortstring) : boolean;
     end;
 
 implementation
@@ -83,7 +99,7 @@ implementation
      * Note: caller MUST not modify or destroy TStrings
      * instance and should read only
      *-----------------------------------------------*)
-    function TNullViewParameters.vars() : TStrings;
+    function TNullViewParameters.asStrings() : TStrings;
     begin
         result := keys;
     end;
@@ -114,5 +130,32 @@ implementation
     begin
         //intentionally does nothing
         result := self;
+    end;
+
+    (*!------------------------------------------------
+     * set variable value by name. Alias to setVar
+     *-----------------------------------------------
+     * @param varName name of variable
+     * @param valueData value to be store
+     * @return current class instance
+     *-----------------------------------------------*)
+    procedure TNullViewParameters.putVar(
+        const varName : shortstring;
+        const valueData :string
+    );
+    begin
+        setVar(varName, valueData);
+    end;
+
+    (*!------------------------------------------------
+     * test if variable name is set
+     *-----------------------------------------------
+     * @param varName name of variable
+     * @return boolean
+     *-----------------------------------------------*)
+    function TNullViewParameters.has(const varName : shortstring) : boolean;
+    begin
+        //intentionally does nothing
+        result := false;
     end;
 end.

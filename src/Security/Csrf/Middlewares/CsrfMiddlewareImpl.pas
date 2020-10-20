@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -110,8 +110,8 @@ implementation
     var tokenName, tokenValue : string;
     begin
         fCsrf.generateToken(tokenName, tokenValue);
-        sess.setVar(fNameKey, tokenName);
-        sess.setVar(fValueKey, tokenValue);
+        sess[fNameKey] := tokenName;
+        sess[fValueKey] := tokenValue;
     end;
 
     function TCsrfMiddleware.handleCsrfRequest(
@@ -151,7 +151,7 @@ implementation
     var isCsrfMethod : boolean;
         sess : ISession;
     begin
-        sess := fSessionMgr.getSession(request);
+        sess := fSessionMgr[request];
         isCsrfMethod := (request.method = 'POST') or
             (request.method = 'PUT') or
             (request.method = 'DELETE') or

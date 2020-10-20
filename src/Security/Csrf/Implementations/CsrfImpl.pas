@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -29,6 +29,26 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
     TCsrf = class(TInterfacedObject, ICsrf)
+    private
+
+        (*!------------------------------------------------
+         * get token name and value from session
+         *-------------------------------------------------
+         * @param sess current session instance
+         * @param nameKey name of key that hold token name
+         * @param valueKey name of key that hold token value
+         * @param tokenName token name retrived from session
+         * @param tokenValue token value retrieved from session
+         * @return true if token name and value is found in session
+         *        false otherwise
+         *-------------------------------------------------*)
+        function getTokenFromSession(
+            const sess : ISession;
+            const nameKey : shortstring;
+            const valueKey : shortstring;
+            out tokenName : string;
+            out tokenValue : string
+        ) : boolean;
     protected
         fSecretKey : string;
     public
@@ -66,7 +86,8 @@ uses
 
     SysUtils,
     hmac,
-    sha1;
+    sha1,
+    ESessionKeyNotFoundImpl;
 
     constructor TCsrf.create(const secretKey : string);
     begin
@@ -97,6 +118,38 @@ uses
     end;
 
     (*!------------------------------------------------
+     * get token name and value from session
+     *-------------------------------------------------
+     * @param sess current session instance
+     * @param nameKey name of key that hold token name
+     * @param valueKey name of key that hold token value
+     * @param tokenName token name retrived from session
+     * @param tokenValue token value retrieved from session
+     * @return true if token name and value is found in session
+     *        false otherwise
+     *-------------------------------------------------*)
+    function TCsrf.getTokenFromSession(
+        const sess : ISession;
+        const nameKey : shortstring;
+        const valueKey : shortstring;
+        out tokenName : string;
+        out tokenValue : string
+    ) : boolean;
+    begin
+        try
+            tokenName := sess[nameKey];
+            tokenValue := sess[valueKey];
+            result := true;
+        except
+            on e : ESessionKeyNotFound do
+            begin
+                //if we get here, then session data not found
+                result := false;
+            end;
+        end;
+    end;
+
+    (*!------------------------------------------------
      * test if request has valid token
      *-------------------------------------------------
      * @param request current request
@@ -116,11 +169,22 @@ uses
         tokenValueDigest : THMACSHA1Digest;
         currtokenValueDigest : THMACSHA1Digest;
     begin
+        result:= getTokenFromSession(
+            sess,
+            nameKey,
+            valueKey,
+            currTokenName,
+            currTokenValue
+        );
+        if not result then
+        begin
+            //if we get here, token not found in session.
+            //Assume no valid token and just exit early
+            exit(false);
+        end;
         tokenName := request.getParsedBodyParam(nameKey);
         tokenValue := request.getParsedBodyParam(valueKey);
         tokenValueDigest := HMACSHA1Digest(fSecretKey, tokenValue);
-        currTokenName := sess.getVar(nameKey);
-        currTokenValue := sess.getVar(valueKey);
         currTokenValueDigest := HMACSHA1Digest(fSecretKey, currTokenValue);
         result := (tokenName = currTokenName) and
             //we should use HMACSHA1Match(), but we can't because of infinite

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -99,7 +99,7 @@ uses
         pattern, valueData : string;
     begin
         result := templateStr;
-        keys := viewParams.vars();
+        keys := viewParams.asStrings();
         //TODO: improve by collecting keys and replace all keys in one go
         for i := 0 to keys.count-1 do
         begin

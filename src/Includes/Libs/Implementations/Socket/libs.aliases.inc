@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -12,17 +12,3 @@
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
-
-TInetSocketSvr = InetSocketSvrImpl.TInetSocketSvr;
-
-{$IFDEF unix}
-TUnixSocketSvr = UnixSocketSvrImpl.TUnixSocketSvr;
-{$ENDIF}
-
-TBoundSocketSvr = BoundSocketSvrImpl.TBoundSocketSvr;
-
-{$IFDEF LINUX}
-TEpollInetSocketSvr = EpollInetSocketSvrImpl.TEpollInetSocketSvr;
-TEpollUnixSocketSvr = EpollUnixSocketSvrImpl.TEpollUnixSocketSvr;
-TEpollBoundSocketSvr = EpollBoundSocketSvrImpl.TEpollBoundSocketSvr;
-{$ENDIF}

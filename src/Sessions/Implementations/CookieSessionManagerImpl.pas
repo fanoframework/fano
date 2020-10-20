@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -15,7 +15,6 @@ interface
 
 uses
 
-    Classes,
     SessionIntf,
     SessionIdGeneratorIntf,
     SessionManagerIntf,
@@ -30,6 +29,9 @@ type
     (*!------------------------------------------------
      * class having capability to manage
      * session variables in encrypted cookie
+     *
+     * TODO: Current implementation is not thread safe.
+     *       Need to rethink when dealing multiple threads
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
@@ -115,6 +117,7 @@ implementation
 
 uses
 
+    Classes,
     SysUtils,
     DateUtils,
     SessionConsts,
@@ -167,11 +170,9 @@ uses
     begin
         result := nil;
         try
-            //session data is encrypted in cookie value
-            sessData := fDecrypter.decrypt(encryptedSession);
-            if sessData = '' then
+            if encryptedSession = '' then
             begin
-                //oops something is not right, ignore and just create new session
+                //no cookie, just create new one
                 result := fSessionFactory.createNewSession(
                     fCookieName,
                     encryptedSession,
@@ -179,11 +180,24 @@ uses
                 );
             end else
             begin
-                result := fSessionFactory.createSession(
-                    fCookieName,
-                    encryptedSession,
-                    sessData
-                );
+                //session data is encrypted in cookie value
+                sessData := fDecrypter.decrypt(encryptedSession);
+                if sessData = '' then
+                begin
+                    //oops something is not right, ignore and just create new session
+                    result := fSessionFactory.createNewSession(
+                        fCookieName,
+                        encryptedSession,
+                        incSecond(now(), lifeTimeInSec)
+                    );
+                end else
+                begin
+                    result := fSessionFactory.createSession(
+                        fCookieName,
+                        encryptedSession,
+                        sessData
+                    );
+                end;
             end;
         except
             on EReadError do
@@ -221,32 +235,13 @@ uses
     ) : ISession;
     var encryptedSession : string;
     begin
-        result := nil;
-        try
-            encryptedSession := request.getCookieParam(fCookieName);
-            if encryptedSession = '' then
-            begin
-                result := fSessionFactory.createNewSession(
-                    fCookieName,
-                    encryptedSession,
-                    incSecond(now(), lifeTimeInSec)
-                );
-            end else
-            begin
-                result := createNewSessionIfExpired(
-                    request,
-                    lifeTimeInSec,
-                    encryptedSession
-                );
-            end;
-            fCurrentSession := result;
-        except
-            on e: ESessionExpired do
-            begin
-                e.message := e.message + ' at begin session';
-                raise;
-            end;
-        end;
+        encryptedSession := request.getCookieParam(fCookieName);
+        result := createNewSessionIfExpired(
+            request,
+            lifeTimeInSec,
+            encryptedSession
+        );
+        fCurrentSession := result;
     end;
 
     (*!------------------------------------

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -31,11 +31,52 @@ type
         (*!------------------------------------
          * set http header
          *-------------------------------------
+         * @param headerline key:value of header
+         * @return header instance
+         *-------------------------------------*)
+        function setHeaderLine(const headerline : string) : IHeaders;
+
+        (*!------------------------------------
+         * set http header
+         *-------------------------------------
          * @param key name  of http header to set
          * @param value value of header
          * @return header instance
          *-------------------------------------*)
         function setHeader(const key : shortstring; const value : string) : IHeaders;
+
+        (*!------------------------------------
+         * add http header
+         *-------------------------------------
+         * @param key name  of http header to set
+         * @param value value of header
+         * @return header instance
+         *-------------------------------------*)
+        function addHeader(const key : shortstring; const value : string) : IHeaders;
+
+        (*!------------------------------------
+         * add http header line
+         *-------------------------------------
+         * @param headerline key:value of header
+         * @return header instance
+         *-------------------------------------*)
+        function addHeaderLine(const headerline : string) : IHeaders;
+
+        (*!------------------------------------
+         * remove http header
+         *-------------------------------------
+         * @param key name of http header to remove
+         * @return header instance
+         *-------------------------------------*)
+        function removeHeader(const key : shortstring) : IHeaders;
+
+        (*!------------------------------------
+         * remove multiple http headers
+         *-------------------------------------
+         * @param keys name of http headers to remove
+         * @return header instance
+         *-------------------------------------*)
+        function removeHeaders(const keys : array of shortstring) : IHeaders;
 
         (*!------------------------------------
          * output http headers to STDOUT

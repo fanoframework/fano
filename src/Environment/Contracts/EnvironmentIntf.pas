@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -49,6 +49,26 @@ type
         function remotePort() : string;
 
         {-----------------------------------------
+         Retrieve REMOTE_HOST environment variable
+        ------------------------------------------}
+        function remoteHost() : string;
+
+        {-----------------------------------------
+         Retrieve REMOTE_USER environment variable
+        ------------------------------------------}
+        function remoteUser() : string;
+
+        {-----------------------------------------
+         Retrieve REMOTE_IDENT environment variable
+        ------------------------------------------}
+        function remoteIdent() : string;
+
+        {-----------------------------------------
+         Retrieve AUTH_TYPE environment variable
+        ------------------------------------------}
+        function authType() : string;
+
+        {-----------------------------------------
          Retrieve SERVER_ADDR environment variable
         ------------------------------------------}
         function serverAddr() : string;
@@ -57,6 +77,21 @@ type
          Retrieve SERVER_PORT environment variable
         ------------------------------------------}
         function serverPort() : string;
+
+        {-----------------------------------------
+         Retrieve SERVER_NAME environment variable
+        ------------------------------------------}
+        function serverName() : string;
+
+        {-----------------------------------------
+         Retrieve SERVER_SOFTWARE environment variable
+        ------------------------------------------}
+        function serverSoftware() : string;
+
+        {-----------------------------------------
+         Retrieve SERVER_PROTOCOL environment variable
+        ------------------------------------------}
+        function serverProtocol() : string;
 
         {-----------------------------------------
          Retrieve DOCUMENT_ROOT environment variable
@@ -84,9 +119,19 @@ type
         function queryString() : string;
 
         {-----------------------------------------
-         Retrieve SERVER_NAME environment variable
+         Retrieve SCRIPT_NAME environment variable
         ------------------------------------------}
-        function serverName() : string;
+        function scriptName() : string;
+
+        {-----------------------------------------
+         Retrieve PATH_INFO environment variable
+        ------------------------------------------}
+        function pathInfo() : string;
+
+        {-----------------------------------------
+         Retrieve PATH_TRANSLATED environment variable
+        ------------------------------------------}
+        function pathTranslated() : string;
 
         {-----------------------------------------
          Retrieve CONTENT_TYPE environment variable

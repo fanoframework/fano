@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -57,8 +57,7 @@ implementation
 uses
 
     EnvironmentEnumeratorIntf,
-    VerbTunnellingEnvironmentImpl,
-    NullEnvironmentImpl;
+    VerbTunnellingEnvironmentImpl;
 
     constructor TVerbTunnellingDispatcher.create(const actualDispatcher : IDispatcher);
     begin
@@ -82,21 +81,14 @@ uses
         const env: ICGIEnvironment;
         const stdIn : IStdIn
     ) : IResponse;
-    var envEnum : ICGIEnvironmentEnumerator;
+    var verbEnv : ICGIEnvironment;
     begin
-        //check if it support environment enumeration
-        if env is ICGIEnvironmentEnumerator then
-        begin
-            envEnum := env as ICGIEnvironmentEnumerator;
-        end else
-        begin
-            //not support environment enumeration, so just pass null class
-            envEnum := TNullCGIEnvironment.create();
+        verbEnv := TVerbTunnellingEnvironment.create(env);
+        try
+            result := fActualDispatcher.dispatchRequest(verbEnv, stdIn);
+        finally
+            //make sure we remove reference to avoid memory leak
+            verbEnv := nil;
         end;
-
-        result := fActualDispatcher.dispatchRequest(
-            TVerbTunnellingEnvironment.create(env, envEnum),
-            stdIn
-        );
     end;
 end.

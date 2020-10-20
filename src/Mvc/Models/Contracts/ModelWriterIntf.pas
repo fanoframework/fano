@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -30,11 +30,11 @@ type
         (*!----------------------------------------------
          * write data to storage
          *-----------------------------------------------
-         * @param params parameters related to data being stored
          * @param data data being stored
+         * @param params parameters related to data being stored
          * @return current instance
          *-----------------------------------------------*)
-        function write(const params : IModelParams; const data : IModelParams) : IModelWriter;
+        function write(const data : IModelParams; const params : IModelParams = nil) : IModelWriter;
     end;
 
 implementation

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -47,7 +47,8 @@ uses
     classes,
     HttpGetImpl,
     HttpClientHeadersImpl,
-    ResponseStreamImpl;
+    ResponseStreamImpl,
+    QueryStrBuilderImpl;
 
     (*!---------------------------------------------------
      * build class instance
@@ -59,7 +60,8 @@ uses
         result := THttpGet.create(
             handle,
             THttpClientHeaders.create(handle),
-            TResponseStream.create(TStringStream.create(''))
+            TResponseStream.create(TStringStream.create('')),
+            TQueryStrBuilder.create()
         );
     end;
 end.

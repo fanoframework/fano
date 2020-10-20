@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -59,33 +59,23 @@ implementation
 
 uses
 
+    StringUtils,
     UploadedFileCollectionIntf;
 
 resourcestring
 
-    sErrFieldIsUploadedMime = 'Field %s must be a valid uploaded file with MIME types of ';
-
-    function initMimeTypes(const mimeTypes : array of string) : TStringArray;
-    var i, len : integer;
-    begin
-        len := high(mimeTypes) - low(mimeTypes) + 1;
-        setLength(result, len);
-        for i := 0 to len -1 do
-        begin
-            result[i] := mimeTypes[i];
-        end;
-    end;
+    sErrFieldIsUploadedMime = 'Field %%s must be a valid uploaded file with MIME type in [%s]';
 
     function inMimeTypes(const aType : string; const mimeTypes : TStringArray) : boolean;
     var i, len : integer;
     begin
-        result := true;
+        result := false;
         len := length(mimeTypes);
         for i := 0 to len -1 do
         begin
-            if (aType <> mimeTypes[i]) then
+            if (aType = mimeTypes[i]) then
             begin
-                result := false;
+                result := true;
                 exit();
             end;
         end;
@@ -112,8 +102,8 @@ resourcestring
     constructor TUploadedMimeValidator.create(const mimes : array of string);
     begin
         inherited create();
-        errorMsgFormat := sErrFieldIsUploadedMime;
-        fMimeTypes := initMimeTypes(mimes);
+        errorMsgFormat := format(sErrFieldIsUploadedMime, [ join(', ', mimes) ]);
+        fMimeTypes := toStringArray(mimes);
     end;
 
     destructor TUploadedMimeValidator.destroy();

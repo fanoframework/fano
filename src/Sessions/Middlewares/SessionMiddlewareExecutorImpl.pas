@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -49,12 +49,6 @@ type
             sess : ISession
         ) : IResponse;
 
-        function tryExecuteMiddlewareExecutor(
-            const executor : IMiddlewareExecutor;
-            const request : IRequest;
-            const response : IResponse;
-            const routeHandler : IRouteHandler
-        ) : IResponse;
     public
         constructor create(
             const actualMiddlewareExecutor : IMiddlewareExecutor;
@@ -110,28 +104,10 @@ uses
     begin
         cookie := cookieFactory.name(sess.name()).value(sess.id()).build();
         try
-            resp.headers().setHeader('Set-Cookie', cookie.serialize());
+            resp.headers().addHeader('Set-Cookie', cookie.serialize());
             result := resp;
         finally
             cookie := nil;
-        end;
-    end;
-
-    function TSessionMiddlewareExecutor.tryExecuteMiddlewareExecutor(
-        const executor : IMiddlewareExecutor;
-        const request : IRequest;
-        const response : IResponse;
-        const routeHandler : IRouteHandler
-    ) : IResponse;
-    begin
-        try
-            result := executor.execute(request, response, routeHandler);
-        except
-            on e : ESessionExpired do
-            begin
-                e.message := e.message + ' try executor';
-                raise;
-            end;
         end;
     end;
 
@@ -143,8 +119,7 @@ uses
     ) : IResponse;
     var newResp : IResponse;
     begin
-        newResp := tryExecuteMiddlewareExecutor(
-            fActualMiddlewareExecutor,
+        newResp := fActualMiddlewareExecutor.execute(
             request,
             response,
             routeHandler

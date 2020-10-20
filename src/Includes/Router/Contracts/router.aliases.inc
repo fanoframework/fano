@@ -5,3 +5,4 @@ IRoute = RouteIntf.IRoute;
 IRouteArgsWriter = RouteArgsWriterIntf.IRouteArgsWriter;
 IRouteArgsReader = RouteArgsReaderIntf.IRouteArgsReader;
 IRouteHandlerFactory = RouteHandlerFactoryIntf.IRouteHandlerFactory;
+IRouteBuilder = RouteBuilderIntf.IRouteBuilder;

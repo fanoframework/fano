@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -39,11 +39,52 @@ type
         (*!------------------------------------
          * set http header
          *-------------------------------------
+         * @param headerline key:value of header
+         * @return header instance
+         *-------------------------------------*)
+        function setHeaderLine(const headerline : string) : IHeaders;
+
+        (*!------------------------------------
+         * set http header
+         *-------------------------------------
          * @param key name  of http header to set
          * @param value value of header
          * @return header instance
          *-------------------------------------*)
         function setHeader(const key : shortstring; const value : string) : IHeaders;
+
+        (*!------------------------------------
+         * add http header
+         *-------------------------------------
+         * @param key name  of http header to set
+         * @param value value of header
+         * @return header instance
+         *-------------------------------------*)
+        function addHeader(const key : shortstring; const value : string) : IHeaders;
+
+        (*!------------------------------------
+         * set http header
+         *-------------------------------------
+         * @param headerline key:value of header
+         * @return header instance
+         *-------------------------------------*)
+        function addHeaderLine(const headerline : string) : IHeaders;
+
+        (*!------------------------------------
+         * remove http header
+         *-------------------------------------
+         * @param key name  of http header to set
+         * @return header instance
+         *-------------------------------------*)
+        function removeHeader(const key : shortstring) : IHeaders;
+
+        (*!------------------------------------
+         * remove multiple http headers
+         *-------------------------------------
+         * @param keys name of http headers to remove
+         * @return header instance
+         *-------------------------------------*)
+        function removeHeaders(const keys : array of shortstring) : IHeaders;
 
         (*!------------------------------------
          * get http header
@@ -76,9 +117,11 @@ implementation
 
 uses
 
+    sysutils,
     HashListImpl,
     HeaderConsts,
-    EHeaderNotSetImpl;
+    EHeaderNotSetImpl,
+    EInvalidHeaderImpl;
 
 type
 
@@ -133,6 +176,113 @@ type
         end;
         hdr^.key := key;
         hdr^.value := value;
+        result := self;
+    end;
+
+    function parseHeaderLine(
+        const headerline : string;
+        out key : shortstring;
+        out value : string
+    ) : boolean;
+    var colonPos: integer;
+    begin
+        colonPos := pos(':', headerline);
+        if (colonPos > 0) then
+        begin
+            key := copy(headerline, 1, colonPos - 1);
+            value := trim(copy(headerline, colonPos + 1, length(headerline) - colonpos));
+            result := true;
+        end else
+        begin
+            result := false;
+        end;
+    end;
+
+    (*!------------------------------------
+     * set http header
+     *-------------------------------------
+     * @param headerline key:value of header
+     * @return header instance
+     *-------------------------------------*)
+    function THeaders.setHeaderLine(const headerline : string) : IHeaders;
+    var key : shortstring;
+        value : string;
+    begin
+        if (parseHeaderLine(headerline, key, value)) then
+        begin
+            result := setHeader(key, value);
+        end else
+        begin
+            raise EInvalidHeader.createFmt(sErrInvalidHeader, [headerline]);
+        end;
+    end;
+
+    (*!------------------------------------
+     * add http header
+     *-------------------------------------
+     * @param key name  of http header to set
+     * @param value value of header
+     * @return header instance
+     *-------------------------------------*)
+    function THeaders.addHeader(const key : shortstring; const value : string) : IHeaders;
+    var hdr : PHeaderRec;
+    begin
+        new(hdr);
+        hdr^.key := key;
+        hdr^.value := value;
+        headerList.add(key, hdr);
+        result := self;
+    end;
+
+    (*!------------------------------------
+     * add http header
+     *-------------------------------------
+     * @param headerline key:value of header
+     * @return header instance
+     *-------------------------------------*)
+    function THeaders.addHeaderLine(const headerline : string) : IHeaders;
+    var key : shortstring;
+        value : string;
+    begin
+        if (parseHeaderLine(headerline, key, value)) then
+        begin
+            result := addHeader(key, value);
+        end else
+        begin
+            raise EInvalidHeader.createFmt(sErrInvalidHeader, [headerline]);
+        end;
+    end;
+
+    (*!------------------------------------
+     * remove http header
+     *-------------------------------------
+     * @param key name of http header to remove
+     * @return header instance
+     *-------------------------------------*)
+    function THeaders.removeHeader(const key : shortstring) : IHeaders;
+    var hdr : PHeaderRec;
+    begin
+        hdr := headerList.remove(key);
+        if assigned(hdr) then
+        begin
+            dispose(hdr);
+        end;
+        result := self;
+    end;
+
+    (*!------------------------------------
+     * remove multiple http headers
+     *-------------------------------------
+     * @param keys name of http headers to remove
+     * @return header instance
+     *-------------------------------------*)
+    function THeaders.removeHeaders(const keys : array of shortstring) : IHeaders;
+    var i:integer;
+    begin
+        for i := low(keys) to high(keys) do
+        begin
+            removeHeader(keys[i]);
+        end;
         result := self;
     end;
 

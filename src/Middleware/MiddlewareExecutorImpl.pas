@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -11,6 +11,7 @@ unit MiddlewareExecutorImpl;
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
 
@@ -45,8 +46,8 @@ implementation
 
 uses
 
-    MiddlewareStackIntf,
-    MiddlewareStackImpl;
+    RequestHandlerIntf,
+    MiddlewareChainImpl;
 
     constructor TMiddlewareExecutor.create(const appMiddlewares : IMiddlewareLinkList);
     begin
@@ -64,16 +65,16 @@ uses
         const response : IResponse;
         const routeHandler : IRouteHandler
     ) : IResponse;
-    var mdlwr : IMiddlewareStack;
+    var mdlwr : IRequestHandler;
     begin
-        mdlwr := TMiddlewareStack.create(
+        mdlwr := TMiddlewareChain.create(
             fAppMiddlewares,
             routeHandler.middlewares(),
             routeHandler.handler()
         );
         try
 
-            result := mdlwr.first.handleRequest(
+            result := mdlwr.handleRequest(
                 request,
                 response,
                 routeHandler.argsReader()

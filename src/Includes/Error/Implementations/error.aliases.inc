@@ -5,7 +5,12 @@ TNullErrorHandler = NullErrorHandlerImpl.TNullErrorHandler;
 TTemplateErrorHandler = TemplateErrorHandlerImpl.TTemplateErrorHandler;
 TLogErrorHandler = LogErrorHandlerImpl.TLogErrorHandler;
 TCompositeErrorHandler = CompositeErrorHandlerImpl.TCompositeErrorHandler;
-
+TConditionalErrorHandler = ConditionalErrorHandlerImpl.TConditionalErrorHandler;
+TDecoratorErrorHandler = DecoratorErrorHandlerImpl.TDecoratorErrorHandler;
+TBoolErrorHandler = BoolErrorHandlerImpl.TBoolErrorHandler;
+TNotFoundErrorHandler = NotFoundErrorHandlerImpl.TNotFoundErrorHandler;
+TMethodNotAllowedErrorHandler = MethodNotAllowedErrorHandlerImpl.TMethodNotAllowedErrorHandler;
 
 TFileLogErrorHandlerFactory = FileLogErrorHandlerFactoryImpl.TFileLogErrorHandlerFactory;
 TProductionErrorHandlerFactory = ProductionErrorHandlerFactoryImpl.TProductionErrorHandlerFactory;
+TProdOrDevErrorHandlerFactory = ProdOrDevErrorHandlerFactoryImpl.TProdOrDevErrorHandlerFactory;

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -67,6 +67,7 @@ uses
         streamInst.reset();
         curl_easy_setopt(hCurl, CURLOPT_URL, [ PChar(url) ]);
         curl_easy_setopt(hCurl, CURLOPT_UPLOAD, [ 1 ]);
+        curl_easy_setopt(hCurl, CURLOPT_PUT, [ 1 ]);
         params := '';
         if (data <> nil) then
         begin

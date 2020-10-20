@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -12,7 +12,11 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
- IRdbms = RdbmsIntf.IRdbms;
- IRdbmsResultSet = RdbmsResultSetIntf.IRdbmsResultSet;
- IRdbmsFields = RdbmsFieldsIntf.IRdbmsFields;
- IRdbmsField = RdbmsFieldIntf.IRdbmsField;
+IRdbms = RdbmsIntf.IRdbms;
+IRdbmsPool = RdbmsPoolIntf.IRdbmsPool;
+IRdbmsFactory = RdbmsFactoryIntf.IRdbmsFactory;
+
+IRdbmsResultSet = RdbmsResultSetIntf.IRdbmsResultSet;
+IRdbmsFields = RdbmsFieldsIntf.IRdbmsFields;
+IRdbmsField = RdbmsFieldIntf.IRdbmsField;
+IRdbmsStatement = RdbmsStatementIntf.IRdbmsStatement;

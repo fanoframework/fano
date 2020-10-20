@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit DependencyContainerImpl;
@@ -63,6 +63,7 @@ type
          * get instance from service registration using its name.
          *---------------------------------------------------------
          * @param serviceName name of service
+         * @param aDepRec dependency record
          * @return dependency instance
          * @throws EDependencyNotFound
          *---------------------------------------------------------
@@ -71,7 +72,10 @@ type
          * registered using factory(), this method will return
          * different instance everytime get() is called
          *---------------------------------------------------------*)
-        function getDependency(const serviceName : shortstring) : IDependency;
+        function getDependency(
+            const serviceName : shortstring;
+            const aDepRec : pointer
+        ) : IDependency;
     public
         (*!--------------------------------------------------------
          * constructor
@@ -93,7 +97,10 @@ type
          * @param serviceFactory factory instance
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function add(const serviceName : shortstring; const serviceFactory : IDependencyFactory) : IDependencyContainer;
+        function add(
+            const serviceName : shortstring;
+            const serviceFactory : IDependencyFactory
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * Add factory instance to service registration as
@@ -103,7 +110,10 @@ type
          * @param serviceFactory factory instance
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function factory(const serviceName : shortstring; const serviceFactory : IDependencyFactory) : IDependencyContainer;
+        function factory(
+            const serviceName : shortstring;
+            const serviceFactory : IDependencyFactory
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * Add alias name to existing service
@@ -112,7 +122,10 @@ type
          * @param serviceName actual name of service
          * @return current dependency container instance
          *---------------------------------------------------------*)
-        function alias(const aliasName: shortstring; const serviceName : shortstring) : IDependencyContainer;
+        function alias(
+            const aliasName: shortstring;
+            const serviceName : shortstring
+        ) : IDependencyContainer;
 
         (*!--------------------------------------------------------
          * get instance from service registration using its name.
@@ -142,13 +155,15 @@ uses
     sysutils,
     EDependencyNotFoundImpl,
     EInvalidFactoryImpl,
-    EDependencyAliasImpl;
+    EDependencyAliasImpl,
+    CircularDepAvoidFactoryImpl;
 
 resourcestring
 
-    sDependencyNotFound = 'Dependency %s not found';
-    sInvalidFactory = 'Factory %s is invalid';
-    sUnsupportedMultiLevelAlias = 'Unsupported multiple level alias %s to %s';
+    sDependencyNotFound = 'Dependency "%s" not found';
+    sInvalidFactory = 'Factory "%s" is invalid';
+    sUnsupportedMultiLevelAlias = 'Unsupported multiple level alias "%s" to "%s"';
+    sSameAlias = 'Cannot create alias to itself ("%s" to "%s")';
 
 type
 
@@ -171,9 +186,9 @@ type
 
     destructor TDependencyContainer.destroy();
     begin
-        inherited destroy();
         cleanUpDependencies();
         dependencyList := nil;
+        inherited destroy();
     end;
 
     procedure TDependencyContainer.cleanUpDependencies();
@@ -208,6 +223,7 @@ type
         const actualServiceName : shortString
     ) : IDependencyContainer;
     var depRec : PDependencyRec;
+        circularDepFactory : IDependencyFactory;
     begin
         depRec := dependencyList.find(serviceName);
         if (depRec = nil) then
@@ -216,7 +232,15 @@ type
            dependencyList.add(serviceName, depRec);
         end;
 
-        depRec^.factory := serviceFactory;
+        //avoid circular dependency by wrapping it internally
+        //with TCircularDepAvoidFactory. Instead of stack overflow
+        //we will throw ECircularDependency exception.
+        circularDepFactory := TCircularDepAvoidFactory.create(
+            serviceName,
+            serviceFactory
+        );
+
+        depRec^.factory := circularDepFactory;
         depRec^.instance := nil;
         depRec^.singleInstance := singleInstance;
         depRec^.aliased := aliased;
@@ -282,6 +306,12 @@ type
     function TDependencyContainer.alias(const aliasName: shortstring; const serviceName : shortstring) : IDependencyContainer;
     var actualDepRec : PDependencyRec;
     begin
+        if (aliasName = serviceName) then
+        begin
+            //Cannot alias to itself as it will cause infinite recursion
+            raise EDependencyAlias.CreateFmt(sSameAlias, [aliasName, serviceName]);
+        end;
+
         actualDepRec := getDepRecordOrExcept(serviceName);
 
         if actualDepRec^.aliased then
@@ -289,7 +319,7 @@ type
             //TODO: Should we allow alias to other alias?
             //Allowing this may cause deep recursion when we need to get actual
             //instance. Current implementation does not support it
-            raise EDependencyAlias.createFmt(sUnsupportedMultiLevelAlias, [aliasName, serviceName])
+            raise EDependencyAlias.createFmt(sUnsupportedMultiLevelAlias, [aliasName, serviceName]);
         end;
 
         result := addDependency(aliasName, nil, false, true, serviceName);
@@ -299,6 +329,7 @@ type
      * get instance from service registration using its name.
      *---------------------------------------------------------
      * @param serviceName name of service
+     * @param aDepRec dependency record
      * @return dependency instance
      * @throws EDependencyNotFound
      * @throws EInvalidFactory
@@ -308,10 +339,13 @@ type
      * registered using factory(), this method will return
      * different instance everytime it is called.
      *---------------------------------------------------------*)
-    function TDependencyContainer.getDependency(const serviceName : shortstring) : IDependency;
+    function TDependencyContainer.getDependency(
+        const serviceName : shortstring;
+        const aDepRec : pointer
+    ) : IDependency;
     var depRec : PDependencyRec;
     begin
-        depRec := getDepRecordOrExcept(serviceName);
+        depRec := aDepRec;
 
         if (depRec^.factory = nil) then
         begin
@@ -346,19 +380,17 @@ type
      *---------------------------------------------------------*)
     function TDependencyContainer.get(const serviceName : shortstring) : IDependency;
     var depRec : PDependencyRec;
-        svcName : shortstring;
     begin
         depRec := getDepRecordOrExcept(serviceName);
 
         if (not depRec^.aliased) then
         begin
-            svcName := serviceName;
+            result := getDependency(serviceName, depRec);
         end else
         begin
-            svcName := depRec^.actualServiceName;
+            result := get(depRec^.actualServiceName);
         end;
 
-        result := getDependency(svcName);
     end;
 
     (*!--------------------------------------------------------

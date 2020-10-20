@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -79,6 +79,17 @@ type
         function get(const indx : integer) : pointer;
         procedure delete(const indx : integer);
         function keyOfIndex(const indx : integer) : shortstring;
+
+        (*!------------------------------------------------
+         * delete item by key
+         *-----------------------------------------------
+         * @param key name to use to associate item
+         * @return item being removed
+         *-----------------------------------------------
+         * implementor is free to decide whether delete
+         * item in list only or also free item memory
+         *-----------------------------------------------*)
+        function remove(const key : shortstring) : pointer;
 
         (*!------------------------------------------------
          * get index by key name
@@ -177,6 +188,7 @@ const
     var matches : TRegexMatchResult;
         i, totalPlaceholder : integer;
     begin
+        result := default(TArrayOfPlaceholders);
         matches := regex.greedyMatch(
             ROUTE_PLACEHOLDER_REGEX,
             originalRouteWithRegex
@@ -306,7 +318,7 @@ const
      *   /name/{name}/{unitId}/edback
      *
      * into route pattern ready for dispatch
-     * /name/([)^/]+)/([^/]+)/edback
+     * /name/([^/]+)/([^/]+)/edback
      *
      * See ROUTE_DISPATCH_REGEX constant
      *---------------------------------------------------*)
@@ -404,6 +416,11 @@ const
     procedure TSimpleRegexRouteList.delete(const indx : integer);
     begin
         hashesList.delete(indx);
+    end;
+
+    function TSimpleRegexRouteList.remove(const key : shortstring) : pointer;
+    begin
+        result := hashesList.remove(translateRouteName(key));
     end;
 
     function TSimpleRegexRouteList.keyOfIndex(const indx : integer) : shortstring;

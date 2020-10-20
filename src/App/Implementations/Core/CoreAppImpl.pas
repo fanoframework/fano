@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit CoreAppImpl;
@@ -16,11 +16,14 @@ uses
     RunnableIntf,
     DependencyContainerIntf,
     AppIntf,
+    AppServiceProviderIntf,
     DispatcherIntf,
     EnvironmentIntf,
     EnvironmentEnumeratorIntf,
     ErrorHandlerIntf,
     StdInIntf,
+    RouterIntf,
+    RouteBuilderIntf,
     CoreAppConsts;
 
 type
@@ -30,23 +33,58 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TCoreWebApplication = class(TInterfacedObject, IWebApplication, IRunnable)
+    TCoreWebApplication = class abstract (TInterfacedObject, IWebApplication, IRunnable)
     protected
-        dependencyContainer : IDependencyContainer;
-        dispatcher : IDispatcher;
-        environment : ICGIEnvironment;
-        errorHandler : IErrorHandler;
-        fStdInReader : IStdIn;
+        fAppSvc : IAppServiceProvider;
+        fRouteBuilder : IRouteBuilder;
 
         (*!-----------------------------------------------
          * execute application and write response
          *------------------------------------------------
+         * @param env CGI environment
+         * @param stdin stdin instance
+         * @param dispatcher dispatcher instance
          * @return current application instance
-         *-----------------------------------------------
-         * TODO: need to think about how to execute when
-         * application is run as daemon.
          *-----------------------------------------------*)
-        function execute() : IRunnable;
+        function execute(
+            const env : ICGIEnvironment;
+            const stdin : IStdIn;
+            const dispatcher : IDispatcher
+        ) : IRunnable;
+
+        (*!-----------------------------------------------
+         * execute application and handle exception
+         *------------------------------------------------
+         * @param container dependency container
+         * @param env CGI environment
+         * @param stdin stdin instance
+         * @param errorHandler error handler instance
+         * @param dispatcher dispatcher instance
+         * @return current application instance
+         *-----------------------------------------------*)
+        function execAndHandleExcept(
+            const container : IDependencyContainer;
+            const env : ICGIEnvironment;
+            const stdin : IStdIn;
+            const errorHandler : IErrorHandler;
+            const dispatcher : IDispatcher
+        ) : IRunnable;
+
+        (*!-----------------------------------------------
+         * execute application
+         *------------------------------------------------
+         * @param container dependency container
+         * @param env CGI environment
+         * @param stdin stdin instance
+         * @param dispatcher dispatcher instance
+         * @return current application instance
+         *-----------------------------------------------*)
+        function doExecute(
+            const container : IDependencyContainer;
+            const env : ICGIEnvironment;
+            const stdin : IStdIn;
+            const dispatcher : IDispatcher
+        ) : IRunnable; virtual; abstract;
 
         procedure reset();
 
@@ -58,50 +96,17 @@ type
          * constructed
          *-----------------------------------------------*)
         function initialize(const container : IDependencyContainer) : boolean; virtual;
-
-        (*!-----------------------------------------------
-         * Build application route dispatcher
-         *------------------------------------------------
-         * @param container dependency container
-         *-----------------------------------------------*)
-        procedure buildDispatcher(const container : IDependencyContainer);
-
-        (*!-----------------------------------------------
-         * Build application dependencies
-         *------------------------------------------------
-         * @param container dependency container
-         *-----------------------------------------------*)
-        procedure buildDependencies(const container : IDependencyContainer); virtual; abstract;
-
-        (*!-----------------------------------------------
-         * Build application routes
-         *------------------------------------------------
-         * @param container dependency container
-         *-----------------------------------------------*)
-        procedure buildRoutes(const container : IDependencyContainer); virtual; abstract;
-
-        (*!-----------------------------------------------
-         * initialize application route dispatcher
-         *------------------------------------------------
-         * @param container dependency container
-         * @return dispatcher instance
-         *-----------------------------------------------*)
-        function initDispatcher(const container : IDependencyContainer) : IDispatcher; virtual; abstract;
     public
 
         (*!-----------------------------------------------
          * constructor
          *------------------------------------------------
-         * @param container dependency container
-         * @param env CGI environment instance
-         * @param errHandler error handler
-         * @param stdIn standard input reader
+         * @param appSvc class provide essentials service
+         * @param routeBuilder class responsible to build application routes
          *-----------------------------------------------*)
         constructor create(
-            const container : IDependencyContainer;
-            const env : ICGIEnvironment;
-            const errHandler : IErrorHandler;
-            const stdInReader : IStdIn
+            const appSvc : IAppServiceProvider;
+            const routeBuilder : IRouteBuilder
         );
         destructor destroy(); override;
         function run() : IRunnable; virtual; abstract;
@@ -114,46 +119,38 @@ uses
     SysUtils,
     ResponseIntf,
 
-    ///exception-related units
-    EInvalidDispatcherImpl;
+    //exception-related units
+    ERouteHandlerNotFoundImpl,
+    EMethodNotAllowedImpl,
+    EInvalidMethodImpl,
+    EInvalidRequestImpl,
+    ENotFoundImpl,
+    EDependencyNotFoundImpl,
+    EUnauthorizedImpl,
+    EForbiddenImpl;
 
     procedure TCoreWebApplication.reset();
     begin
-        dispatcher := nil;
-        environment := nil;
-        errorHandler := nil;
-        dependencyContainer := nil;
-        fStdInReader := nil;
+        fAppSvc := nil;
+        fRouteBuilder := nil;
     end;
 
     (*!-----------------------------------------------
      * constructor
      *------------------------------------------------
-     * @param container dependency container
-     * @param env CGI environment instance
-     * @param errHandler error handler
-     *-----------------------------------------------
-     * errHandler is injected as application dependencies
-     * instead of using dependency container because
-     * we need to make sure that during building
-     * application dependencies and routes, if something
-     * goes wrong, we can be sure that there is error handler
-     * to handle the exception
+     * @param appSvc class that provide essentials services
+     * @param routeBuilder class responsible to build application routes
      *-----------------------------------------------*)
     constructor TCoreWebApplication.create(
-        const container : IDependencyContainer;
-        const env : ICGIEnvironment;
-        const errHandler : IErrorHandler;
-        const stdInReader : IStdIn
+        const appSvc : IAppServiceProvider;
+        const routeBuilder : IRouteBuilder
     );
     begin
         inherited create();
         randomize();
         reset();
-        dependencyContainer := container;
-        environment := env;
-        errorHandler := errHandler;
-        fStdInReader := stdInReader;
+        fAppSvc := appSvc;
+        fRouteBuilder := routeBuilder;
     end;
 
     (*!-----------------------------------------------
@@ -166,59 +163,122 @@ uses
     end;
 
     (*!-----------------------------------------------
-     * Build application route dispatcher
-     *------------------------------------------------
-     * @param container dependency container
-     * @throws EInvalidDispatcher
-     *-----------------------------------------------
-     * route dispatcher is essentials but because
-     * we allow user to use IDispatcher
-     * implementation they like, we need to be informed
-     * about it.
-     *-----------------------------------------------*)
-    procedure TCoreWebApplication.buildDispatcher(const container : IDependencyContainer);
-    begin
-        dispatcher := initDispatcher(container);
-        if (dispatcher = nil) then
-        begin
-            raise EInvalidDispatcher.create(sErrInvalidDispatcher);
-        end;
-    end;
-
-    (*!-----------------------------------------------
      * initialize application dependencies
      *------------------------------------------------
      * @param container dependency container
      * @return true if application dependency succesfully
      * constructed
-     *-----------------------------------------------
-     * TODO: need to think about how to initialize when
-     * application is run as daemon. Current implementation
-     * is we put this in run() method which maybe not right
-     * place.
      *-----------------------------------------------*)
     function TCoreWebApplication.initialize(const container : IDependencyContainer) : boolean;
     begin
-        buildDependencies(container);
-        buildRoutes(container);
-        buildDispatcher(container);
-        result := true;
+        try
+            fAppSvc.register(container);
+            fRouteBuilder.buildRoutes(container, fAppSvc.router);
+            result := true;
+        except
+            on e : Exception do
+            begin
+                result := false;
+                //TODO : improve exception handling
+                writeln('Fail to initialize application.');
+                writeln('Exception: ', e.ClassName);
+                writeln('Message: ', e.Message);
+            end;
+        end;
     end;
 
     (*!-----------------------------------------------
      * execute application and write response
      *------------------------------------------------
+     * @param env CGI environment
+     * @param stdin stdin instance
+     * @param dispatcher dispatcher instance
      * @return current application instance
      *-----------------------------------------------*)
-    function TCoreWebApplication.execute() : IRunnable;
+    function TCoreWebApplication.execute(
+        const env : ICGIEnvironment;
+        const stdin : IStdIn;
+        const dispatcher : IDispatcher
+    ) : IRunnable;
     var response : IResponse;
     begin
-        response := dispatcher.dispatchRequest(environment, fStdInReader);
+        response := dispatcher.dispatchRequest(env, stdIn);
         try
             response.write();
             result := self;
         finally
             response := nil;
+        end;
+    end;
+
+    (*!-----------------------------------------------
+     * execute application and handle exception
+     *------------------------------------------------
+     * @param container dependency container
+     * @param env CGI environment
+     * @param stdin stdin instance
+     * @param errorHandler error handler instance
+     * @param dispatcher dispatcher instance
+     * @return current application instance
+     *-----------------------------------------------*)
+    function TCoreWebApplication.execAndHandleExcept(
+        const container : IDependencyContainer;
+        const env : ICGIEnvironment;
+        const stdin : IStdIn;
+        const errorHandler : IErrorHandler;
+        const dispatcher : IDispatcher
+    ) : IRunnable;
+    begin
+        try
+            result := doExecute(container, env, stdin, dispatcher);
+        except
+            on e : EInvalidRequest do
+            begin
+                errorHandler.handleError(env.enumerator, e, 400, sHttp400Message);
+                reset();
+            end;
+
+            on e : EUnauthorized do
+            begin
+                errorHandler.handleError(env.enumerator, e, 401, sHttp401Message);
+                reset();
+            end;
+
+            on e : EForbidden do
+            begin
+                errorHandler.handleError(env.enumerator, e, 403, sHttp403Message);
+                reset();
+            end;
+
+            on e : ERouteHandlerNotFound do
+            begin
+                errorHandler.handleError(env.enumerator, e, 404, sHttp404Message);
+                reset();
+            end;
+
+            on e : ENotFound do
+            begin
+                errorHandler.handleError(env.enumerator, e, 404, sHttp404Message);
+                reset();
+            end;
+
+            on e : EMethodNotAllowed do
+            begin
+                errorHandler.handleError(env.enumerator, e, 405, sHttp405Message);
+                reset();
+            end;
+
+            on e : EInvalidMethod do
+            begin
+                errorHandler.handleError(env.enumerator, e, 501, sHttp501Message);
+                reset();
+            end;
+
+            on e : Exception do
+            begin
+                errorHandler.handleError(env.enumerator, e);
+                reset();
+            end;
         end;
     end;
 

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -48,7 +48,7 @@ type
          * Note: caller MUST not modify or destroy TStrings
          * instance and should read only
          *-----------------------------------------------*)
-        function vars() : TStrings;
+        function asStrings() : TStrings;
 
         (*!------------------------------------------------
          * get variable value by name
@@ -66,6 +66,22 @@ type
          * @return current class instance
          *-----------------------------------------------*)
         function setVar(const varName : shortstring; const valueData :string) : IViewParameters;
+
+        (*!------------------------------------------------
+         * set variable value by name. Alias to setVar()
+         *-----------------------------------------------
+         * @param varName name of variable
+         * @param valueData value to be store
+         *-----------------------------------------------*)
+        procedure putVar(const varName : shortstring; const valueData :string);
+
+        (*!------------------------------------------------
+         * test if variable name is set
+         *-----------------------------------------------
+         * @param varName name of variable
+         * @return boolean
+         *-----------------------------------------------*)
+        function has(const varName : shortstring) : boolean;
     end;
 
 implementation
@@ -100,12 +116,12 @@ uses
      * Note: caller MUST not modify or destroy TStrings
      * instance and should read only
      *-----------------------------------------------*)
-    function TCompositeViewParameters.vars() : TStrings;
+    function TCompositeViewParameters.asStrings() : TStrings;
     var firstKeys, secondKeys : TStrings;
         indx, firstCount, secondCount : integer;
     begin
-        firstKeys := firstViewParam.vars();
-        secondKeys := secondViewParam.vars();
+        firstKeys := firstViewParam.asStrings();
+        secondKeys := secondViewParam.asStrings();
         firstCount := firstKeys.count;
         secondCount := secondKeys.count;
         keys.clear();
@@ -156,5 +172,31 @@ uses
         firstViewParam.setVar(varName, valueData);
         secondViewParam.setVar(varName, valueData);
         result := self;
+    end;
+
+    (*!------------------------------------------------
+     * set variable value by name. Alias to setVar
+     *-----------------------------------------------
+     * @param varName name of variable
+     * @param valueData value to be store
+     * @return current class instance
+     *-----------------------------------------------*)
+    procedure TCompositeViewParameters.putVar(
+        const varName : shortstring;
+        const valueData :string
+    );
+    begin
+        setVar(varName, valueData);
+    end;
+
+    (*!------------------------------------------------
+     * test if variable name is set
+     *-----------------------------------------------
+     * @param varName name of variable
+     * @return boolean
+     *-----------------------------------------------*)
+    function TCompositeViewParameters.has(const varName : shortstring) : boolean;
+    begin
+        result := firstViewParam.has(varName) or secondViewParam.has(varName);
     end;
 end.

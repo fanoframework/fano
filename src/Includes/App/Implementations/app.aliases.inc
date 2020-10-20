@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -13,43 +13,25 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-TFanoWebApplication = AppImpl.TFanoWebApplication;
-TSimpleWebApplication = SimpleAppImpl.TSimpleWebApplication;
+TCgiWebApplication = AppImpl.TCgiWebApplication;
 TDaemonWebApplication = DaemonAppImpl.TDaemonWebApplication;
+TCgiFcgiGatewayApplication = CgiFcgiGatewayAppImpl.TCgiFcgiGatewayApplication;
+
+TBasicAppServiceProvider = BasicAppServiceProviderImpl.TBasicAppServiceProvider;
+TDaemonAppServiceProvider = DaemonAppServiceProviderImpl.TDaemonAppServiceProvider;
+TServerAppServiceProvider = ServerAppServiceProviderImpl.TServerAppServiceProvider;
+TDecoratorAppServiceProvider = DecoratorAppServiceProviderImpl.TDecoratorAppServiceProvider;
+TDecoratorDaemonAppServiceProvider = DecoratorDaemonAppServiceProviderImpl.TDecoratorDaemonAppServiceProvider;
+TAdapterDaemonAppServiceProvider = AdapterDaemonAppServiceProviderImpl.TAdapterDaemonAppServiceProvider;
 
 {----------------Begin FastCGI related-----------------------------}
-TSimpleFastCGIWebApplication = SimpleFastCGIAppImpl.TSimpleFastCGIWebApplication;
-
-{$IFDEF UNIX}
-TSimpleUnixFastCGIWebApplication = SimpleUnixFastCGIAppImpl.TSimpleUnixFastCGIWebApplication;
-{$ENDIF}
-
-TSimpleSockFastCGIWebApplication = SimpleSockFastCGIAppImpl.TSimpleSockFastCGIWebApplication;
-
-
-{$IFDEF LINUX}
-TEpollSimpleFastCGIWebApplication = EpollSimpleFastCGIAppImpl.TEpollSimpleFastCGIWebApplication;
-TEpollSimpleUnixFastCGIWebApplication = EpollSimpleUnixFastCGIAppImpl.TEpollSimpleUnixFastCGIWebApplication;
-TEpollSimpleSockFastCGIWebApplication = EpollSimpleSockFastCGIAppImpl.TEpollSimpleSockFastCGIWebApplication;
-{$ENDIF}
-{----------------End FastCGI related-----------------------------}
+TFastCgiAppServiceProvider = FastCgiAppServiceProviderImpl.TFastCgiAppServiceProvider;
+{---------------- End FastCGI related-----------------------------}
 
 {----------------Begin SCGI related-----------------------------}
-TSimpleScgiWebApplication = SimpleScgiAppImpl.TSimpleScgiWebApplication;
-TSimpleUnixScgiWebApplication = SimpleUnixScgiAppImpl.TSimpleUnixScgiWebApplication;
-
-{$IFDEF LINUX}
-TEpollSimpleScgiWebApplication = EpollSimpleScgiAppImpl.TEpollSimpleScgiWebApplication;
-TEpollSimpleUnixScgiWebApplication = EpollSimpleUnixScgiAppImpl.TEpollSimpleUnixScgiWebApplication;
-{$ENDIF}
-{----------------End SCGI related-----------------------------}
+TScgiAppServiceProvider = ScgiAppServiceProviderImpl.TScgiAppServiceProvider;
+{---------------- End SCGI related-----------------------------}
 
 {----------------Begin uwsgi related-----------------------------}
-TSimpleUwsgiWebApplication = SimpleUwsgiAppImpl.TSimpleUwsgiWebApplication;
-TSimpleUnixUwsgiWebApplication = SimpleUnixUwsgiAppImpl.TSimpleUnixUwsgiWebApplication;
-
-{$IFDEF LINUX}
-TEpollSimpleUwsgiWebApplication = EpollSimpleUwsgiAppImpl.TEpollSimpleUwsgiWebApplication;
-TEpollSimpleUnixUwsgiWebApplication = EpollSimpleUnixUwsgiAppImpl.TEpollSimpleUnixUwsgiWebApplication;
-{$ENDIF}
-{----------------End uwsgi related-----------------------------}
+TUwsgiAppServiceProvider = UwsgiAppServiceProviderImpl.TUwsgiAppServiceProvider;
+{---------------- End uwsgi related-----------------------------}

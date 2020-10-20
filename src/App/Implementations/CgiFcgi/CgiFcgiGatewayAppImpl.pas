@@ -2,10 +2,10 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit FastCGIAppImpl;
+unit CgiFcgiGatewayAppImpl;
 
 interface
 
@@ -26,7 +26,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TCGIFastCGIGatewayApplication = class(TInterfacedObject, IWebApplication)
+    TCgiFcgiGatewayApplication = class(TInterfacedObject, IWebApplication)
     private
         fCgiApp : IWebApplication;
         fFcgiApp : IWebApplication;
@@ -36,15 +36,15 @@ type
         (*!-----------------------------------------------
          * constructor
          *------------------------------------------------
-         * @param cgiApp instance CGI Application
-         * @param fcgiApp instance FastCGI application
+         * @param cgiAppInst instance CGI Application
+         * @param fcgiAppInst instance FastCGI application
          *-----------------------------------------------*)
         constructor create(
-            const cgiApp : IWebApplication;
-            const fcgiApp : IWebApplication
+            const cgiAppInst : IWebApplication;
+            const fcgiAppInst : IWebApplication
         );
         destructor destroy(); override;
-        function run() : IRunnable; override;
+        function run() : IRunnable;
 
     end;
 
@@ -52,32 +52,33 @@ implementation
 
 uses
 
-    sockets;
+    sockets,
+    fastcgi;
 
     (*!-----------------------------------------------
      * constructor
      *------------------------------------------------
-     * @param cgiApp instance CGI Application
-     * @param fcgiApp instance FastCGI application
+     * @param cgiAppInst instance CGI Application
+     * @param fcgiAppInst instance FastCGI application
      *-----------------------------------------------*)
-    constructor TCGIFastCGIGatewayApplication.create(
-        const cgiApp : IWebApplication;
-        const fcgiApp : IWebApplication
+    constructor TCgiFcgiGatewayApplication.create(
+        const cgiAppInst : IWebApplication;
+        const fcgiAppInst : IWebApplication
     );
     begin
         inherited create();
-        fCgiApp := cgiApp;
-        fFcgiApp := fcgiApp;
+        fCgiApp := cgiAppInst;
+        fFcgiApp := fcgiAppInst;
     end;
 
-    destructor TCGIFastCGIGatewayApplication.destroy();
+    destructor TCgiFcgiGatewayApplication.destroy();
     begin
-        inherited destroy();
         fCgiApp := nil;
         fFcgiApp := nil;
+        inherited destroy();
     end;
 
-    function TCGIFastCGIGatewayApplication.isRunAsFastCgi() : boolean;
+    function TCgiFcgiGatewayApplication.isRunAsFastCgi() : boolean;
     var sockAddr :TSockAddr;
         len, err: longint;
     begin
@@ -87,7 +88,7 @@ uses
         result := (err = -1) and (socketError() = EsockENOTCONN);
     end;
 
-    function TCGIFastCGIGatewayApplication.run() : IRunnable;
+    function TCgiFcgiGatewayApplication.run() : IRunnable;
     begin
         if (isRunAsFastCgi()) then
         begin

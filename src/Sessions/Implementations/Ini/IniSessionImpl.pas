@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -96,13 +96,6 @@ type
         function has(const sessionVar : shortstring) : boolean; override;
 
         (*!------------------------------------
-         * test if current session is expired
-         *-------------------------------------
-         * @return true if session is expired
-         *-------------------------------------*)
-        function expired() : boolean; override;
-
-        (*!------------------------------------
          * get session expiration date
          *-------------------------------------
          * @return date time when session is expired
@@ -122,7 +115,6 @@ implementation
 uses
 
     SysUtils,
-    DateUtils,
     SessionConsts,
     ESessionExpiredImpl;
 
@@ -177,8 +169,8 @@ uses
     (*!------------------------------------
      * get session variable
      *-------------------------------------
-     * @return session value
-     * @throws EJSON exception when not found
+     * @return session value or empty string
+     *        when not found
      *-------------------------------------*)
     function TIniSession.internalGetVar(const sessionVar : shortstring) : string;
     begin
@@ -209,20 +201,6 @@ uses
     begin
         fSessionData.eraseSection(SESSION_VARS);
         result := self;
-    end;
-
-    (*!------------------------------------
-     * test if current session is expired
-     *-------------------------------------
-     * @return true if session is expired
-     *-------------------------------------*)
-    function TIniSession.expired() : boolean;
-    var expiredDateTime : TDateTime;
-    begin
-        expiredDateTime := strToDateTime(fSessionData.readString('expiry', 'expire', '01-01-1970 00:00:00'));
-        //value > 0, means now() is later than expiredDateTime i.e,
-        //expireddateTime is in past
-        result := (compareDateTime(now(), expiredDateTime) > 0);
     end;
 
     (*!------------------------------------

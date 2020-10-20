@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -27,10 +27,11 @@ type
         (*!------------------------------------------------
          *  add header
          *-----------------------------------------------
-         * @param headerLine string contain header
+         * @param aheader string contain header name
+         * @param avalue string contain header value
          * @return current instance
          *-----------------------------------------------*)
-        function add(const headerLine : string) : IHttpClientHeaders;
+        function add(const aheader : string; const avalue : string) : IHttpClientHeaders;
 
         (*!------------------------------------------------
          *  apply added header

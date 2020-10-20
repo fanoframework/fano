@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -39,11 +39,11 @@ type
         (*!------------------------------------------------
          * process request stream
          *-----------------------------------------------*)
-        procedure process(
+        function process(
             const stream : IStreamAdapter;
             const streamCloser : ICloseable;
             const streamId : IStreamId
-        );
+        ) : boolean;
 
         (*!------------------------------------------------
          * get StdIn stream for complete request
@@ -56,6 +56,14 @@ type
          * @return current instance
          *-----------------------------------------------*)
         function setReadyListener(const listener : IReadyListener) : IProtocolProcessor;
+
+        (*!------------------------------------------------
+         * get number of bytes of complete request based
+         * on information buffer
+         *-----------------------------------------------
+         * @return number of bytes of complete request
+         *-----------------------------------------------*)
+        function expectedSize(const buff : IStreamAdapter) : int64;
     end;
 
 implementation
@@ -79,13 +87,14 @@ uses
     (*!------------------------------------------------
      * process request stream
      *-----------------------------------------------*)
-    procedure TNullProtocolProcessor.process(
+    function TNullProtocolProcessor.process(
         const stream : IStreamAdapter;
         const streamCloser : ICloseable;
         const streamId : IStreamId
-    );
+    ) : boolean;
     begin
         //intentionally does nothing
+        result := true;
     end;
 
     (*!------------------------------------------------
@@ -106,4 +115,15 @@ uses
         result := self;
     end;
 
+    (*!------------------------------------------------
+     * get number of bytes of complete request based
+     * on information buffer
+     *-----------------------------------------------
+     * @return number of bytes of complete request
+     *-----------------------------------------------*)
+    function TNullProtocolProcessor.expectedSize(const buff : IStreamAdapter) : int64;
+    begin
+        //intentionally return empty size
+        result := 0;
+    end;
 end.

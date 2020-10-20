@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -54,6 +54,26 @@ type
         function remotePort() : string;
 
         {-----------------------------------------
+         Retrieve REMOTE_HOST environment variable
+        ------------------------------------------}
+        function remoteHost() : string;
+
+        {-----------------------------------------
+         Retrieve REMOTE_USER environment variable
+        ------------------------------------------}
+        function remoteUser() : string;
+
+        {-----------------------------------------
+         Retrieve REMOTE_IDENT environment variable
+        ------------------------------------------}
+        function remoteIdent() : string;
+
+        {-----------------------------------------
+         Retrieve AUTH_TYPE environment variable
+        ------------------------------------------}
+        function authType() : string;
+
+        {-----------------------------------------
          Retrieve SERVER_ADDR environment variable
         ------------------------------------------}
         function serverAddr() : string;
@@ -62,6 +82,21 @@ type
          Retrieve SERVER_PORT environment variable
         ------------------------------------------}
         function serverPort() : string;
+
+        {-----------------------------------------
+         Retrieve SERVER_NAME environment variable
+        ------------------------------------------}
+        function serverName() : string;
+
+        {-----------------------------------------
+         Retrieve SERVER_SOFTWARE environment variable
+        ------------------------------------------}
+        function serverSoftware() : string;
+
+        {-----------------------------------------
+         Retrieve SERVER_PROTOCOL environment variable
+        ------------------------------------------}
+        function serverProtocol() : string;
 
         {-----------------------------------------
          Retrieve DOCUMENT_ROOT environment variable
@@ -89,9 +124,19 @@ type
         function queryString() : string;
 
         {-----------------------------------------
-         Retrieve SERVER_NAME environment variable
+         Retrieve SCRIPT_NAME environment variable
         ------------------------------------------}
-        function serverName() : string;
+        function scriptName() : string;
+
+        {-----------------------------------------
+         Retrieve PATH_INFO environment variable
+        ------------------------------------------}
+        function pathInfo() : string;
+
+        {-----------------------------------------
+         Retrieve PATH_TRANSLATED environment variable
+        ------------------------------------------}
+        function pathTranslated() : string;
 
         {-----------------------------------------
          Retrieve CONTENT_TYPE environment variable
@@ -198,6 +243,38 @@ resourcestring
     end;
 
     {-----------------------------------------
+     Retrieve REMOTE_HOST environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.remoteHost() : string;
+    begin
+        result := env('REMOTE_HOST');
+    end;
+
+    {-----------------------------------------
+     Retrieve REMOTE_USER environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.remoteUser() : string;
+    begin
+        result := env('REMOTE_USER');
+    end;
+
+    {-----------------------------------------
+     Retrieve REMOTE_IDENT environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.remoteIdent() : string;
+    begin
+        result := env('REMOTE_IDENT');
+    end;
+
+    {-----------------------------------------
+     Retrieve AUTH_TYPE environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.authType() : string;
+    begin
+        result := env('AUTH_TYPE');
+    end;
+
+    {-----------------------------------------
      Retrieve SERVER_ADDR environment variable
     ------------------------------------------}
     function TAbstractCGIEnvironment.serverAddr() : string;
@@ -211,6 +288,30 @@ resourcestring
     function TAbstractCGIEnvironment.serverPort() : string;
     begin
         result := env('SERVER_PORT');
+    end;
+
+    {-----------------------------------------
+     Retrieve SERVER_NAME environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.serverName() : string;
+    begin
+        result := env('SERVER_NAME');
+    end;
+
+    {-----------------------------------------
+     Retrieve SERVER_SOFTWARE environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.serverSoftware() : string;
+    begin
+        result := env('SERVER_SOFTWARE');
+    end;
+
+    {-----------------------------------------
+     Retrieve SERVER_PROTOCOL environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.serverProtocol() : string;
+    begin
+        result := env('SERVER_PROTOCOL');
     end;
 
     {-----------------------------------------
@@ -254,11 +355,27 @@ resourcestring
     end;
 
     {-----------------------------------------
-     Retrieve SERVER_NAME environment variable
+     Retrieve SCRIPT_NAME environment variable
     ------------------------------------------}
-    function TAbstractCGIEnvironment.serverName() : string;
+    function TAbstractCGIEnvironment.scriptName() : string;
     begin
-        result := env('SERVER_NAME');
+        result := env('SCRIPT_NAME');
+    end;
+
+    {-----------------------------------------
+     Retrieve PATH_INFO environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.pathInfo() : string;
+    begin
+        result := env('PATH_INFO');
+    end;
+
+    {-----------------------------------------
+        Retrieve PATH_TRANSLATED environment variable
+    ------------------------------------------}
+    function TAbstractCGIEnvironment.pathTranslated() : string;
+    begin
+        result := env('PATH_TRANSLATED');
     end;
 
     {-----------------------------------------
