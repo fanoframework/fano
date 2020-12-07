@@ -25,8 +25,8 @@ type
 
     (*!------------------------------------------------
      * basic class having capability to create
-     * basic auth middleware instance using static array of
-     * credentials
+     * basic auth middleware instance using credentials
+     * stored in database
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)

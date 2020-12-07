@@ -120,6 +120,7 @@ uses
     base64,
     strutils,
     fpjson,
+    jsonparser,
     JwtConsts,
     EJwtImpl;
 
@@ -162,8 +163,9 @@ type
     end;
 
     function TJwtTokenVerifier.initAlgorithms(const algos: array of IJwtAlgVerifier) : TAlgArray;
-    var i: integer;
+    var i : integer;
     begin
+        result := nil;
         setLength(result, high(algos) - low(algos) + 1);
         for i:= low(algos) to high(algos) do
         begin
@@ -198,7 +200,7 @@ type
         //number of algorithms is very small, sequential search is good enough
         result := nil;
         len := length(fAlgorithms);
-        for i := 0 to len-1 do
+        for i := 0 to len - 1 do
         begin
             if (alg = fAlgorithms[i].name()) then
             begin
@@ -242,7 +244,7 @@ type
         jwt := TJwt.create();
         try
             try
-                //this may raise EJSON when token is not well-formed JWT
+                //this may raise EJSON or EJSONParser when token is not well-formed JWT
                 {$IF FPC_FULLVERSION <= 30400}
                     //FPC <= 3.0.4, TJWT.asEncodedString assume base64 decode
                     //while JWT requirse base64url decode. Here we do it manually
@@ -309,6 +311,13 @@ type
                 end;
             except
                 on e : EJSON do
+                begin
+                    //if we get here, token is not valid JWT
+                    result.verified := false;
+                    result.credential := '';
+                end;
+
+                on e : EJSONParser do
                 begin
                     //if we get here, token is not valid JWT
                     result.verified := false;

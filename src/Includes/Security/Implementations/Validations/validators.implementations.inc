@@ -71,6 +71,7 @@ EqualDateTimeValidatorImpl,
 AfterDateTimeFieldValidatorImpl,
 BeforeDateTimeFieldValidatorImpl,
 UuidValidatorImpl,
+Base64ValidatorImpl,
 MinLengthValidatorImpl,
 MaxLengthValidatorImpl,
 EqualLengthValidatorImpl,
@@ -89,6 +90,7 @@ ImageJpgValidatorImpl,
 ImageGifValidatorImpl,
 
 Ipv4ValidatorImpl,
+Ipv6ValidatorImpl,
 
 JsonValidatorImpl,
 

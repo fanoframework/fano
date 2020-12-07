@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit KqueueBoundSvrFactoryImpl;
+unit EpollInet6SvrFactoryImpl;
 
 interface
 
@@ -19,16 +19,17 @@ uses
 
 type
     (*------------------------------------------------
-     * factory class for socket server using bound
-     * socket and FreeBSD kqueue API
+     * factory class for socket server using IP
+     * and Linux epoll API with IPv6 support
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TKqueueBoundSvrFactory = class (TInterfacedObject, ISocketSvrFactory)
+    TEpollInet6SvrFactory = class(TInterfacedObject, ISocketSvrFactory)
     private
-        fListenSocket : longint;
+        fHost : string;
+        fPort : word;
     public
-        constructor create(const listenSocket : longint);
+        constructor create(const aHost : string; const aPort : word);
         function build() : IRunnableWithDataNotif;
     end;
 
@@ -39,21 +40,22 @@ uses
     SocketOptsIntf,
     Socket2SvrImpl,
     SocketOptsImpl,
-    BoundSocketImpl,
-    KqueueIoHandlerImpl;
+    Inet6SocketImpl,
+    EpollIoHandlerImpl;
 
-    constructor TKqueueBoundSvrFactory.create(const listenSocket : longint);
+    constructor TEpollInet6SvrFactory.create(const aHost : string; const aPort : word);
     begin
-        fListenSocket := listenSocket;
+        fHost := aHost;
+        fPort := aPort;
     end;
 
-    function TKqueueBoundSvrFactory.build() : IRunnableWithDataNotif;
+    function TEpollInet6SvrFactory.build() : IRunnableWithDataNotif;
     var sockOpts : ISocketOpts;
     begin
         sockOpts := TSocketOpts.create();
         result := TSocket2Svr.create(
-            TBoundSocket.create(fListenSocket, sockOpts),
-            TKqueueIoHandler.create(sockOpts)
+            TInet6Socket.create(fHost, fPort, sockOpts),
+            TEpollIoHandler.create(sockOpts)
         );
     end;
 

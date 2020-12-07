@@ -24,6 +24,9 @@ SegregatedLoggerFactoryImpl,
 StdOutLoggerImpl,
 StdOutLoggerFactoryImpl,
 
+StdErrLoggerImpl,
+StdErrLoggerFactoryImpl,
+
 SysLogLoggerImpl,
 SysLogLoggerFactoryImpl,
 

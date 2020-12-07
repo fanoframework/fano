@@ -43,16 +43,18 @@ implementation
 
     function TFcgiParamKeyValuePair.readLength(const astream : IStreamAdapter; var bytesToRead : int64) : integer;
     var lenByte : byte;
-        lenInt : integer;
+        b3, b2, b1, b0 : byte;
     begin
         //read key length
         aStream.read(lenByte, 1);
         if (lenByte and $80 = $80) then
         begin
             //4 byte encoding
-            astream.seek(-1, FROM_CURRENT);
-            astream.read(lenInt, 4);
-            result := lenInt and $7FFFFFFF;
+            b3 := lenByte;
+            astream.read(b2, 1);
+            astream.read(b1, 1);
+            astream.read(b0, 1);
+            result := ((b3 and $7F) shl 24) + (b2 shl 16) + (b1 shl 8) + b0;
             dec(bytesToRead, 4);
         end else
         begin

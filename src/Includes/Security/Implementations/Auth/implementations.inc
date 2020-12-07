@@ -18,6 +18,7 @@ CredentialTypes,
 AbstractPasswHashAuthImpl,
 DbPasswHashAuthImpl,
 StaticCredentialsAuthImpl,
+StaticPasswHashAuthImpl,
 
 BasicAuthMiddlewareImpl,
 StaticCredentialsBasicAuthMiddlewareFactoryImpl,
@@ -30,3 +31,4 @@ BearerAuthMiddlewareImpl,
 BearerAuthMiddlewareFactoryImpl,
 
 DbPasswHashAuthFactoryImpl,
+StaticPasswHashAuthFactoryImpl,

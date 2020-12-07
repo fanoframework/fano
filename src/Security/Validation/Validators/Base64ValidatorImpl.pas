@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit Ipv4ValidatorImpl;
+unit Base64ValidatorImpl;
 
 interface
 
@@ -23,12 +23,12 @@ uses
 type
 
     (*!------------------------------------------------
-     * class having capability to validate if data
-     * matched IP Address (IPV4)
+     * basic class having capability to
+     * validate if string is Base64 encoded
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TIpv4Validator = class(TBaseValidator)
+    TBase64Validator = class(TBaseValidator)
     protected
         (*!------------------------------------------------
          * actual data validation
@@ -53,18 +53,18 @@ implementation
 uses
 
     SysUtils,
-    sockets;
+    Base64;
 
 resourcestring
 
-    sErrFieldMustBeIpv4 = 'Field %s must be valid IP Address (IPv4)';
+    sErrFieldMustBeBase64 = 'Field %s must be Base64 encoded string';
 
     (*!------------------------------------------------
      * constructor
      *-------------------------------------------------*)
-    constructor TIpv4Validator.create();
+    constructor TBase64Validator.create();
     begin
-        inherited create(sErrFieldMustBeIpv4);
+        inherited create(sErrFieldMustBeBase64);
     end;
 
     (*!------------------------------------------------
@@ -72,16 +72,18 @@ resourcestring
      *-------------------------------------------------
      * @param dataToValidate input data
      * @return true if data is valid otherwise false
-     * @link https://lists.freepascal.org/pipermail/fpc-pascal/2016-July/048523.html
      *-------------------------------------------------*)
-    function TIpv4Validator.isValidData(
+    function TBase64Validator.isValidData(
         const dataToValidate : string;
         const dataCollection : IReadOnlyList;
         const request : IRequest
     ) : boolean;
-    var tmpAddress : string;
     begin
-        tmpAddress := HostAddrToStr(StrToHostAddr(dataToValidate));
-        result := (tmpAddress = dataToValidate);
+        try
+            DecodeStringBase64(dataToValidate, false);
+            result := true;
+        except
+            result := false;
+        end;
     end;
 end.

@@ -19,17 +19,21 @@ uses
     ResponseIntf,
     RouteArgsReaderIntf,
     AuthIntf,
-    CredentialTypes;
+    CredentialTypes,
+    InjectableObjectImpl;
 
 type
 
     (*!------------------------------------------------
      * basic class having capability to authenticate user
      * using simple array of allowed credentials
-     *
+     *-------------------------------------------------
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
+     *-------------------------------------------------
+     * Note: Not very suitable for very large arrays
+     * as it searches credentials sequentially
      *-------------------------------------------------*)
-    TStaticCredentialsAuth = class (TInterfacedObject, IAuth)
+    TStaticCredentialsAuth = class (TInjectableObject, IAuth)
     private
         fAllowedCredentials : TCredentials;
 
@@ -44,6 +48,18 @@ type
             const authCred : TCredential;
             const allowedCred : TCredentials
         ) : boolean;
+    protected
+        (*!------------------------------------------------
+         * verify credential against stored credential
+         *-------------------------------------------------
+         * @param authCred credential to check
+         * @param allowedCred stored credential
+         * @return boolean true if verified
+         *-------------------------------------------------*)
+        function verifyCredential(
+            const authCred : TCredential;
+            const allowedCred : TCredential
+        ) : boolean; virtual;
     public
         (*!------------------------------------------------
          * constructor
@@ -89,6 +105,22 @@ implementation
     end;
 
     (*!------------------------------------------------
+     * verify credential against stored credential
+     *-------------------------------------------------
+     * @param authCred credential to check
+     * @param allowedCred stored credential
+     * @return boolean true if verified
+     *-------------------------------------------------*)
+    function TStaticCredentialsAuth.verifyCredential(
+        const authCred : TCredential;
+        const allowedCred : TCredential
+    ) : boolean;
+    begin
+        result := (authCred.username = allowedCred.username) and
+            (authCred.password = allowedCred.password);
+    end;
+
+    (*!------------------------------------------------
      * test if a credential is in allowed credentials list
      *-------------------------------------------------
      * @param authCred credential to check
@@ -103,15 +135,13 @@ implementation
     begin
         result := false;
         totCred := length(allowedCred);
+        //sequentially find match credential. Performance is bad when array is big
         for indx := 0 to totCred - 1 do
         begin
-            with allowedCred[indx] do
+            if verifyCredential(authCred, allowedCred[indx]) then
             begin
-                if (username = authCred.username) and (password = authCred.password) then
-                begin
-                    result := true;
-                    exit;
-                end;
+                result := true;
+                exit;
             end;
         end;
     end;
@@ -126,6 +156,5 @@ implementation
     begin
         result := isAllowedCredential(credential, fAllowedCredentials);
     end;
-
 
 end.

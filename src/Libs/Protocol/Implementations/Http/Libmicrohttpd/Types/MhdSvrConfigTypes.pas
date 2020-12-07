@@ -24,6 +24,11 @@ type
         serverSignature : string;
         serverAdmin : string;
         timeout : longword;
+        //use IPv6
+        useIPv6 : boolean;
+        //use IPv6 = true and dualStack =true, support IPv4 and IPv6
+        //use IPv6 = true and dualStack =false, IPv6 only
+        dualStack : boolean;
 
         //set to true if using https
         useTLS : boolean;

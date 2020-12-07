@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit KqueueBoundSvrFactoryImpl;
+unit KqueueInetSvrFactoryImpl;
 
 interface
 
@@ -19,16 +19,17 @@ uses
 
 type
     (*------------------------------------------------
-     * factory class for socket server using bound
-     * socket and FreeBSD kqueue API
+     * factory class for socket server using IP
+     * and FreeBSD kqueue API
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TKqueueBoundSvrFactory = class (TInterfacedObject, ISocketSvrFactory)
+    TKqueueInetSvrFactory = class(TInterfacedObject, ISocketSvrFactory)
     private
-        fListenSocket : longint;
+        fHost : string;
+        fPort : word;
     public
-        constructor create(const listenSocket : longint);
+        constructor create(const aHost : string; const aPort : word);
         function build() : IRunnableWithDataNotif;
     end;
 
@@ -39,20 +40,21 @@ uses
     SocketOptsIntf,
     Socket2SvrImpl,
     SocketOptsImpl,
-    BoundSocketImpl,
+    InetSocketImpl,
     KqueueIoHandlerImpl;
 
-    constructor TKqueueBoundSvrFactory.create(const listenSocket : longint);
+    constructor TKqueueInetSvrFactory.create(const aHost : string; const aPort : word);
     begin
-        fListenSocket := listenSocket;
+        fHost := aHost;
+        fPort := aPort;
     end;
 
-    function TKqueueBoundSvrFactory.build() : IRunnableWithDataNotif;
+    function TKqueueInetSvrFactory.build() : IRunnableWithDataNotif;
     var sockOpts : ISocketOpts;
     begin
         sockOpts := TSocketOpts.create();
         result := TSocket2Svr.create(
-            TBoundSocket.create(fListenSocket, sockOpts),
+            TInetSocket.create(fHost, fPort, sockOpts),
             TKqueueIoHandler.create(sockOpts)
         );
     end;

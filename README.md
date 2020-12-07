@@ -63,7 +63,7 @@ Fano Framework is not yet supported on Windows.
 
 ## Roadmap
 
-See [Projects](https://github.com/orgs/fanoframework/projects) for more information about what is currently being developed or planed.
+See [Projects](https://github.com/orgs/fanoframework/projects) for more information about what is currently being developed or planned.
 
 ## Copyright Notice
 

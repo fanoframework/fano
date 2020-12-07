@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit Ipv4ValidatorImpl;
+unit Ipv6ValidatorImpl;
 
 interface
 
@@ -24,11 +24,11 @@ type
 
     (*!------------------------------------------------
      * class having capability to validate if data
-     * matched IP Address (IPV4)
+     * matched IP Address (IPv6)
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TIpv4Validator = class(TBaseValidator)
+    TIpv6Validator = class(TBaseValidator)
     protected
         (*!------------------------------------------------
          * actual data validation
@@ -57,14 +57,14 @@ uses
 
 resourcestring
 
-    sErrFieldMustBeIpv4 = 'Field %s must be valid IP Address (IPv4)';
+    sErrFieldMustBeIpv6 = 'Field %s must be valid IP Address (IPv6)';
 
     (*!------------------------------------------------
      * constructor
      *-------------------------------------------------*)
-    constructor TIpv4Validator.create();
+    constructor TIpv6Validator.create();
     begin
-        inherited create(sErrFieldMustBeIpv4);
+        inherited create(sErrFieldMustBeIpv6);
     end;
 
     (*!------------------------------------------------
@@ -74,14 +74,14 @@ resourcestring
      * @return true if data is valid otherwise false
      * @link https://lists.freepascal.org/pipermail/fpc-pascal/2016-July/048523.html
      *-------------------------------------------------*)
-    function TIpv4Validator.isValidData(
+    function TIpv6Validator.isValidData(
         const dataToValidate : string;
         const dataCollection : IReadOnlyList;
         const request : IRequest
     ) : boolean;
     var tmpAddress : string;
     begin
-        tmpAddress := HostAddrToStr(StrToHostAddr(dataToValidate));
+        tmpAddress := HostAddrToStr6(StrToHostAddr6(dataToValidate));
         result := (tmpAddress = dataToValidate);
     end;
 end.

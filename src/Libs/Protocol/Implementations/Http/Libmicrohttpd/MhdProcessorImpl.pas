@@ -424,15 +424,28 @@ uses
     var
         svrDaemon : PMHD_Daemon;
         tlsKey, tlsCert : string;
+        flags : cuint;
     begin
+        flags := MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY;
+        if fSvrConfig.useIPv6 then
+        begin
+            if fSvrConfig.dualStack then
+            begin
+                flags := flags or MHD_USE_DUAL_STACK;
+            end else
+            begin
+                flags := flags or MHD_USE_IPv6;
+            end;
+        end;
+
         if fSvrConfig.useTLS then
         begin
             tlsKey := readFile(fSvrConfig.tlsKey);
             tlsCert := readFile(fSvrConfig.tlsCert);
-
             svrDaemon := MHD_start_daemon(
                 //TODO: MHD_USE_SSL is now deprecated and replaced with MHD_USE_TLS
-                MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY or MHD_USE_SSL,
+                //but FreePascal header translation not yet support MHD_USE_TLS
+                flags or MHD_USE_SSL,
                 fSvrConfig.port,
                 nil,
                 nil,
@@ -449,7 +462,7 @@ uses
         end else
         begin
             svrDaemon := MHD_start_daemon(
-                MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY,
+                flags,
                 fSvrConfig.port,
                 nil,
                 nil,
