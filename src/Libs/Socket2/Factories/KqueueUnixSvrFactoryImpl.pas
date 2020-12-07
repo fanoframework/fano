@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit KqueueInetSvrFactoryImpl;
+unit KqueueUnixSvrFactoryImpl;
 
 interface
 
@@ -19,17 +19,16 @@ uses
 
 type
     (*------------------------------------------------
-     * factory class for socket server using IP
-     * and FreeBSD kqueue API
+     * factory class for socket server using Unix Domain
+     * Socket and FreeBSD kqueue API
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TKqueueInetSvrFactory = class(TInterfacedObject, ISocketSvrFactory)
+    TKqueueUnixSvrFactory = class (TInterfacedObject, ISocketSvrFactory)
     private
-        fHost : string;
-        fPort : word;
+        fFilename : string;
     public
-        constructor create(const aHost : string; const aPort : word);
+        constructor create(const aFilename : string);
         function build() : IRunnableWithDataNotif;
     end;
 
@@ -40,22 +39,21 @@ uses
     SocketOptsIntf,
     Socket2SvrImpl,
     SocketOptsImpl,
-    InetSocketImpl,
-    KQueueIoHandlerImpl;
+    UnixSocketImpl,
+    KqueueIoHandlerImpl;
 
-    constructor TKQueueInetSvrFactory.create(const aHost : string; const aPort : word);
+    constructor TKqueueUnixSvrFactory.create(const aFilename : string);
     begin
-        fHost := aHost;
-        fPort := aPort;
+        fFilename := aFilename;
     end;
 
-    function TKqueueInetSvrFactory.build() : IRunnableWithDataNotif;
+    function TKqueueUnixSvrFactory.build() : IRunnableWithDataNotif;
     var sockOpts : ISocketOpts;
     begin
         sockOpts := TSocketOpts.create();
         result := TSocket2Svr.create(
-            TInetSocket.create(fHost, fPort, sockOpts),
-            TKQueueIoHandler.create(sockOpts)
+            TUnixSocket.create(fFilename, sockOpts),
+            TKqueueIoHandler.create(sockOpts)
         );
     end;
 

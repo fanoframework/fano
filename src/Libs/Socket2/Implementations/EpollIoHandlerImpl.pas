@@ -315,8 +315,7 @@ uses
                 end else
                 if (totFd = 0) then
                 begin
-                    //timeout reached.
-                    //For now, do nothing
+                    handleTimeout();
                 end else
                 if (totFd < 0) then
                 begin
