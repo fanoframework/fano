@@ -24,7 +24,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TKQueueBoundSvrFactory = class (TInterfacedObject, ISocketSvrFactory)
+    TKqueueBoundSvrFactory = class (TInterfacedObject, ISocketSvrFactory)
     private
         fListenSocket : longint;
     public

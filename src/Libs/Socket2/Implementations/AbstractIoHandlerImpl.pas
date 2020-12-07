@@ -37,6 +37,7 @@ type
         fSockOpts : ISocketOpts;
         fDataAvailListener : IDataAvailListener;
 
+        procedure handleTimeout(); virtual;
         procedure handleAcceptError();
 
         (*!-----------------------------------------------
@@ -180,5 +181,11 @@ uses
                 end;
             end;
         until (res > 0) or (err = ESysEAGAIN) or (err = EsysEWOULDBLOCK);
+    end;
+
+    procedure TAbstractIoHandler.handleTimeout();
+    begin
+        //do something when timeout
+        //TODO: remove too long idle connection
     end;
 end.
