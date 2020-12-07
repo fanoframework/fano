@@ -20,6 +20,7 @@ type
         password : string;
 
         //additional user-related data
+        salt : string;
         data : pointer;
     end;
 

@@ -57,7 +57,7 @@ uses
 
 resourcestring
 
-    sErrFieldMustBeIpv4 = 'Field %s must be valid IP Address (IPV4)';
+    sErrFieldMustBeIpv4 = 'Field %s must be valid IP Address (IPv4)';
 
     (*!------------------------------------------------
      * constructor

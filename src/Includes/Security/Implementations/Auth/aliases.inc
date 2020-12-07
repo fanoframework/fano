@@ -16,10 +16,20 @@
 TCredential = CredentialTypes.TCredential;
 TCredentials = CredentialTypes.TCredentials;
 
+TAbstractPasswHashAuth = AbstractPasswHashAuthImpl.TAbstractPasswHashAuth;
+TDbPasswHashAuth = DbPasswHashAuthImpl.TDbPasswHashAuth;
 TStaticCredentialsAuth = StaticCredentialsAuthImpl.TStaticCredentialsAuth;
+TStaticPasswHashAuth = StaticPasswHashAuthImpl.TStaticPasswHashAuth;
+
 TBasicAuthMiddleware = BasicAuthMiddlewareImpl.TBasicAuthMiddleware;
 TStaticCredentialsBasicAuthMiddlewareFactory = StaticCredentialsBasicAuthMiddlewareFactoryImpl.TStaticCredentialsBasicAuthMiddlewareFactory;
 
 TDigestStaticCredentialsAuth = DigestStaticCredentialsAuthImpl.TDigestStaticCredentialsAuth;
 TDigestAuthMiddleware = DigestAuthMiddlewareImpl.TDigestAuthMiddleware;
 TStaticCredentialsDigestAuthMiddlewareFactory = StaticCredentialsDigestAuthMiddlewareFactoryImpl.TStaticCredentialsDigestAuthMiddlewareFactory;
+
+TBearerAuthMiddleware = BearerAuthMiddlewareImpl.TBearerAuthMiddleware;
+TBearerAuthMiddlewareFactory = BearerAuthMiddlewareFactoryImpl.TBearerAuthMiddlewareFactory;
+
+TDbPasswHashAuthFactory = DbPasswHashAuthFactoryImpl.TDbPasswHashAuthFactory;
+TStaticPasswHashAuthFactory = StaticPasswHashAuthFactoryImpl.TStaticPasswHashAuthFactory;

@@ -15,10 +15,20 @@
 
 CredentialTypes,
 
+AbstractPasswHashAuthImpl,
+DbPasswHashAuthImpl,
 StaticCredentialsAuthImpl,
+StaticPasswHashAuthImpl,
+
 BasicAuthMiddlewareImpl,
 StaticCredentialsBasicAuthMiddlewareFactoryImpl,
 
 DigestStaticCredentialsAuthImpl,
 DigestAuthMiddlewareImpl,
 StaticCredentialsDigestAuthMiddlewareFactoryImpl,
+
+BearerAuthMiddlewareImpl,
+BearerAuthMiddlewareFactoryImpl,
+
+DbPasswHashAuthFactoryImpl,
+StaticPasswHashAuthFactoryImpl,

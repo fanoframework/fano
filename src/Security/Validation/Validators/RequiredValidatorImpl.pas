@@ -104,7 +104,7 @@ resourcestring
             //will fail above test because dataToValidate does not include uploaded files
             //so we need to make sure that if there
             //is entry in uploaded file, assume pass validation
-            request.uploadedFiles.has(fieldName);
+            ((request.uploadedFiles <> nil) and request.uploadedFiles.has(fieldName));
     end;
 
     (*!------------------------------------------------

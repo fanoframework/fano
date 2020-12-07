@@ -76,6 +76,7 @@ TAfterDateTimeFieldValidator = AfterDateTimeFieldValidatorImpl.TAfterDateTimeFie
 TBeforeDateTimeFieldValidator = BeforeDateTimeFieldValidatorImpl.TBeforeDateTimeFieldValidator;
 
 TUuidValidator = UuidValidatorImpl.TUuidValidator;
+TBase64Validator = Base64ValidatorImpl.TBase64Validator;
 
 TMinLengthValidator = MinLengthValidatorImpl.TMinLengthValidator;
 TMaxLengthValidator = MaxLengthValidatorImpl.TMaxLengthValidator;
@@ -97,11 +98,12 @@ TImageJpgValidator = ImageJpgValidatorImpl.TImageJpgValidator;
 TImageGifValidator = ImageGifValidatorImpl.TImageGifValidator;
 
 TIpv4Validator = Ipv4ValidatorImpl.TIpv4Validator;
+TIpv6Validator = Ipv6ValidatorImpl.TIpv6Validator;
 
 TJsonValidator = JsonValidatorImpl.TJsonValidator;
 
 TFileValidator = FileValidatorImpl.TFileValidator;
-DirectoryValidator = DirectoryValidatorImpl.TDirectoryValidator;
+TDirectoryValidator = DirectoryValidatorImpl.TDirectoryValidator;
 
 TCompareStrValidator = CompareStrValidatorImpl.TCompareStrValidator;
 TEqualStrValidator = EqualStrValidatorImpl.TEqualStrValidator;

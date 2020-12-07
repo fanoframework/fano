@@ -19,6 +19,7 @@ Socket2SvrImpl,
 UnixSocketImpl,
 {$ENDIF}
 InetSocketImpl,
+Inet6SocketImpl,
 BoundSocketImpl,
 
 AbstractIoHandlerImpl,
@@ -31,26 +32,31 @@ SelectIoHandlerImpl,
 
 {$IFDEF FREEBSD}
     {$IFDEF USE_KQUEUE}
-    KQueueIoHandlerImpl,
+    KqueueIoHandlerImpl,
     {$ENDIF}
 {$ENDIF}
 
 SocketOptsImpl,
 
 InetSvrFactoryImpl,
+Inet6SvrFactoryImpl,
+{$IFDEF UNIX}
 UnixSvrFactoryImpl,
+{$ENDIF}
 BoundSvrFactoryImpl,
 
 {$IFDEF LINUX}
 EpollInetSvrFactoryImpl,
+EpollInet6SvrFactoryImpl,
 EpollUnixSvrFactoryImpl,
 EpollBoundSvrFactoryImpl,
 {$ENDIF}
 
 {$IFDEF FREEBSD}
     {$IFDEF USE_KQUEUE}
-    KQueueInetSvrFactoryImpl,
-    KQueueUnixSvrFactoryImpl,
-    KQueueBoundSvrFactoryImpl,
+    KqueueInetSvrFactoryImpl,
+    KQueueInet6SvrFactoryImpl,
+    KqueueUnixSvrFactoryImpl,
+    KqueueBoundSvrFactoryImpl,
     {$ENDIF}
 {$ENDIF}

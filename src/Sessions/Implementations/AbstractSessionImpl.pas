@@ -150,7 +150,7 @@ type
          *-------------------------------------
          * @return true if session is expired
          *-------------------------------------*)
-        function expired() : boolean; virtual; abstract;
+        function expired() : boolean; virtual;
 
         (*!------------------------------------
          * get session expiration date
@@ -173,6 +173,7 @@ uses
 
     Classes,
     SysUtils,
+    DateUtils,
     SessionConsts,
     ESessionExpiredImpl;
 
@@ -277,4 +278,17 @@ uses
             raise ESessionExpired.createFmt(rsSessionExpired, [fSessionId]);
         end;
     end;
+
+    (*!------------------------------------
+     * test if current session is expired
+     *-------------------------------------
+     * @return true if session is expired
+     *-------------------------------------*)
+    function TAbstractSession.expired() : boolean;
+    begin
+        //value > 0, means now() is later than expiresAt() i.e,
+        //expiresAt is in past
+        result := (compareDateTime(now(), expiresAt()) > 0);
+    end;
+
 end.

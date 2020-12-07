@@ -92,13 +92,6 @@ type
         function has(const sessionVar : shortstring) : boolean; override;
 
         (*!------------------------------------
-         * test if current session is expired
-         *-------------------------------------
-         * @return true if session is expired
-         *-------------------------------------*)
-        function expired() : boolean; override;
-
-        (*!------------------------------------
          * get session expiration date
          *-------------------------------------
          * @return date time when session is expired
@@ -120,7 +113,6 @@ uses
     Classes,
     SysUtils,
     jsonParser,
-    DateUtils,
     SessionConsts,
     ESessionExpiredImpl,
     ESessionKeyNotFoundImpl,
@@ -260,20 +252,6 @@ resourcestring
             sessValue.clear();
         end;
         result := self;
-    end;
-
-    (*!------------------------------------
-     * test if current session is expired
-     *-------------------------------------
-     * @return true if session is expired
-     *-------------------------------------*)
-    function TJsonSession.expired() : boolean;
-    var expiredDateTime : TDateTime;
-    begin
-        expiredDateTime := strToDateTime(fSessionData.getPath('expire').asString);
-        //value > 0, means now() is later than expiredDateTime i.e,
-        //expireddateTime is in past
-        result := (compareDateTime(now(), expiredDateTime) > 0);
     end;
 
     (*!------------------------------------
