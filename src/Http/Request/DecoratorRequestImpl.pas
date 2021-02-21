@@ -37,7 +37,16 @@ type
         fActualRequest : IRequest;
 
     public
+        (*!------------------------------------------------
+         * constructor
+         *-------------------------------------------------
+         * @param IRequest actual request to be decorated
+         *------------------------------------------------*)
         constructor create(const request : IRequest);
+
+        (*!------------------------------------------------
+         * destructor
+         *------------------------------------------------*)
         destructor destroy(); override;
 
         (*!------------------------------------------------

@@ -32,7 +32,16 @@ type
     protected
         fVerbTunnelingEnv : ICGIEnvironment;
     public
+        (*!------------------------------------------------
+         * constructor
+         *-------------------------------------------------
+         * @param IRequest actual request to be decorated
+         *------------------------------------------------*)
         constructor create(const request : IRequest);
+
+        (*!------------------------------------------------
+         * destructor
+         *------------------------------------------------*)
         destructor destroy(); override;
 
 
@@ -50,7 +59,6 @@ type
          *------------------------------------------------*)
         function getEnvironment() : ICGIEnvironment; override;
 
-
     end;
 
 implementation
@@ -59,6 +67,11 @@ uses
 
     VerbTunnellingEnvironmentImpl;
 
+    (*!------------------------------------------------
+     * constructor
+     *-------------------------------------------------
+     * @param IRequest actual request to be decorated
+     *------------------------------------------------*)
     constructor TMethodOverrideRequest.create(const request : IRequest);
     begin
         inherited create(request);
