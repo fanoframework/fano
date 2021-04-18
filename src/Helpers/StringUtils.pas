@@ -38,7 +38,19 @@ uses
      *-----------------------------------------------*)
     function toStringArray(const values : array of string) : TStringArray;
 
+    (*!------------------------------------------------
+     * generate slug
+     *-----------------------------------------------
+     * @param originalStr input string
+     * @return slug
+     *-----------------------------------------------*)
+    function slug(const originalStr : string) : string;
+
 implementation
+
+uses
+
+    regexpr;
 
     (*!------------------------------------------------
      * join array of string with a delimiter
@@ -77,4 +89,17 @@ implementation
         end;
     end;
 
+    (*!------------------------------------------------
+     * generate slug
+     *-----------------------------------------------
+     * replace string 'test hei$#@slug to Slug 10' to
+     * 'test-hei-slug-to-slug-10'
+     *-----------------------------------------------
+     * @param originalStr input string
+     * @return slug
+     *-----------------------------------------------*)
+    function slug(const originalStr : string) : string;
+    begin
+        result := ReplaceRegExpr('[\W\s]+', lowercase(trim(originalStr)), '-', true);
+    end;
 end.

@@ -85,20 +85,14 @@ uses
     ) : IResponse;
     var nextHandler : IRequestHandler;
     begin
-        try
-            if (fNextLink = nil) then
-            begin
-                nextHandler := fDefaultHandler;
-            end else
-            begin
-                nextHandler := fNextLink;
-            end;
-            result := fMiddleware.handleRequest(request, response, routeArgs, nextHandler);
-        except
-            cleanUp();
-            nextHandler := nil;
-            raise;
+        if (fNextLink = nil) then
+        begin
+            nextHandler := fDefaultHandler;
+        end else
+        begin
+            nextHandler := fNextLink;
         end;
+        result := fMiddleware.handleRequest(request, response, routeArgs, nextHandler);
     end;
 
     procedure TMiddlewareLink.setNext(const next : IRequestHandler);

@@ -25,7 +25,7 @@ type
 
     (*!----------------------------------------------
      * adapter class having capability as
-     * HTTP response body and also log easch call
+     * HTTP response body and also log each call
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)

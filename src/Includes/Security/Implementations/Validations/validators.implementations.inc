@@ -22,6 +22,7 @@ AlphaValidatorImpl,
 SlugValidatorImpl,
 PhoneValidatorImpl,
 MacAddrValidatorImpl,
+ColorValidatorImpl,
 
 BaseCompositeValidatorImpl,
 CompositeValidatorImpl,

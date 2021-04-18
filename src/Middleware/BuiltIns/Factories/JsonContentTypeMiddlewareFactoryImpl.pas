@@ -21,7 +21,7 @@ uses
 type
 
     (*!------------------------------------------------
-     * factory class for TCsrfMiddleware
+     * factory class for TJsonContentTypeMiddleware
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)

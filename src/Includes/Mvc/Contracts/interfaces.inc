@@ -16,6 +16,8 @@ TemplateParserIntf,
 ViewIntf,
 ViewPartialIntf,
 ViewParametersIntf,
+ViewStackIntf,
+ViewPushIntf,
 
 ModelResultSetIntf,
 ModelParamsIntf,

@@ -26,6 +26,14 @@ type
      *--------------------------------------------------*)
     IRequestFactory = interface
         ['{C4015735-B800-4F0B-BF35-C7900D5135E7}']
+
+        (*!------------------------------------------------
+         * build instance of IRequest
+         *-------------------------------------------------
+         * @param ICGIEnvironment CGI environment instance
+         * @param IStdIn Standard input instance
+         * @return IRequest newly created instance
+         *------------------------------------------------*)
         function build(const env : ICGIEnvironment; const stdIn : IStdIn) : IRequest;
     end;
 

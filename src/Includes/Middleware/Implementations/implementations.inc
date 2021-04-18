@@ -26,3 +26,7 @@ JsonContentTypeMiddlewareImpl,
 JsonContentTypeMiddlewareFactoryImpl,
 CacheControlMiddlewareImpl,
 CacheControlMiddlewareFactoryImpl,
+
+StaticFilesMiddlewareImpl,
+StaticFilesMiddlewareFactoryImpl,
+CommonStaticFilesMiddlewareFactoryImpl,

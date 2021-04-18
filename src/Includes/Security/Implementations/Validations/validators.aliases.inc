@@ -25,6 +25,7 @@ TUrlValidator = UrlValidatorImpl.TUrlValidator;
 TSlugValidator = SlugValidatorImpl.TSlugValidator;
 TPhoneValidator = PhoneValidatorImpl.TPhoneValidator;
 TMacAddrValidator = MacAddrValidatorImpl.TMacAddrValidator;
+TColorValidator = ColorValidatorImpl.TColorValidator;
 
 TBaseCompositeValidator = BaseCompositeValidatorImpl.TBaseCompositeValidator;
 TCompositeValidator = CompositeValidatorImpl.TCompositeValidator;

@@ -37,7 +37,7 @@ type
         responseFactory : IResponseFactory;
         requestFactory : IRequestFactory;
 
-        function getRouteHandler(const env: ICGIEnvironment) : IRouteHandler;
+        function getRouteHandler(const env: ICGIEnvironment) : IRouteHandler; virtual;
     public
         constructor create(
             const routes : IRouteMatcher;
