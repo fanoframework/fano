@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -25,6 +25,7 @@ TUrlValidator = UrlValidatorImpl.TUrlValidator;
 TSlugValidator = SlugValidatorImpl.TSlugValidator;
 TPhoneValidator = PhoneValidatorImpl.TPhoneValidator;
 TMacAddrValidator = MacAddrValidatorImpl.TMacAddrValidator;
+TColorValidator = ColorValidatorImpl.TColorValidator;
 
 TBaseCompositeValidator = BaseCompositeValidatorImpl.TBaseCompositeValidator;
 TCompositeValidator = CompositeValidatorImpl.TCompositeValidator;
