@@ -24,3 +24,6 @@ TSysLogLoggerFactory = SysLogLoggerFactoryImpl.TSysLogLoggerFactory;
 TThreadSafeLogger = ThreadSafeLoggerImpl.TThreadSafeLogger;
 TDbLogger = DbLoggerImpl.TDbLogger;
 TDbLoggerFactory = DbLoggerFactoryImpl.TDbLoggerFactory;
+
+TMailLogger = MailLoggerImpl.TMailLogger;
+TMailLoggerFactory = MailLoggerFactoryImpl.TMailLoggerFactory;

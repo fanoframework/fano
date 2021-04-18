@@ -34,4 +34,7 @@ ThreadSafeLoggerImpl,
 
 DbLoggerImpl,
 DbLoggerFactoryImpl,
+
+MailLoggerImpl,
+MailLoggerFactoryImpl,
 {------------ End logger-related------------------}

@@ -30,8 +30,8 @@ uses
 type
 
     (*!------------------------------------------------
-     * interface for any class having capability as
-     * HTTP request
+     * IRequest implementation class having capability as
+     * HTTP request with Content-Type: application/json
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)

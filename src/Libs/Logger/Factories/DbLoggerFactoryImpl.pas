@@ -10,6 +10,7 @@ unit DbLoggerFactoryImpl;
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
 
