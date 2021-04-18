@@ -19,7 +19,7 @@ uses
     ReadOnlyListIntf,
     UploadedFileIntf,
     UploadedFileCollectionIntf,
-    ReadonlyHeadersIntf,
+    ReadOnlyHeadersIntf,
     EnvironmentIntf,
     UriIntf;
 

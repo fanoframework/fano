@@ -15,6 +15,10 @@ if [[ -z "${FANO_DIR}" ]]; then
 export FANO_DIR="../"
 fi
 
+if [[ -z "${FANO_TEST_DIR}" ]]; then
+export FANO_TEST_DIR="${FANO_DIR}/tests"
+fi
+
 if [[ -z "${UNIT_OUTPUT_DIR}" ]]; then
     export UNIT_OUTPUT_DIR="bin/unit"
 fi

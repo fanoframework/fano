@@ -31,8 +31,11 @@ begin
     DefaultFormat := fPlain;
     DefaultRunAllTests := true;
     fanoTestRunner := TFanoTestRunner.Create(nil);
-    fanoTestRunner.initialize();
-    fanoTestRunner.title := 'Fano Test Runner';
-    fanoTestRunner.run();
-    fanoTestRunner.free();
+    try
+        fanoTestRunner.initialize();
+        fanoTestRunner.title := 'Fano Test Runner';
+        fanoTestRunner.run();
+    finally
+        fanoTestRunner.free();
+    end;
 end.
