@@ -5,11 +5,18 @@ ERouteHandlerNotFound = ERouteHandlerNotFoundImpl.ERouteHandlerNotFound;
 TDispatcher = DispatcherImpl.TDispatcher;
 TSimpleDispatcher = SimpleDispatcherImpl.TSimpleDispatcher;
 TVerbTunnellingDispatcher = VerbTunnellingDispatcherImpl.TVerbTunnellingDispatcher;
+TXDispatcher = XDispatcherImpl.TXDispatcher;
+TXSimpleDispatcher = XSimpleDispatcherImpl.TXSimpleDispatcher;
+TMwExecDispatcher = MwExecDispatcherImpl.TMwExecDispatcher;
 
 TDispatcherFactory = DispatcherFactoryImpl.TDispatcherFactory;
 TSimpleDispatcherFactory = SimpleDispatcherFactoryImpl.TSimpleDispatcherFactory;
 TSessionDispatcherFactory = SessionDispatcherFactoryImpl.TSessionDispatcherFactory;
 TVerbTunnellingDispatcherFactory = VerbTunnellingDispatcherFactoryImpl.TVerbTunnellingDispatcherFactory;
+TXDispatcherFactory = XDispatcherFactoryImpl.TXDispatcherFactory;
+TXSimpleDispatcherFactory = XSimpleDispatcherFactoryImpl.TXSimpleDispatcherFactory;
+TMwExecDispatcherFactory = MwExecDispatcherFactoryImpl.TMwExecDispatcherFactory;
 
 TRequestResponseFactory = RequestResponseFactoryImpl.TRequestResponseFactory;
 TFcgiRequestResponseFactory = FcgiRequestResponseFactoryImpl.TFcgiRequestResponseFactory;
+TVerbTunnellingRequestResponseFactory = VerbTunnellingRequestResponseFactoryImpl.TVerbTunnellingRequestResponseFactory;
