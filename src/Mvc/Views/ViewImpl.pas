@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -29,18 +29,18 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
     TView = class(TInjectableObject, IView)
-    private
+    protected
 
         (*!------------------------------------------------
          * original HTML template content
          *-----------------------------------------------*)
-        templateContent : string;
+        fTemplateContent : string;
 
         (*!------------------------------------------------
          * helper class that will parse template content
          * and replace variable placeholder with value
          *-----------------------------------------------*)
-        templateParser : ITemplateParser;
+        fTemplateParser : ITemplateParser;
     public
 
         (*!------------------------------------------------
@@ -69,7 +69,7 @@ type
         function render(
             const viewParams : IViewParameters;
             const response : IResponse
-        ) : IResponse;
+        ) : IResponse; virtual;
 
     end;
 
@@ -92,8 +92,8 @@ uses
     );
     begin
         inherited create();
-        templateParser := templateParserInst;
-        templateContent := tplContent;
+        fTemplateParser := templateParserInst;
+        fTemplateContent := tplContent;
     end;
 
     (*!------------------------------------------------
@@ -101,7 +101,7 @@ uses
      *-----------------------------------------------*)
     destructor TView.destroy();
     begin
-        templateParser := nil;
+        fTemplateParser := nil;
         inherited destroy();
     end;
 
@@ -120,7 +120,7 @@ uses
         contentLength : string;
     begin
         bodyInst := response.body();
-        bodyInst.write(templateParser.parse(templateContent, viewParams));
+        bodyInst.write(fTemplateParser.parse(fTemplateContent, viewParams));
         contentLength := intToStr(bodyInst.size());
         response.headers().setHeader('Content-Length',  contentLength);
         result := response;
