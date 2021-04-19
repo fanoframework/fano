@@ -76,13 +76,6 @@ uses
         fAcceptedCreditCardsValidator := TOneOfValidator.create(acceptedCreditCards);
     end;
 
-    destructor TCreditCardValidator.destroy();
-    begin
-        fLuhnValidator := nil;
-        fAcceptedCreditCardsValidator := nil;
-        inherited destroy();
-    end;
-
     (*!------------------------------------------------
      * Validate data
      *-------------------------------------------------
