@@ -40,7 +40,7 @@ const
 
 resourcestring
 
-    sErrNotValidColor = 'Field ''%s'' must be hex color value';
+    sErrNotValidColor = 'Field %s must be hex color value';
 
     constructor TColorValidator.create(const regexInst : IRegex);
     begin
