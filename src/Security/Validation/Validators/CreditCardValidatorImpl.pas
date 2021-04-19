@@ -35,6 +35,8 @@ type
         fLuhnIsValid : boolean;
         fCreditCardsIsValid : boolean;
     public
+        constructor create(const acceptedCreditCards : array of IValidator);
+
         (*!------------------------------------------------
          * Validate data
          *-------------------------------------------------
