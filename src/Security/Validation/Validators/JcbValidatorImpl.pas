@@ -36,7 +36,7 @@ implementation
 
 const
 
-    REGEX_VISA = '^(?:2131|1800|35[0-9]{3})[0-9]{11}$';
+    REGEX_JCB = '^(?:2131|1800|35[0-9]{3})[0-9]{11}$';
 
 resourcestring
 
