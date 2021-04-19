@@ -53,6 +53,10 @@ type
         ) : boolean; override;
 
     public
+        (*!------------------------------------------------
+         * constructor
+         *-------------------------------------------------*)
+        constructor create();
 
     end;
 
@@ -61,6 +65,18 @@ implementation
 uses
 
     sysutils;
+
+resourcestring
+
+    sErrFieldIsLuhn = 'Field %s value must match credit card number';
+
+    (*!------------------------------------------------
+     * constructor
+     *-------------------------------------------------*)
+    constructor TLuhnValidator.create();
+    begin
+        inherited create(sErrFieldIsLuhn);
+    end;
 
     (*!------------------------------------------------
      * validate against Luhn algorithm
