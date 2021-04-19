@@ -90,7 +90,8 @@ resourcestring
                 begin
                     errorMsgFormat := errorMsgFormat + ', ';
                 end;
-                errorMsgFormat := errorMsgFormat + fValidators[i].errorMessage(fieldName);
+                errorMsgFormat := errorMsgFormat +
+                    fValidators[i].errorMessage(fieldName);
             end;
         end;
 
@@ -101,7 +102,10 @@ resourcestring
             errorMsgFormat := '';
         end else
         begin
-            errorMsgFormat := format(sErrMustPassExactlyOne, [totSuccess, totFail]) + errorMessage;
+            errorMsgFormat := format(
+                sErrMustPassExactlyOne,
+                [ totSuccess, totFail ]
+            ) + errorMsgFormat;
         end;;
     end;
 end.
