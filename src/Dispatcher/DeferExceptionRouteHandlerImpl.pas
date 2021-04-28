@@ -94,7 +94,8 @@ implementation
 uses
 
     NullMiddlewareListImpl,
-    NullRouteArgsImpl;
+    NullRouteArgsImpl,
+    NullRouteImpl;
 
     constructor TDeferExceptionRouteHandler.create(const exceptionMsg : string);
     begin
@@ -123,8 +124,8 @@ uses
     begin
         //if we have to use this class it means normal route matching
         //already fails i.e route not found or method is not allowed
-        //so getting route is pointless so we just return nil
-        result := nil;
+        //so getting route is pointless so we just return null implementation
+        result := TNullRoute.create();
     end;
 
     (*!-------------------------------------------

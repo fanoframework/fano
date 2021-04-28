@@ -118,7 +118,7 @@ uses
         begin
             result := result + LineEnding +
                 '==== Start context ====' + LineEnding +
-                context.serialize() +
+                context.serialize() + LineEnding +
                 '==== End context ====';
         end;
     end;
