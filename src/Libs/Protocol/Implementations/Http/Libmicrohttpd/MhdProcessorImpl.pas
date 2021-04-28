@@ -26,7 +26,8 @@ uses
     DataAvailListenerIntf,
     EnvironmentIntf,
     MhdConnectionAwareIntf,
-    MhdSvrConfigTypes;
+    MhdSvrConfigTypes,
+    SyncObjs;
 
 type
 
@@ -37,12 +38,12 @@ type
      *-----------------------------------------------*)
     TMhdProcessor = class(TInterfacedObject, IProtocolProcessor, IRunnable, IRunnableWithDataNotif)
     private
+        fLock :TCriticalSection;
         fSvrConfig : TMhdSvrConfig;
         fRequestReadyListener : IReadyListener;
         fDataListener : IDataAvailListener;
         fStdIn : IStreamAdapter;
         fConnectionAware : IMhdConnectionAware;
-
         procedure resetInternalVars();
         procedure waitUntilTerminate();
 
@@ -86,6 +87,7 @@ type
         function tryRun() : IRunnable;
     public
         constructor create(
+            const lock : TCriticalSection;
             const aConnectionAware : IMhdConnectionAware;
             const svrConfig : TMhdSvrConfig
         );
@@ -144,7 +146,7 @@ uses
     Classes,
     BaseUnix,
     SysUtils,
-    TermSignalImpl,
+    SigTermImpl,
     KeyValueEnvironmentImpl,
     MhdParamKeyValuePairImpl,
     StreamAdapterImpl,
@@ -152,11 +154,13 @@ uses
     FileUtils;
 
     constructor TMhdProcessor.create(
+        const lock : TCriticalSection;
         const aConnectionAware : IMhdConnectionAware;
         const svrConfig : TMhdSvrConfig
     );
     begin
         inherited create();
+        fLock := lock;
         fConnectionAware := aConnectionAware;
         fSvrConfig := svrConfig;
         fRequestReadyListener := nil;
@@ -176,6 +180,7 @@ uses
         fDataListener := nil;
         fStdIn := nil;
         fConnectionAware := nil;
+        fLock := nil;
     end;
 
     (*!------------------------------------------------
@@ -228,10 +233,10 @@ uses
         fds := default(TFDSet);
         fpfd_zero(fds);
         //terminatePipeIn will be ready for IO when application is terminated
-        //see TermSignalImpl unit
-        fpfd_set(terminatePipeIn, FDS);
+        //see SigTermImpl unit
+        fpfd_set(TSigTerm.terminatePipeIn, FDS);
         //wait forever until terminatePipeIn changes
-        fpSelect(terminatePipeIn + 1, @fds, nil, nil, nil);
+        fpSelect(TSigTerm.terminatePipeIn + 1, @fds, nil, nil, nil);
     end;
 
     //BaseUnix and libmicrohttpd both declared pcchar type
@@ -358,23 +363,28 @@ uses
 
             if (aupload_data_size^ = 0) then
             begin
-                //request is complete
-                //set seek position to beginning to avoid EReadError
-                mem.position := 0;
-                fConnectionAware.connection := aconnection;
-                mhdEnv := buildEnv(aconnection, aurl, amethod, aversion);
+                fLock.acquire();
+                try
+                    fConnectionAware.connection := aconnection;
+                    mhdEnv := buildEnv(aconnection, aurl, amethod, aversion);
 
-                //wrap memory stream as IStreamAdapter and let
-                //them free memory when finished
-                mhdStream := TStreamAdapter.create(mem);
+                    //request is complete
+                    //set seek position to beginning to avoid EReadError
+                    mem.position := 0;
+                    //wrap memory stream as IStreamAdapter and let
+                    //them free memory when finished
+                    mhdStream := TStreamAdapter.create(mem);
 
-                fRequestReadyListener.ready(
-                    //we will not use socket stream as we will have our own IStdOut
-                    //that write output with libmicrohttpd
-                    TNullStreamAdapter.create(),
-                    mhdEnv,
-                    mhdStream
-                );
+                    fRequestReadyListener.ready(
+                        //we will not use socket stream as we will have our own IStdOut
+                        //that write output with libmicrohttpd
+                        TNullStreamAdapter.create(),
+                        mhdEnv,
+                        mhdStream
+                    );
+                finally
+                    fLock.release();
+                end;
             end else
             begin
                 mem.writeBuffer(aupload_data^, aupload_data_size^);
@@ -426,7 +436,21 @@ uses
         tlsKey, tlsCert : string;
         flags : cuint;
     begin
-        flags := MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY;
+        flags := MHD_NO_FLAG;
+        if fSvrConfig.threaded and (fSvrConfig.threadPoolSize = 0) then
+        begin
+            flags := flags or
+                //MHD_USE_SELECT_INTERNALLY is deprecated and should be
+                //replace with MHD_USE_INTERNAL_POLLING_THREAD
+                MHD_USE_SELECT_INTERNALLY or
+                MHD_USE_THREAD_PER_CONNECTION;
+        end else
+        begin
+            //MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY is deprecated,
+            //should use MHD_USE_EPOLL_INTERNAL_THREAD
+            flags := flags or MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY;
+        end;
+
         if fSvrConfig.useIPv6 then
         begin
             if fSvrConfig.dualStack then
@@ -442,42 +466,88 @@ uses
         begin
             tlsKey := readFile(fSvrConfig.tlsKey);
             tlsCert := readFile(fSvrConfig.tlsCert);
-            svrDaemon := MHD_start_daemon(
-                //TODO: MHD_USE_SSL is now deprecated and replaced with MHD_USE_TLS
-                //but FreePascal header translation not yet support MHD_USE_TLS
-                flags or MHD_USE_SSL,
-                fSvrConfig.port,
-                nil,
-                nil,
-                @handleRequestCallback,
-                self,
-                MHD_OPTION_CONNECTION_TIMEOUT,
-                cuint(fSvrConfig.Timeout),
-                MHD_OPTION_HTTPS_MEM_KEY,
-                libmicrohttpd.pcchar(tlsKey),
-                MHD_OPTION_HTTPS_MEM_CERT,
-                libmicrohttpd.pcchar(tlsCert),
-                MHD_OPTION_END
-            );
+
+            if fSvrConfig.threadPoolSize = 0 then
+            begin
+                svrDaemon := MHD_start_daemon(
+                    //TODO: MHD_USE_SSL is now deprecated and replaced with MHD_USE_TLS
+                    //but FreePascal header translation not yet support MHD_USE_TLS
+                    flags or MHD_USE_SSL,
+                    fSvrConfig.port,
+                    nil,
+                    nil,
+                    @handleRequestCallback,
+                    self,
+                    MHD_OPTION_CONNECTION_TIMEOUT,
+                    cuint(fSvrConfig.Timeout),
+                    MHD_OPTION_HTTPS_MEM_KEY,
+                    libmicrohttpd.pcchar(tlsKey),
+                    MHD_OPTION_HTTPS_MEM_CERT,
+                    libmicrohttpd.pcchar(tlsCert),
+                    MHD_OPTION_END
+                );
+            end else
+            begin
+                svrDaemon := MHD_start_daemon(
+                    //TODO: MHD_USE_SSL is now deprecated and replaced with MHD_USE_TLS
+                    //but FreePascal header translation not yet support MHD_USE_TLS
+                    flags or MHD_USE_SSL,
+                    fSvrConfig.port,
+                    nil,
+                    nil,
+                    @handleRequestCallback,
+                    self,
+                    MHD_OPTION_THREAD_POOL_SIZE,
+                    cuint(fSvrConfig.threadPoolSize),
+                    MHD_OPTION_CONNECTION_TIMEOUT,
+                    cuint(fSvrConfig.Timeout),
+                    MHD_OPTION_HTTPS_MEM_KEY,
+                    libmicrohttpd.pcchar(tlsKey),
+                    MHD_OPTION_HTTPS_MEM_CERT,
+                    libmicrohttpd.pcchar(tlsCert),
+                    MHD_OPTION_END
+                );
+            end;
         end else
         begin
-            svrDaemon := MHD_start_daemon(
-                flags,
-                fSvrConfig.port,
-                nil,
-                nil,
-                @handleRequestCallback,
-                self,
-                MHD_OPTION_CONNECTION_TIMEOUT,
-                cuint(fSvrConfig.Timeout),
-                MHD_OPTION_END
-            );
+            if fSvrConfig.threadPoolSize = 0 then
+            begin
+                svrDaemon := MHD_start_daemon(
+                    flags,
+                    fSvrConfig.port,
+                    nil,
+                    nil,
+                    @handleRequestCallback,
+                    self,
+                    MHD_OPTION_CONNECTION_TIMEOUT,
+                    cuint(fSvrConfig.Timeout),
+                    MHD_OPTION_END
+                );
+            end else
+            begin
+                svrDaemon := MHD_start_daemon(
+                    flags,
+                    fSvrConfig.port,
+                    nil,
+                    nil,
+                    @handleRequestCallback,
+                    self,
+                    MHD_OPTION_THREAD_POOL_SIZE,
+                    cuint(fSvrConfig.threadPoolSize),
+                    MHD_OPTION_CONNECTION_TIMEOUT,
+                    cuint(fSvrConfig.Timeout),
+                    MHD_OPTION_END
+                );
+            end;
         end;
 
         if svrDaemon <> nil then
         begin
             waitUntilTerminate();
             MHD_stop_daemon(svrDaemon);
+        end else
+        begin
+            writeln('Cannot start libmicrohttpd daemon');
         end;
         result := self;
     end;

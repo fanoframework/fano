@@ -67,7 +67,7 @@ implementation
 
 uses
 
-    TermSignalImpl;
+    SigTermImpl;
 
     constructor TSocket2Svr.create(
         const socket : IListenSocket;
@@ -91,7 +91,7 @@ uses
     begin
         fSocket.bind();
         fSocket.listen(fQueueSize);
-        fIoHandler.handleConnection(fSocket, terminatePipeIn);
+        fIoHandler.handleConnection(fSocket, TSigTerm.terminatePipeIn);
         result := self;
     end;
 

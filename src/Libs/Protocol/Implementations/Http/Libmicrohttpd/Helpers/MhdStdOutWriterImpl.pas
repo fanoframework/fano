@@ -84,6 +84,19 @@ const
         for i:= 0 to length(headers) - 1 do
         begin
             headerItem := headers[i].split(':');
+            if length(headerItem) = 0 then
+            begin
+                //skip invalid header
+                continue;
+            end;
+
+            if length(headerItem) = 1 then
+            begin
+                //force to use empty value
+                setLength(headerItem, 2);
+                headerItem[1] := '';
+            end;
+
             if (headerItem[0] <> 'Status') then
             begin
                 MHD_add_response_header(
