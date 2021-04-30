@@ -27,6 +27,7 @@ type
     (*!------------------------------------------------
      * class having capability to retrieve
      * CGI environment variable and override HTTP method
+     * using request parameter such as _method
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *--------------------------------------------------*)
@@ -75,6 +76,7 @@ uses
         //with request instance so store reference request as weak reference to
         //avoid memory leak
         makeWeakRef(@fRequest, request);
+        // fRequest := request;
         fVerbOverrideParam := verbOverrideParam;
     end;
 
@@ -87,7 +89,7 @@ uses
     function TXVerbTunnellingEnvironment.overrideMethod(const keyName : string) : string;
     var allowed : boolean;
     begin
-        result := fRequest.getParsedBodyParam(fVerbOverrideParam);
+        result := trim(uppercase(fRequest.getParsedBodyParam(fVerbOverrideParam)));
         if result <> '' then
         begin
             allowed := (result = 'GET') or
@@ -100,10 +102,6 @@ uses
 
             if not allowed then
             begin
-                //important! release reference to avoid memory leak
-                //before we raise exception
-                fDecoratedEnv := nil;
-                fRequest := nil;
                 raise EInvalidMethod.createFmt(
                     sErrInvalidMethod,
                     [ result ]

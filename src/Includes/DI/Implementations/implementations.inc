@@ -21,6 +21,7 @@ EDependencyNotFoundImpl,
 EInvalidFactoryImpl,
 EDependencyAliasImpl,
 FactoryImpl,
+DecoratorFactoryImpl,
 
 BasicContainerFactoryImpl,
 

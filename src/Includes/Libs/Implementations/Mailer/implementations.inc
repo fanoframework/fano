@@ -16,3 +16,13 @@ AbstractMailerImpl,
 
 SendmailMailerImpl,
 SendmailMailerFactoryImpl,
+
+{$IFDEF USE_SYNAPSE}
+SynapseMailerImpl,
+SynapseMailerFactoryImpl,
+{$ENDIF}
+
+{$IFDEF USE_INDY}
+IndyMailerImpl,
+IndyMailerFactoryImpl,
+{$ENDIF}

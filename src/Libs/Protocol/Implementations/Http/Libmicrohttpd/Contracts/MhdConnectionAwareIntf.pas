@@ -20,8 +20,8 @@ uses
 type
 
     (*!------------------------------------------------
-     * interface for any class having capability to read
-     * command line parameter options
+     * interface for any class having maintain libmicrohttpd
+     * connection instance
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)

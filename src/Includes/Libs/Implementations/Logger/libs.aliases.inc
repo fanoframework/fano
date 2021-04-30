@@ -22,6 +22,12 @@ TStdErrLoggerFactory = StdErrLoggerFactoryImpl.TStdErrLoggerFactory;
 TSysLogLogger = SysLogLoggerImpl.TSysLogLogger;
 TSysLogLoggerFactory = SysLogLoggerFactoryImpl.TSysLogLoggerFactory;
 TThreadSafeLogger = ThreadSafeLoggerImpl.TThreadSafeLogger;
+
+TDecoratorLogger = DecoratorLoggerImpl.TDecoratorLogger;
+
+TBackgroundThreadLogger = BackgroundThreadLoggerImpl.TBackgroundThreadLogger;
+TBackgroundThreadLoggerFactory = BackgroundThreadLoggerFactoryImpl.TBackgroundThreadLoggerFactory;
+
 TDbLogger = DbLoggerImpl.TDbLogger;
 TDbLoggerFactory = DbLoggerFactoryImpl.TDbLoggerFactory;
 
