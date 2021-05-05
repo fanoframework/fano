@@ -36,7 +36,7 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
     TStaticFilesMiddleware = class(TInjectableObject, IMiddleware)
-    private
+    protected
         fBaseDirectory : string;
         fMimeTypes : IReadOnlyKeyValuePair;
         function getContentTypeFromFilename(const filename : string) : string;
@@ -51,7 +51,7 @@ type
             const response : IResponse;
             const args : IRouteArgsReader;
             const nextMdlwr : IRequestHandler
-        ) : IResponse;
+        ) : IResponse; virtual;
     end;
 
 implementation

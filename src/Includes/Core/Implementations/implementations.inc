@@ -15,6 +15,7 @@
 
 NullSerializeableImpl,
 StringSerializeableImpl,
+JsonSerializeableImpl,
 ExceptionSerializeableImpl,
 
 HashListImpl,

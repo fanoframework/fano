@@ -122,3 +122,5 @@ TDinersClubValidator = DinersClubValidatorImpl.TDinersClubValidator;
 TJcbValidator = JcbValidatorImpl.TJcbValidator;
 
 TCreditCardValidator = CreditCardValidatorImpl.TCreditCardValidator;
+TStartWithValidator = StartWithValidatorImpl.TStartWithValidator;
+TEndWithValidator = EndWithValidatorImpl.TEndWithValidator;
