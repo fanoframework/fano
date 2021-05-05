@@ -448,7 +448,11 @@ uses
         begin
             //MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY is deprecated,
             //should use MHD_USE_EPOLL_INTERNAL_THREAD
-            flags := flags or MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY;
+            {$IFDEF LINUX}
+                flags := flags or MHD_USE_EPOLL_INTERNALLY_LINUX_ONLY;
+            {$ELSE}
+                flags := flags or MHD_USE_SELECT_INTERNALLY;
+            {$ENDIF}
         end;
 
         if fSvrConfig.useIPv6 then
