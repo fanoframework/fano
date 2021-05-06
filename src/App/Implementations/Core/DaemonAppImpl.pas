@@ -71,6 +71,10 @@ type
             const dispatcher : IDispatcher
         ) : IRunnable; override;
 
+        procedure setReadyListener(
+            const protocol : IProtocolProcessor;
+            const listener : IReadyListener
+        ); virtual;
     public
         (*!-----------------------------------------------
          * constructor
@@ -152,6 +156,14 @@ uses
         inherited destroy();
     end;
 
+    procedure TDaemonWebApplication.setReadyListener(
+        const protocol : IProtocolProcessor;
+        const listener : IReadyListener
+    );
+    begin
+        protocol.setReadyListener(listener);
+    end;
+
     (*!-----------------------------------------------
      * attach ourself as listener and run socket server
      *-----------------------------------------------
@@ -161,7 +173,7 @@ uses
     begin
         //This is to ensure that reference count of our instance
         //properly incremented/decremented so no memory leak
-        fDaemonAppSvc.protocol.setReadyListener(self);
+        setReadyListener(fDaemonAppSvc.protocol, self);
         try
             fDaemonAppSvc.server.setDataAvailListener(self);
             try
@@ -193,7 +205,7 @@ uses
                 fDaemonAppSvc.server.setDataAvailListener(nil);
             end;
         finally
-            fDaemonAppSvc.protocol.setReadyListener(nil);
+            setReadyListener(fDaemonAppSvc.protocol, nil);
         end;
     end;
 
