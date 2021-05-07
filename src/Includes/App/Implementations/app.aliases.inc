@@ -23,6 +23,7 @@ TServerAppServiceProvider = ServerAppServiceProviderImpl.TServerAppServiceProvid
 TDecoratorAppServiceProvider = DecoratorAppServiceProviderImpl.TDecoratorAppServiceProvider;
 TDecoratorDaemonAppServiceProvider = DecoratorDaemonAppServiceProviderImpl.TDecoratorDaemonAppServiceProvider;
 TAdapterDaemonAppServiceProvider = AdapterDaemonAppServiceProviderImpl.TAdapterDaemonAppServiceProvider;
+TThreadProtocolAppServiceProvider = ThreadProtocolAppServiceProviderImpl.TThreadProtocolAppServiceProvider;
 
 {----------------Begin FastCGI related-----------------------------}
 TFastCgiAppServiceProvider = FastCgiAppServiceProviderImpl.TFastCgiAppServiceProvider;
