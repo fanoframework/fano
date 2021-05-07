@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit MultiThreadDaemonAppImpl;
+unit ThreadDaemonAppImpl;
 
 interface
 
@@ -32,7 +32,7 @@ uses
     StreamAdapterIntf,
     StreamIdIntf,
     CoreAppConsts,
-    CoreAppImpl;
+    DaemonAppImpl;
 
 type
 
@@ -43,7 +43,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TMultiThreadDaemonWebApplication = class(TDaemonWebApplication)
+    TThreadDaemonWebApplication = class(TDaemonWebApplication)
     protected
         procedure setReadyListener(
             const protocol : IProtocolProcessor;
@@ -56,9 +56,9 @@ implementation
 
 uses
 
-    MultiThreadReadyListenerImpl;
+    ThreadReadyListenerImpl;
 
-    procedure TMultiThreadDaemonWebApplication.setReadyListener(
+    procedure TThreadDaemonWebApplication.setReadyListener(
         const protocol : IProtocolProcessor;
         const listener : IReadyListener
     );
@@ -73,7 +73,7 @@ uses
             //ready method will be called in new background thread
             inherited setReadyListener(
                 protocol,
-                TMultiThreadReadyListener.create(listener)
+                TThreadReadyListener.create(listener)
             );
         end;
     end;

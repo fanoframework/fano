@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit MultiThreadReadyListenerIntf;
+unit ThreadReadyListenerImpl;
 
 interface
 
@@ -17,6 +17,7 @@ uses
 
     EnvironmentIntf,
     StreamAdapterIntf,
+    ReadyListenerIntf,
     DecoratorReadyListenerImpl;
 
 type
@@ -29,7 +30,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TMultiThreadReadyListener = class (TDecoratorReadyListener)
+    TThreadReadyListener = class (TDecoratorReadyListener)
     public
         (*!------------------------------------------------
          * request is ready
@@ -74,7 +75,7 @@ type
             const actualListener : IReadyListener
         );
         destructor destroy(); override;
-        procedure execute();
+        procedure execute(); override;
     end;
 
     constructor TReadyThread.create(
@@ -105,7 +106,7 @@ type
 
     procedure TReadyThread.execute();
     begin
-        result := fActualListener.ready(fSocketStream, fEnv, fStdInStream);
+        fActualListener.ready(fSocketStream, fEnv, fStdInStream);
     end;
 
     (*!------------------------------------------------
@@ -116,7 +117,7 @@ type
      * @param stdInStream, stream contains parsed POST-ed data
      * @return true request is handled
      *-----------------------------------------------*)
-    function TMultiThreadReadyListener.ready(
+    function TThreadReadyListener.ready(
         const socketStream : IStreamAdapter;
         const env : ICGIEnvironment;
         const stdInStream : IStreamAdapter
@@ -130,6 +131,7 @@ type
             fActualListener
         );
         executorThread.start();
+        result := true;
     end;
 
 end.

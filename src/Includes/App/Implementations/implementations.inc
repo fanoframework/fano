@@ -16,7 +16,7 @@
 AppImpl,
 DaemonAppImpl,
 CgiFcgiGatewayAppImpl,
-MultiThreadDaemonAppImpl,
+ThreadDaemonAppImpl,
 
 BasicAppServiceProviderImpl,
 DaemonAppServiceProviderImpl,
