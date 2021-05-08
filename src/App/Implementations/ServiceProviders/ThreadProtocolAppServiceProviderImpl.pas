@@ -23,6 +23,7 @@ uses
     EnvironmentIntf,
     RouterIntf,
     RouteMatcherIntf,
+    OutputBufferIntf,
     DaemonAppServiceProviderIntf,
     ProtocolAppServiceProviderImpl;
 
@@ -46,6 +47,7 @@ type
         fThreadSafeStdOut : IStdOut;
         fThreadSafeRouter : IRouter;
         fThreadSafeRouteMatcher : IRouteMatcher;
+        fThreadSafeOutputBuffer : IOutputBuffer;
     public
         constructor create(const actualSvc : IDaemonAppServiceProvider);
         destructor destroy(); override;
@@ -63,6 +65,8 @@ type
 
         function getStdIn() : IStdIn; override;
 
+        function getOutputBuffer() : IOutputBuffer; override;
+
         function getProtocol() : IProtocolProcessor; override;
         function getStdOut() : IStdOut; override;
     end;
@@ -78,7 +82,8 @@ uses
     ThreadSafeEnvironmentImpl,
     ThreadSafeStdInImpl,
     ThreadSafeStdOutImpl,
-    ThreadSafeRouterImpl;
+    ThreadSafeRouterImpl,
+    ThreadSafeOutputBufferImpl;
 
     constructor TThreadProtocolAppServiceProvider.create(
         const actualSvc : IDaemonAppServiceProvider
@@ -118,6 +123,10 @@ uses
 
         //TThreadSafeRouter also implements IRouteMatcher so this is OK
         fThreadSafeRouteMatcher := fThreadSafeRouter as IRouteMatcher;
+
+        fThreadSafeOutputBuffer := TThreadSafeOutputBuffer.create(
+            fDaemonSvc.getOutputBuffer
+        );
     end;
 
     destructor TThreadProtocolAppServiceProvider.destroy();
@@ -167,6 +176,11 @@ uses
     function TThreadProtocolAppServiceProvider.getStdIn() : IStdIn;
     begin
         result := fThreadSafeStdIn;
+    end;
+
+    function TThreadProtocolAppServiceProvider.getOutputBuffer() : IOutputBuffer;
+    begin
+        result := fThreadSafeOutputBuffer;
     end;
 
     function TThreadProtocolAppServiceProvider.getProtocol() : IProtocolProcessor;
