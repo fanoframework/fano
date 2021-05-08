@@ -20,6 +20,7 @@ uses
     DispatcherIntf,
     EnvironmentIntf,
     StdInIntf,
+    RouteMatcherIntf,
     RouterIntf;
 
 type
@@ -46,6 +47,7 @@ type
         function getEnvironment() : ICGIEnvironment; virtual;
 
         function getRouter() : IRouter; virtual;
+        function getRouteMatcher() : IRouteMatcher; virtual;
 
         function getStdIn() : IStdIn; virtual;
 
@@ -96,6 +98,11 @@ implementation
     function TDecoratorAppServiceProvider.getRouter() : IRouter;
     begin
         result := fAppSvc.getRouter();
+    end;
+
+    function TDecoratorAppServiceProvider.getRouteMatcher() : IRouteMatcher;
+    begin
+        result := fAppSvc.getRouteMatcher();
     end;
 
     function TDecoratorAppServiceProvider.getStdIn() : IStdIn;

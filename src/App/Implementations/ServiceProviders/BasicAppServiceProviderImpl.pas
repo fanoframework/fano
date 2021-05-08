@@ -43,7 +43,6 @@ type
         fStdIn : IStdIn;
         fAppConfig : IAppConfiguration;
     protected
-        function getRouteMatcher() : IRouteMatcher; virtual;
 
         function buildContainer() : IDependencyContainer; virtual;
         function buildErrorHandler(
@@ -72,6 +71,7 @@ type
         function getEnvironment() : ICGIEnvironment;
 
         function getRouter() : IRouter;
+        function getRouteMatcher() : IRouteMatcher; virtual;
 
         function getStdIn() : IStdIn;
 
@@ -114,6 +114,10 @@ resourcestring
         fEnv := buildEnvironment(fContainer);
         fErrHandler := buildErrorHandler(fContainer, fAppConfig);
         fStdIn := buildStdIn(fContainer);
+
+        //we will set its instance in buildRouter
+        fRouteMatcher := nil;
+
         fRouter := buildRouter(fContainer);
         fDispatcher := buildDispatcher(fContainer, getRouteMatcher(), fAppConfig);
     end;

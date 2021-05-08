@@ -48,6 +48,9 @@ type
         function getRouter() : IRouter;
         property router : IRouter read getRouter;
 
+        function getRouteMatcher() : IRouteMatcher;
+        property routeMatcher : IRouteMatcher read getRouteMatcher;
+
         function getStdIn() : IStdIn;
         property stdIn : IStdIn read getStdIn;
     end;

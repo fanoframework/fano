@@ -34,7 +34,7 @@ type
         (*!---------------------------------------------------
          * constructor
          *---------------------------------------------------
-         * @param errHandler error handler
+         * @param errHandler decorated error handler
          *---------------------------------------------------*)
         constructor create(const errHandler : IErrorHandler);
         destructor destroy(); override;
@@ -45,8 +45,7 @@ implementation
     (*!---------------------------------------------------
      * constructor
      *---------------------------------------------------
-     * @param firstErrHandler first error handler
-     * @param secondErrHandler second error handler
+     * @param errorHandler decorated error handler
      *---------------------------------------------------*)
     constructor TDecoratorErrorHandler.create(const errHandler : IErrorHandler);
     begin

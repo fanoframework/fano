@@ -14,6 +14,9 @@
  *-----------------------------------------------*)
 
 DependencyContainerImpl,
+DecoratorDependencyContainerImpl,
+ThreadSafeDependencyContainerImpl,
+
 DependencyListImpl,
 InjectableObjectImpl,
 

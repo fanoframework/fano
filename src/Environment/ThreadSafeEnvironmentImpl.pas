@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit DecoratorEnvironmentImpl;
+unit ThreadSafeEnvironmentImpl;
 
 interface
 
@@ -15,21 +15,21 @@ interface
 
 uses
 
+    SyncObjs,
     EnvironmentIntf,
     EnvironmentEnumeratorIntf,
-    InjectableObjectImpl;
+    DecoratorEnvironmentImpl;
 
 type
 
     (*!------------------------------------------------
-     * base decorator class for any class having capability to retrieve
-     * CGI environment variable from external environment class
+     * thread-safe decorator ICGIEnvironment class
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *--------------------------------------------------*)
-    TDecoratorEnvironment = class(TInjectableObject, ICGIEnvironment, ICGIEnvironmentEnumerator)
-    protected
-        fDecoratedEnv : ICGIEnvironment;
+    TThreadSafeEnvironment = class(TDecoratorEnvironment)
+    private
+        fCriticalSection : TCriticalSection;
     public
         constructor create(const aEnv : ICGIEnvironment);
         destructor destroy(); override;
@@ -40,117 +40,117 @@ type
          * @param key name of variable
          * @return variable value
          *------------------------------------------*)
-        function env(const keyName : string) : string; virtual;
+        function env(const keyName : string) : string; override;
 
         {-----------------------------------------
          Retrieve GATEWAY_INTERFACE environment variable
         ------------------------------------------}
-        function gatewayInterface() : string; virtual;
+        function gatewayInterface() : string; override;
 
         {-----------------------------------------
          Retrieve REMOTE_ADDR environment variable
         ------------------------------------------}
-        function remoteAddr() : string; virtual;
+        function remoteAddr() : string; override;
 
         {-----------------------------------------
          Retrieve REMOTE_PORT environment variable
         ------------------------------------------}
-        function remotePort() : string; virtual;
+        function remotePort() : string; override;
 
         {-----------------------------------------
          Retrieve REMOTE_HOST environment variable
         ------------------------------------------}
-        function remoteHost() : string; virtual;
+        function remoteHost() : string; override;
 
         {-----------------------------------------
          Retrieve REMOTE_USER environment variable
         ------------------------------------------}
-        function remoteUser() : string; virtual;
+        function remoteUser() : string; override;
 
         {-----------------------------------------
          Retrieve REMOTE_IDENT environment variable
         ------------------------------------------}
-        function remoteIdent() : string; virtual;
+        function remoteIdent() : string; override;
 
         {-----------------------------------------
          Retrieve AUTH_TYPE environment variable
         ------------------------------------------}
-        function authType() : string; virtual;
+        function authType() : string; override;
 
         {-----------------------------------------
          Retrieve SERVER_ADDR environment variable
         ------------------------------------------}
-        function serverAddr() : string; virtual;
+        function serverAddr() : string; override;
 
         {-----------------------------------------
          Retrieve SERVER_PORT environment variable
         ------------------------------------------}
-        function serverPort() : string; virtual;
+        function serverPort() : string; override;
 
         {-----------------------------------------
          Retrieve SERVER_NAME environment variable
         ------------------------------------------}
-        function serverName() : string; virtual;
+        function serverName() : string; override;
 
         {-----------------------------------------
          Retrieve SERVER_SOFTWARE environment variable
         ------------------------------------------}
-        function serverSoftware() : string; virtual;
+        function serverSoftware() : string; override;
 
         {-----------------------------------------
          Retrieve SERVER_PROTOCOL environment variable
         ------------------------------------------}
-        function serverProtocol() : string; virtual;
+        function serverProtocol() : string; override;
 
         {-----------------------------------------
          Retrieve DOCUMENT_ROOT environment variable
         ------------------------------------------}
-        function documentRoot() : string; virtual;
+        function documentRoot() : string; override;
 
         {-----------------------------------------
          Retrieve REQUEST_METHOD environment variable
         ------------------------------------------}
-        function requestMethod() : string; virtual;
+        function requestMethod() : string; override;
 
         {-----------------------------------------
          Retrieve REQUEST_SCHEME environment variable
         ------------------------------------------}
-        function requestScheme() : string; virtual;
+        function requestScheme() : string; override;
 
         {-----------------------------------------
          Retrieve REQUEST_URI environment variable
         ------------------------------------------}
-        function requestUri() : string; virtual;
+        function requestUri() : string; override;
 
         {-----------------------------------------
          Retrieve QUERY_STRING environment variable
         ------------------------------------------}
-        function queryString() : string; virtual;
+        function queryString() : string; override;
 
         {-----------------------------------------
          Retrieve SCRIPT_NAME environment variable
         ------------------------------------------}
-        function scriptName() : string; virtual;
+        function scriptName() : string; override;
 
         {-----------------------------------------
          Retrieve PATH_INFO environment variable
         ------------------------------------------}
-        function pathInfo() : string; virtual;
+        function pathInfo() : string; override;
 
         {-----------------------------------------
          Retrieve PATH_TRANSLATED environment variable
         ------------------------------------------}
-        function pathTranslated() : string; virtual;
+        function pathTranslated() : string; override;
 
         {-----------------------------------------
          Retrieve CONTENT_TYPE environment variable
         ------------------------------------------}
-        function contentType() : string; virtual;
+        function contentType() : string; override;
 
         {-----------------------------------------
          Retrieve CONTENT_LENGTH environment variable
         ------------------------------------------}
-        function contentLength() : string; virtual;
+        function contentLength() : string; override;
 
         (*-----------------------------------------
          * Retrieve CONTENT_LENGTH environment variable
@@ -158,39 +158,39 @@ type
          *------------------------------------------
          * @return content length as integer value
          *------------------------------------------*)
-        function intContentLength() : integer; virtual;
+        function intContentLength() : integer; override;
 
         {-----------------------------------------
          Retrieve HTTP_HOST environment variable
         ------------------------------------------}
-        function httpHost() : string; virtual;
+        function httpHost() : string; override;
 
         {-----------------------------------------
          Retrieve HTTP_USER_AGENT environment variable
         ------------------------------------------}
-        function httpUserAgent() : string; virtual;
+        function httpUserAgent() : string; override;
 
         {-----------------------------------------
          Retrieve HTTP_ACCEPT environment variable
         ------------------------------------------}
-        function httpAccept() : string; virtual;
+        function httpAccept() : string; override;
 
         {-----------------------------------------
          Retrieve HTTP_ACCEPT_LANGUAGE environment variable
         ------------------------------------------}
-        function httpAcceptLanguage() : string; virtual;
+        function httpAcceptLanguage() : string; override;
 
         {-----------------------------------------
          Retrieve HTTP_COOKIE environment variable
         ------------------------------------------}
-        function httpCookie() : string; virtual;
+        function httpCookie() : string; override;
 
         (*!------------------------------------------------
          * get number of variables
          *-----------------------------------------------
          * @return number of variables
          *-----------------------------------------------*)
-        function count() : integer; virtual;
+        function count() : integer; override;
 
         (*!------------------------------------------------
          * get key by index
@@ -198,7 +198,7 @@ type
          * @param index index to use
          * @return key name
          *-----------------------------------------------*)
-        function getKey(const indx : integer) : shortstring; virtual;
+        function getKey(const indx : integer) : shortstring; override;
 
         (*!------------------------------------------------
          * get value by index
@@ -206,21 +206,20 @@ type
          * @param index index to use
          * @return value name
          *-----------------------------------------------*)
-        function getValue(const indx : integer) : string; virtual;
-
-        function getEnumerator() : ICGIEnvironmentEnumerator; virtual;
+        function getValue(const indx : integer) : string; override;
     end;
 
 implementation
 
-    constructor TDecoratorEnvironment.create(const aEnv : ICGIEnvironment);
+    constructor TThreadSafeEnvironment.create(const aEnv : ICGIEnvironment);
     begin
-        fDecoratedEnv := aEnv;
+        inherited create(aEnv);
+        fCriticalSection := TCriticalSection.create();
     end;
 
-    destructor TDecoratorEnvironment.destroy();
+    destructor TThreadSafeEnvironment.destroy();
     begin
-        fDecoratedEnv := nil;
+        fCriticalSection.free();
         inherited destroy();
     end;
 
@@ -230,185 +229,300 @@ implementation
      * @param key name of variable
      * @return variable value
      *------------------------------------------*)
-    function TDecoratorEnvironment.env(const keyName : string) : string;
+    function TThreadSafeEnvironment.env(const keyName : string) : string;
     begin
-        result := fDecoratedEnv.env(keyName);
+        fCriticalSection.acquire();
+        try
+            result := inherited env(keyName);
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve GATEWAY_INTERFACE environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.gatewayInterface() : string;
+    function TThreadSafeEnvironment.gatewayInterface() : string;
     begin
-        result := fDecoratedEnv.gatewayInterface();
+        fCriticalSection.acquire();
+        try
+            result := inherited gatewayInterface();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REMOTE_ADDR environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.remoteAddr() : string;
+    function TThreadSafeEnvironment.remoteAddr() : string;
     begin
-        result := fDecoratedEnv.remoteAddr();
+        fCriticalSection.acquire();
+        try
+            result := inherited remoteAddr();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REMOTE_PORT environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.remotePort() : string;
+    function TThreadSafeEnvironment.remotePort() : string;
     begin
-        result := fDecoratedEnv.remotePort();
+        fCriticalSection.acquire();
+        try
+            result := inherited remotePort();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REMOTE_HOST environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.remoteHost() : string;
+    function TThreadSafeEnvironment.remoteHost() : string;
     begin
-        result := fDecoratedEnv.remoteHost();
+        fCriticalSection.acquire();
+        try
+            result := inherited remoteHost();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REMOTE_USER environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.remoteUser() : string;
+    function TThreadSafeEnvironment.remoteUser() : string;
     begin
-        result := fDecoratedEnv.remoteUser();
+        fCriticalSection.acquire();
+        try
+            result := inherited remoteUser();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REMOTE_IDENT environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.remoteIdent() : string;
+    function TThreadSafeEnvironment.remoteIdent() : string;
     begin
-        result := fDecoratedEnv.remoteIdent();
+        fCriticalSection.acquire();
+        try
+            result := inherited remoteIdent();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve AUTH_TYPE environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.authType() : string;
+    function TThreadSafeEnvironment.authType() : string;
     begin
-        result := fDecoratedEnv.authType();
+        fCriticalSection.acquire();
+        try
+            result := inherited authType();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve SERVER_ADDR environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.serverAddr() : string;
+    function TThreadSafeEnvironment.serverAddr() : string;
     begin
-        result := fDecoratedEnv.serverAddr();
+        fCriticalSection.acquire();
+        try
+            result := inherited serverAddr();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve SERVER_PORT environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.serverPort() : string;
+    function TThreadSafeEnvironment.serverPort() : string;
     begin
-        result := fDecoratedEnv.serverPort();
+        fCriticalSection.acquire();
+        try
+            result := inherited serverPort();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve SERVER_NAME environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.serverName() : string;
+    function TThreadSafeEnvironment.serverName() : string;
     begin
-        result := fDecoratedEnv.serverName();
+        fCriticalSection.acquire();
+        try
+            result := inherited serverName();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve SERVER_SOFTWARE environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.serverSoftware() : string;
+    function TThreadSafeEnvironment.serverSoftware() : string;
     begin
-        result := fDecoratedEnv.serverSoftware();
+        fCriticalSection.acquire();
+        try
+            result := inherited serverSoftware();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve SERVER_PROTOCOL environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.serverProtocol() : string;
+    function TThreadSafeEnvironment.serverProtocol() : string;
     begin
-        result := fDecoratedEnv.serverProtocol();
+        fCriticalSection.acquire();
+        try
+            result := inherited serverProtocol();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve DOCUMENT_ROOT environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.documentRoot() : string;
+    function TThreadSafeEnvironment.documentRoot() : string;
     begin
-        result := fDecoratedEnv.documentRoot();
+        fCriticalSection.acquire();
+        try
+            result := inherited documentRoot();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REQUEST_METHOD environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.requestMethod() : string;
+    function TThreadSafeEnvironment.requestMethod() : string;
     begin
-        result := fDecoratedEnv.requestMethod();
+        fCriticalSection.acquire();
+        try
+            result := inherited requestMethod();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REQUEST_SCHEME environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.requestScheme() : string;
+    function TThreadSafeEnvironment.requestScheme() : string;
     begin
-        result := fDecoratedEnv.requestScheme();
+        fCriticalSection.acquire();
+        try
+            result := inherited requestScheme();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve REQUEST_URI environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.requestUri() : string;
+    function TThreadSafeEnvironment.requestUri() : string;
     begin
-        result := fDecoratedEnv.requestUri();
+        fCriticalSection.acquire();
+        try
+            result := inherited requestUri();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve QUERY_STRING environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.queryString() : string;
+    function TThreadSafeEnvironment.queryString() : string;
     begin
-        result := fDecoratedEnv.queryString();
+        fCriticalSection.acquire();
+        try
+            result := inherited queryString();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve SCRIPT_NAME environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.scriptName() : string;
+    function TThreadSafeEnvironment.scriptName() : string;
     begin
-        result := fDecoratedEnv.scriptName();
+        fCriticalSection.acquire();
+        try
+            result := inherited scriptName();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve PATH_INFO environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.pathInfo() : string;
+    function TThreadSafeEnvironment.pathInfo() : string;
     begin
-        result := fDecoratedEnv.pathInfo();
+        fCriticalSection.acquire();
+        try
+            result := inherited pathInfo();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
         Retrieve PATH_TRANSLATED environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.pathTranslated() : string;
+    function TThreadSafeEnvironment.pathTranslated() : string;
     begin
-        result := fDecoratedEnv.pathTranslated();
+        fCriticalSection.acquire();
+        try
+            result := inherited pathTranslated();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve CONTENT_TYPE environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.contentType() : string;
+    function TThreadSafeEnvironment.contentType() : string;
     begin
-        result := fDecoratedEnv.contentType();
+        fCriticalSection.acquire();
+        try
+            result := inherited contentType();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
     Retrieve CONTENT_LENGTH environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.contentLength() : string;
+    function TThreadSafeEnvironment.contentLength() : string;
     begin
-        result := fDecoratedEnv.contentLength();
+        fCriticalSection.acquire();
+        try
+            result := inherited contentLength();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     (*-----------------------------------------
@@ -417,49 +531,79 @@ implementation
      *------------------------------------------
      * @return content length as integer value
      *------------------------------------------*)
-    function TDecoratorEnvironment.intContentLength() : integer;
+    function TThreadSafeEnvironment.intContentLength() : integer;
     begin
-        result := fDecoratedEnv.intContentLength();
+        fCriticalSection.acquire();
+        try
+            result := inherited intContentLength();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve HTTP_HOST environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.httpHost() : string;
+    function TThreadSafeEnvironment.httpHost() : string;
     begin
-        result := fDecoratedEnv.httpHost();
+        fCriticalSection.acquire();
+        try
+            result := inherited httpHost();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve HTTP_USER_AGENT environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.httpUserAgent() : string;
+    function TThreadSafeEnvironment.httpUserAgent() : string;
     begin
-        result := fDecoratedEnv.httpUserAgent();
+        fCriticalSection.acquire();
+        try
+            result := inherited httpUserAgent();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve HTTP_ACCEPT environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.httpAccept() : string;
+    function TThreadSafeEnvironment.httpAccept() : string;
     begin
-        result := fDecoratedEnv.httpAccept();
+        fCriticalSection.acquire();
+        try
+            result := inherited httpAccept();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve HTTP_ACCEPT_LANGUAGE environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.httpAcceptLanguage() : string;
+    function TThreadSafeEnvironment.httpAcceptLanguage() : string;
     begin
-        result := fDecoratedEnv.httpAcceptLanguage();
+        fCriticalSection.acquire();
+        try
+            result := inherited httpAcceptLanguage();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     {-----------------------------------------
      Retrieve HTTP_COOKIE environment variable
     ------------------------------------------}
-    function TDecoratorEnvironment.httpCookie() : string;
+    function TThreadSafeEnvironment.httpCookie() : string;
     begin
-        result := fDecoratedEnv.httpCookie();
+        fCriticalSection.acquire();
+        try
+            result := inherited httpCookie();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     (*!------------------------------------------------
@@ -468,14 +612,14 @@ implementation
      * @param index index to use
      * @return key name
      *-----------------------------------------------*)
-    function TDecoratorEnvironment.getValue(const indx : integer) : string;
+    function TThreadSafeEnvironment.getValue(const indx : integer) : string;
     begin
-        result := fDecoratedEnv.enumerator.getValue(indx);
-    end;
-
-    function TDecoratorEnvironment.getEnumerator() : ICGIEnvironmentEnumerator;
-    begin
-        result := self;
+        fCriticalSection.acquire();
+        try
+            result := inherited getValue(indx);
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     (*!------------------------------------------------
@@ -483,9 +627,14 @@ implementation
      *-----------------------------------------------
      * @return number of variables
      *-----------------------------------------------*)
-    function TDecoratorEnvironment.count() : integer;
+    function TThreadSafeEnvironment.count() : integer;
     begin
-        result := fDecoratedEnv.enumerator.count();
+        fCriticalSection.acquire();
+        try
+            result := inherited count();
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
     (*!------------------------------------------------
@@ -494,9 +643,14 @@ implementation
      * @param index index to use
      * @return key name
      *-----------------------------------------------*)
-    function TDecoratorEnvironment.getKey(const indx : integer) : shortstring;
+    function TThreadSafeEnvironment.getKey(const indx : integer) : shortstring;
     begin
-        result := fDecoratedEnv.enumerator.getKey(indx);
+        fCriticalSection.acquire();
+        try
+            result := inherited getKey(indx);
+        finally
+            fCriticalSection.release();
+        end;
     end;
 
 end.

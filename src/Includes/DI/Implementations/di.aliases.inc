@@ -14,6 +14,9 @@
  *-----------------------------------------------*)
 
 TDependencyContainer = DependencyContainerImpl.TDependencyContainer;
+TDecoratorDependencyContainer = DecoratorDependencyContainerImpl.TDecoratorDependencyContainer;
+TThreadSafeDependencyContainer = ThreadSafeDependencyContainerImpl.TThreadSafeDependencyContainer;
+
 TDependencyList = DependencyListImpl.TDependencyList;
 TInjectableObject = InjectableObjectImpl.TInjectableObject;
 TFactory = FactoryImpl.TFactory;

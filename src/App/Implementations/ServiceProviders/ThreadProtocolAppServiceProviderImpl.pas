@@ -14,26 +14,55 @@ interface
 
 uses
 
+    DependencyContainerIntf,
     ProtocolProcessorIntf,
     StdOutIntf,
+    StdInIntf,
+    ErrorHandlerIntf,
+    DispatcherIntf,
+    EnvironmentIntf,
+    RouterIntf,
+    RouteMatcherIntf,
     DaemonAppServiceProviderIntf,
     ProtocolAppServiceProviderImpl;
 
 type
 
     {*------------------------------------------------
-     * interface for any class having capability to
-     * register one or more service factories for FastCGI
-     * application
+     * class having capability to
+     * register one or more service factories for
+     * application that handle multiple threads
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
     TThreadProtocolAppServiceProvider = class (TProtocolAppServiceProvider)
     private
         fThreadProtocol : IProtocolProcessor;
+        fThreadSafeContainer : IDependencyContainer;
+        fThreadSafeErrorHandler : IErrorHandler;
+        fThreadSafeDispatcher : IDispatcher;
+        fThreadSafeEnv : ICGIEnvironment;
+        fThreadSafeStdIn : IStdIn;
+        fThreadSafeStdOut : IStdOut;
+        fThreadSafeRouter : IRouter;
+        fThreadSafeRouteMatcher : IRouteMatcher;
     public
         constructor create(const actualSvc : IDaemonAppServiceProvider);
         destructor destroy(); override;
+
+        function getContainer() : IDependencyContainer; override;
+
+        function getErrorHandler() : IErrorHandler; override;
+
+        function getDispatcher() : IDispatcher; override;
+
+        function getEnvironment() : ICGIEnvironment; override;
+
+        function getRouter() : IRouter; override;
+        function getRouteMatcher() : IRouteMatcher; override;
+
+        function getStdIn() : IStdIn; override;
+
         function getProtocol() : IProtocolProcessor; override;
         function getStdOut() : IStdOut; override;
     end;
@@ -42,22 +71,102 @@ implementation
 
 uses
 
-    ThreadProtocolProcessorImpl;
+    ThreadProtocolProcessorImpl,
+    ThreadSafeDependencyContainerImpl,
+    ThreadSafeErrorHandlerImpl,
+    ThreadSafeDispatcherImpl,
+    ThreadSafeEnvironmentImpl,
+    ThreadSafeStdInImpl,
+    ThreadSafeStdOutImpl,
+    ThreadSafeRouterImpl;
 
     constructor TThreadProtocolAppServiceProvider.create(
         const actualSvc : IDaemonAppServiceProvider
     );
     begin
         inherited create(actualSvc);
+        //wrap global instance with thread-safe implementation
         fThreadProtocol := TThreadProtocolProcessor.create(
             fDaemonSvc.getProtocol()
         );
+
+        fThreadSafeContainer := TThreadSafeDependencyContainer.create(
+            fDaemonSvc.getContainer()
+        );
+
+        fThreadSafeErrorHandler := TThreadSafeErrorHandler.create(
+            fDaemonSvc.getErrorHandler()
+        );
+
+        fThreadSafeDispatcher := TThreadSafeDispatcher.create(
+            fDaemonSvc.getDispatcher()
+        );
+
+        fThreadSafeEnv := TThreadSafeEnvironment.create(
+            fDaemonSvc.getEnvironment()
+        );
+
+        fThreadSafeStdIn := TThreadSafeStdIn.create(
+            fDaemonSvc.getStdIn()
+        );
+
+        fThreadSafeStdOut := TThreadSafeStdOut.create(fDaemonSvc.getStdOut());
+        fThreadSafeRouter := TThreadSafeRouter.create(
+            fDaemonSvc.getRouter(),
+            fDaemonSvc.getRouteMatcher()
+        );
+
+        //TThreadSafeRouter also implements IRouteMatcher so this is OK
+        fThreadSafeRouteMatcher := fThreadSafeRouter as IRouteMatcher;
     end;
 
     destructor TThreadProtocolAppServiceProvider.destroy();
     begin
+        fThreadSafeStdIn := nil;
+        fThreadSafeStdOut := nil;
+        fThreadSafeRouter := nil;
+        fThreadSafeRouteMatcher := nil;
+        fThreadSafeEnv := nil;
+        fThreadSafeDispatcher := nil;
+        fThreadSafeErrorHandler := nil;
+        fThreadSafeContainer := nil;
         fThreadProtocol := nil;
         inherited destroy();
+    end;
+
+    function TThreadProtocolAppServiceProvider.getContainer() : IDependencyContainer;
+    begin
+        result := fThreadSafeContainer;
+    end;
+
+    function TThreadProtocolAppServiceProvider.getErrorHandler() : IErrorHandler;
+    begin
+        result := fThreadSafeErrorHandler;
+    end;
+
+    function TThreadProtocolAppServiceProvider.getDispatcher() : IDispatcher;
+    begin
+        result := fThreadSafeDispatcher;
+    end;
+
+    function TThreadProtocolAppServiceProvider.getEnvironment() : ICGIEnvironment;
+    begin
+        result := fThreadSafeEnv;
+    end;
+
+    function TThreadProtocolAppServiceProvider.getRouter() : IRouter;
+    begin
+        result := fThreadSafeRouter;
+    end;
+
+    function TThreadProtocolAppServiceProvider.getRouteMatcher() : IRouteMatcher;
+    begin
+        result := fThreadSafeRouteMatcher;
+    end;
+
+    function TThreadProtocolAppServiceProvider.getStdIn() : IStdIn;
+    begin
+        result := fThreadSafeStdIn;
     end;
 
     function TThreadProtocolAppServiceProvider.getProtocol() : IProtocolProcessor;
@@ -67,6 +176,6 @@ uses
 
     function TThreadProtocolAppServiceProvider.getStdOut() : IStdOut;
     begin
-        result := fDaemonSvc.getStdOut();
+        result := fThreadSafeStdOut;
     end;
 end.
