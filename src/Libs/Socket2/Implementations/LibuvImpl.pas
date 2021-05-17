@@ -142,12 +142,12 @@ type
         if fConfig.useIpv6 then
         begin
             addr6 := default(sockaddr_in6);
-            uv_ip6_addr(pansichar(fConfig.ip), fConfig.port, addr6);
+            uv_ip6_addr(pansichar(fConfig.ip), fConfig.port, @addr6);
             addr := psockaddr(@addr6);
         end else
         begin
             addr4 := default(sockaddr_in);
-            uv_ip4_addr(pansichar(fConfig.ip), fConfig.port, addr4);
+            uv_ip4_addr(pansichar(fConfig.ip), fConfig.port, @addr4);
             addr := psockaddr(@addr4);
         end;
 
