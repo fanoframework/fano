@@ -119,6 +119,97 @@ type
         end;
     end;
 
+    procedure on_close(handle : puv_handle_t); cdecl;
+    var client : pclient_t;
+    begin
+        client := pclient_t(handle^.data);
+
+        freemem(client);
+    end;
+
+    function on_alloc(client : puv_handle_t; suggested_size : size_t) : uv_buf_t; cdecl;
+    begin
+        result.base := getmem(suggested_size);
+        result.len := suggested_size;
+    end;
+
+    procedure on_read(tcp : puv_stream_t; nread : ssize_t; buf : uv_buf_t); cdecl;
+    var parsed : size_t;
+        client : pclient_t;
+        err : uv_err_t;
+    begin
+
+        client := pclient_t(tcp^.data);
+
+        if (nread >= 0) then
+        begin
+            parsed := http_parser_execute(
+                @client^.parser,
+                @parser_settings,
+                buf.base,
+                nread
+            );
+            if (parsed < nread) then
+            begin
+                //LOG_ERROR("parse error");
+                uv_close(puv_handle_t(@client^.handle), @on_close);
+            end;
+        end else
+        begin
+            err := uv_last_error(uv_default_loop());
+            if (err.code <> UV_EOF) then
+            begin
+                //UVERR(err, "read");
+            end;
+        end;
+
+        freemem(buf.base);
+    end;
+
+    procedure on_connect(server_handle : puv_stream_t; status : integer); cdecl;
+    var res : integer;
+        client : pclient_t;
+    begin
+
+        //assert(puv_tcp_t(server_handle) = @server);
+
+        client := getmem(sizeof(client_t));
+        client^.request_num := request_num;
+        inc(request_num);
+
+        uv_tcp_init(uv_default_loop(), @client^.handle);
+        http_parser_init(@client^.parser, HTTP_REQUEST);
+
+        client^.parser.data = client;
+        client^.handle.data = client;
+
+        r := uv_accept(server_handle, puv_stream_t(@client^.handle));
+
+        uv_read_start(puv_stream_t(@client^.handle, on_alloc, @on_read);
+    end;
+
+    procedure after_write(req : puv_write_t; status : integer); cdecl;
+    begin
+        uv_close(puv_handle_t(req^.handle), on_close);
+    end;
+
+    function on_headers_complete(parser : phttp_parser) : integer; cdecl;
+    var
+        client : pclient_t;
+    begin
+        client := pclient_t(parser^.data);
+
+        uv_write(
+            @client^.write_req,
+            puv_stream_t(@client^.handle),
+            @resbuf,
+            1,
+            @after_write
+        );
+
+        result := 1;
+    end;
+
     constructor TLibuvSocketSvr.create(const config : TlibuvSvrConfig);
     begin
         fConfig := config;
