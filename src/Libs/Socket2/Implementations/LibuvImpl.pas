@@ -127,12 +127,6 @@ type
         freemem(client);
     end;
 
-    function on_alloc(client : puv_handle_t; suggested_size : size_t) : uv_buf_t; cdecl;
-    begin
-        result.base := getmem(suggested_size);
-        result.len := suggested_size;
-    end;
-
     procedure on_read(tcp : puv_stream_t; nread : ssize_t; buf : uv_buf_t); cdecl;
     var parsed : size_t;
         client : pclient_t;
@@ -170,7 +164,7 @@ type
     var res : integer;
         client : pclient_t;
     begin
-
+        //TODO handle status < 0
         //assert(puv_tcp_t(server_handle) = @server);
 
         client := getmem(sizeof(client_t));
@@ -185,7 +179,7 @@ type
 
         r := uv_accept(server_handle, puv_stream_t(@client^.handle));
 
-        uv_read_start(puv_stream_t(@client^.handle, on_alloc, @on_read);
+        uv_read_start(puv_stream_t(@client^.handle, @alloc_buffer, @on_read);
     end;
 
     procedure after_write(req : puv_write_t; status : integer); cdecl;
@@ -244,7 +238,7 @@ type
 
         uv_tcp_bind(@server, addr, 0);
 
-        res := uv_listen(puv_stream_t(@server), fConfig.queueSize, @on_new_connection);
+        res := uv_listen(puv_stream_t(@server), fConfig.queueSize, @on_connect);
 
         if (res <> 0) then
         begin
