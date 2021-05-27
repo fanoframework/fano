@@ -15,6 +15,7 @@ tests/bin/*
 tests/bin/unit/*
 !tests/bin/README.md
 !tests/bin/unit/README.md
+vendor
 
 #----------------------------------------------
 # Ignore Free Pascal built-in console IDE generated files
