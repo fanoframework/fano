@@ -6,6 +6,7 @@ TArrayOfKeyValue = KeyValueTypes.TArrayOfKeyValue;
 TNullSerializeable = NullSerializeableImpl.TNullSerializeable;
 TStringSerializeable = StringSerializeableImpl.TStringSerializeable;
 TJsonSerializeable = JsonSerializeableImpl.TJsonSerializeable;
+TJsonRttiSerializeable = JsonRttiSerializeableImpl.TJsonRttiSerializeable;
 TExceptionSerializeable = ExceptionSerializeableImpl.TExceptionSerializeable;
 THashList = HashListImpl.THashList;
 TCompositeList = CompositeListImpl.TCompositeList;
