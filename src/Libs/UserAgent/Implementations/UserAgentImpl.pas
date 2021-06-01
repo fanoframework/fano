@@ -126,6 +126,7 @@ type
         addRule(rules, OS_JAVA, REGEX_JAVA);
         addRule(rules, OS_PALMOS, REGEX_PALMOS);
         addRule(rules, OS_WEBOS, REGEX_WEBOS);
+        addRule(rules, OS_LINUX, REGEX_LINUX);
     end;
 
     procedure TUserAgent.initRules(const rules : IList);
