@@ -37,7 +37,6 @@ type
         function password(const smtpPasw : string) : TAbstractMailerFactory;
         function useTls(const smtpTls : boolean) : TAbstractMailerFactory;
         function useSSL(const smtpSsl : boolean) : TAbstractMailerFactory;
-        function build(const container : IDependencyContainer) : IDependency; virtual; abstract;
     end;
 
 implementation
