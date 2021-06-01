@@ -2,10 +2,10 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit KqueueUnixSvrFactoryImpl;
+unit Inet6SvrFactoryImpl;
 
 interface
 
@@ -19,16 +19,17 @@ uses
 
 type
     (*------------------------------------------------
-     * factory class for socket server using Unix Domain
-     * Socket and FreeBSD kqueue API
+     * factory class for socket server using IP
+     * and select() with IPv6 support
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TKQueueUnixSvrFactory = class (TInterfacedObject, ISocketSvrFactory)
+    TInet6SvrFactory = class (TInterfacedObject, ISocketSvrFactory)
     private
-        fFilename : string;
+        fHost : string;
+        fPort : word;
     public
-        constructor create(const aFilename : string);
+        constructor create(const aHost : string; const aPort : word);
         function build() : IRunnableWithDataNotif;
     end;
 
@@ -39,21 +40,22 @@ uses
     SocketOptsIntf,
     Socket2SvrImpl,
     SocketOptsImpl,
-    UnixSocketImpl,
-    KQueueIoHandlerImpl;
+    Inet6SocketImpl,
+    SelectIoHandlerImpl;
 
-    constructor TKQueueUnixSvrFactory.create(const aFilename : string);
+    constructor TInet6SvrFactory.create(const aHost : string; const aPort : word);
     begin
-        fFilename := aFilename;
+        fHost := aHost;
+        fPort := aPort;
     end;
 
-    function TKQueueUnixSvrFactory.build() : IRunnableWithDataNotif;
+    function TInet6SvrFactory.build() : IRunnableWithDataNotif;
     var sockOpts : ISocketOpts;
     begin
         sockOpts := TSocketOpts.create();
         result := TSocket2Svr.create(
-            TUnixSocket.create(fFilename, sockOpts),
-            TKQueueIoHandler.create(sockOpts)
+            TInet6Socket.create(fHost, fPort, sockOpts),
+            TSelectIoHandler.create(sockOpts)
         );
     end;
 

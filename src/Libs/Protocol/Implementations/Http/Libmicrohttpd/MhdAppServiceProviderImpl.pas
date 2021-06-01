@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit MhdAppServiceProviderImpl;
@@ -14,6 +14,7 @@ interface
 
 uses
 
+    SyncObjs,
     RunnableWithDataNotifIntf,
     DaemonAppServiceProviderIntf,
     ProtocolAppServiceProviderImpl,
@@ -31,6 +32,7 @@ type
     TMhdAppServiceProvider = class (TProtocolAppServiceProvider)
     private
         fServer : IRunnableWithDataNotif;
+        fLock : TCriticalSection;
     public
         constructor create(
             const actualSvc : IDaemonAppServiceProvider;
@@ -44,18 +46,37 @@ implementation
 
 uses
 
+    StdOutIntf,
+    ProtocolProcessorIntf,
+    RunnableIntf,
     MhdConnectionAwareIntf,
     MhdProcessorImpl,
-    MhdStdOutWriterImpl;
+    MhdStdOutWriterImpl,
+    ThreadSafeMhdConnectionAwareImpl,
+    ThreadSafeProtocolProcessorImpl;
 
     constructor TMhdAppServiceProvider.create(
         const actualSvc : IDaemonAppServiceProvider;
         const svrConfig : TMhdSvrConfig
     );
+    var astdout : IStdOut;
+        aConnAware : IMhdConnectionAware;
     begin
+        //create lock before anything
+        fLock := TCriticalSection.create();
         inherited create(actualSvc);
-        fStdOut := TMhdStdOutWriter.create();
-        fProtocol := TMhdProcessor.create(fStdOut as IMhdConnectionAware, svrConfig);
+        aStdOut := TMhdStdOutWriter.create();
+        aConnAware := aStdOut as IMhdConnectionAware;
+        fStdOut := TThreadSafeMhdConnectionAware.create(
+            fLock,
+            aStdOut,
+            aConnAware
+        );
+        fProtocol := TMhdProcessor.create(
+            fLock,
+            fStdOut as IMhdConnectionAware,
+            svrConfig
+        );
         //TMhdProcessor also act as server
         fServer := fProtocol as IRunnableWithDataNotif;
     end;
@@ -64,6 +85,8 @@ uses
     begin
         fServer := nil;
         inherited destroy();
+        //destroy lock after anything
+        fLock.free();
     end;
 
     function TMhdAppServiceProvider.getServer() : IRunnableWithDataNotif;

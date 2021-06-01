@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -19,6 +19,7 @@ uses
     IoHandlerIntf,
     DataAvailListenerIntf,
     ListenSocketIntf,
+    SocketOptsIntf,
     StreamAdapterIntf,
     AbstractIoHandlerImpl,
     BaseUnix,
@@ -165,7 +166,7 @@ uses
     function getTimeout(const timeoutInMs : integer) : TTimeSpec;
     begin
         result.tv_sec := timeoutInMs div 1000;
-        result.tv_nsec = (timeoutInMs mod 1000) * 1000000;
+        result.tv_nsec := (timeoutInMs mod 1000) * 1000000;
     end;
 
     constructor TKqueueIoHandler.create(
@@ -190,7 +191,7 @@ uses
     var ev : TKEvent;
         res : longint;
     begin
-        EV_SET(@ev, fd, EVFILT_READ, EV_ADD, 0, nil, nil);
+        EV_SET(@ev, fd, EVFILT_READ, EV_ADD, 0, 0, nil);
         res := kevent(kqFd, @ev, 1, nil, 0, nil);
         if (res < 0) then
         begin
@@ -209,8 +210,9 @@ uses
         const fd : longint
     );
     var ev : TKEvent;
+        res : cint;
     begin
-        EV_SET(@ev, fd, EVFILT_READ, EV_DELETE, 0, nil, nil);
+        EV_SET(@ev, fd, EVFILT_READ, EV_DELETE, 0, 0, nil);
         res := kevent(kqFd, @ev, 1, nil, 0, nil);
         if (res < 0) then
         begin
@@ -327,7 +329,7 @@ uses
             terminated := false;
             repeat
                 //wait indefinitely until something happen in fListenSocket or epollTerminatePipeIn
-                totFd := kevent(kqFd, nil, 0, events, maxEvents, fTimeoutVal);
+                totFd := kevent(kqFd, nil, 0, events, maxEvents, @fTimeoutVal);
                 if totFd > 0 then
                 begin
                     //one or more file descriptors is ready for I/O, check further
@@ -342,8 +344,7 @@ uses
                 end else
                 if (totFd = 0) then
                 begin
-                    //timeout reached.
-                    //For now, do nothing
+                    handleTimeout();
                 end else
                 if (totFd < 0) then
                 begin
