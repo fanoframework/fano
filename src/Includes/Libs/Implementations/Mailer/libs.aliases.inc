@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -16,3 +16,13 @@ TAbstractMailer = AbstractMailerImpl.TAbstractMailer;
 
 TSendmailMailer = SendmailMailerImpl.TSendmailMailer;
 TSendmailMailerFactory = SendmailMailerFactoryImpl.TSendmailMailerFactory;
+
+{$IFDEF USE_SYNAPSE}
+TSynapseMailer = SynapseMailerImpl.TSynapseMailer;
+TSynapseMailerFactory = SynapseMailerFactoryImpl.TSynapseMailerFactory;
+{$ENDIF}
+
+{$IFDEF USE_INDY}
+TIndyMailer = IndyMailerImpl.TIndyMailer;
+TIndyMailerFactory = IndyMailerFactoryImpl.TIndyMailerFactory;
+{$ENDIF}

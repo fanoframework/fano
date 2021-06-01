@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -158,6 +158,8 @@ uses
     ESockErrorImpl,
     StreamAdapterImpl,
     SockStreamImpl,
+    CloseableIntf,
+    StreamIdIntf,
     CloseableStreamImpl,
     DateUtils;
 
@@ -397,6 +399,10 @@ uses
                     origfds,
                     terminated
                 );
+            end else
+            if totDesc = 0 then
+            begin
+                handleTimeout();
             end;
         until terminated;
     end;
@@ -408,6 +414,9 @@ uses
      *-----------------------------------------------*)
     function TSelectIoHandler.handleClientConnection(clientSocket : longint) : boolean;
     var aStream : TCloseableStream;
+        streamAdapt : IStreamAdapter;
+        closeableStr : ICloseable;
+        streamId : IStreamId;
     begin
         result := true;
         if (assigned(fDataAvailListener)) then
@@ -416,11 +425,10 @@ uses
                 clientSocket,
                 getSockStream(clientSocket)
             );
-            try
-                result := fDataAvailListener.handleData(aStream, self, astream, astream);
-            finally
-                aStream.free();
-            end;
+            streamAdapt := aStream;
+            closeableStr := aStream;
+            streamId := aStream;
+            result := fDataAvailListener.handleData(streamAdapt, self, closeableStr, streamId);
         end;
     end;
 

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -76,8 +76,8 @@ const
 
     REGEX_VER = '([\w._\+]+)';
 
-    REGEX_CHROME = '\bCrMo\b|CriOS|Android.*Chrome/[.0-9]* (Mobile)?';
-    REGEX_FIREFOX = 'fennec|firefox.*maemo|(Mobile|Tablet).*Firefox|Firefox.*Mobile|FxiOS';
+    REGEX_CHROME = 'Chrome/[.0-9]*|\bCrMo\b|CriOS|Android.*Chrome/[.0-9]* (Mobile)?';
+    REGEX_FIREFOX = 'Firefox/[.0-9]*|fennec|firefox.*maemo|(Mobile|Tablet).*Firefox|Firefox.*Mobile|FxiOS';
     REGEX_SAFARI = 'Version.*Mobile.*Safari|Safari.*Mobile|MobileSafari';
     REGEX_EDGE = 'Mobile Safari/[.0-9]* Edge';
     REGEX_OPERA = 'Opera.*Mini|Opera.*Mobi|Android.*Opera|Mobile.*OPR/[0-9.]+$|Coast/[0-9.]+';
@@ -119,6 +119,7 @@ const
     REGEX_WINDOWS_PHONE = 'Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;';
     REGEX_JAVA = 'J2ME/|\bMIDP\b|\bCLDC\b';
     REGEX_WEBOS = 'webOS|hpwOS';
+    REGEX_LINUX = 'Linux';
 
     OS_ANDROID = 'AndroidOS';
     OS_BLACKBERRY = 'BlackBerryOS';
@@ -129,6 +130,7 @@ const
     OS_WINDOWS_PHONE = 'WindowsPhoneOS';
     OS_JAVA = 'JavaOS';
     OS_WEBOS = 'webOS';
+    OS_LINUX = 'Linux';
 
 implementation
 end.

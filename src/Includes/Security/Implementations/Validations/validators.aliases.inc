@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -25,6 +25,7 @@ TUrlValidator = UrlValidatorImpl.TUrlValidator;
 TSlugValidator = SlugValidatorImpl.TSlugValidator;
 TPhoneValidator = PhoneValidatorImpl.TPhoneValidator;
 TMacAddrValidator = MacAddrValidatorImpl.TMacAddrValidator;
+TColorValidator = ColorValidatorImpl.TColorValidator;
 
 TBaseCompositeValidator = BaseCompositeValidatorImpl.TBaseCompositeValidator;
 TCompositeValidator = CompositeValidatorImpl.TCompositeValidator;
@@ -76,6 +77,7 @@ TAfterDateTimeFieldValidator = AfterDateTimeFieldValidatorImpl.TAfterDateTimeFie
 TBeforeDateTimeFieldValidator = BeforeDateTimeFieldValidatorImpl.TBeforeDateTimeFieldValidator;
 
 TUuidValidator = UuidValidatorImpl.TUuidValidator;
+TBase64Validator = Base64ValidatorImpl.TBase64Validator;
 
 TMinLengthValidator = MinLengthValidatorImpl.TMinLengthValidator;
 TMaxLengthValidator = MaxLengthValidatorImpl.TMaxLengthValidator;
@@ -97,12 +99,16 @@ TImageJpgValidator = ImageJpgValidatorImpl.TImageJpgValidator;
 TImageGifValidator = ImageGifValidatorImpl.TImageGifValidator;
 
 TIpv4Validator = Ipv4ValidatorImpl.TIpv4Validator;
+TIpv6Validator = Ipv6ValidatorImpl.TIpv6Validator;
 
 TJsonValidator = JsonValidatorImpl.TJsonValidator;
 
 TFileValidator = FileValidatorImpl.TFileValidator;
-DirectoryValidator = DirectoryValidatorImpl.TDirectoryValidator;
+TDirectoryValidator = DirectoryValidatorImpl.TDirectoryValidator;
 
 TCompareStrValidator = CompareStrValidatorImpl.TCompareStrValidator;
 TEqualStrValidator = EqualStrValidatorImpl.TEqualStrValidator;
 TCaseInsensitiveEqualStrValidator = CaseInsensitiveEqualStrValidatorImpl.TCaseInsensitiveEqualStrValidator;
+
+TStartWithValidator = StartWithValidatorImpl.TStartWithValidator;
+TEndWithValidator = EndWithValidatorImpl.TEndWithValidator;

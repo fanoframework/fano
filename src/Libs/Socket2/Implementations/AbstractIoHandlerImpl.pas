@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -37,6 +37,7 @@ type
         fSockOpts : ISocketOpts;
         fDataAvailListener : IDataAvailListener;
 
+        procedure handleTimeout(); virtual;
         procedure handleAcceptError();
 
         (*!-----------------------------------------------
@@ -180,5 +181,11 @@ uses
                 end;
             end;
         until (res > 0) or (err = ESysEAGAIN) or (err = EsysEWOULDBLOCK);
+    end;
+
+    procedure TAbstractIoHandler.handleTimeout();
+    begin
+        //do something when timeout
+        //TODO: remove too long idle connection
     end;
 end.

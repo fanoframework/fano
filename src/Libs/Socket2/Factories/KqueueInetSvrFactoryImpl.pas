@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit KqueueInetSvrFactoryImpl;
@@ -41,9 +41,9 @@ uses
     Socket2SvrImpl,
     SocketOptsImpl,
     InetSocketImpl,
-    KQueueIoHandlerImpl;
+    KqueueIoHandlerImpl;
 
-    constructor TKQueueInetSvrFactory.create(const aHost : string; const aPort : word);
+    constructor TKqueueInetSvrFactory.create(const aHost : string; const aPort : word);
     begin
         fHost := aHost;
         fPort := aPort;
@@ -55,7 +55,7 @@ uses
         sockOpts := TSocketOpts.create();
         result := TSocket2Svr.create(
             TInetSocket.create(fHost, fPort, sockOpts),
-            TKQueueIoHandler.create(sockOpts)
+            TKqueueIoHandler.create(sockOpts)
         );
     end;
 

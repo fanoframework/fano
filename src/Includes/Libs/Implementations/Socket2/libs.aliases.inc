@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -19,6 +19,7 @@ TSocket2Svr = Socket2SvrImpl.TSocket2Svr;
 TUnixSocket = UnixSocketImpl.TUnixSocket;
 {$ENDIF}
 TInetSocket = InetSocketImpl.TInetSocket;
+TInet6Socket = Inet6SocketImpl.TInet6Socket;
 TBoundSocket = BoundSocketImpl.TBoundSocket;
 
 TAbstractIoHandler = AbstractIoHandlerImpl.TAbstractIoHandler;
@@ -29,18 +30,22 @@ TSelectIoHandler = SelectIoHandlerImpl.TSelectIoHandler;
 
 {$IFDEF FREEBSD}
     {$IFDEF USE_KQUEUE}
-    TKQueueIoHandler = KQueueIoHandlerImpl.TKQueueIoHandler;
+    TKqueueIoHandler = KqueueIoHandlerImpl.TKqueueIoHandler;
     {$ENDIF}
 {$ENDIF}
 
 TSocketOpts = SocketOptsImpl.TSocketOpts;
 
 TInetSvrFactory = InetSvrFactoryImpl.TInetSvrFactory;
+TInet6SvrFactory = Inet6SvrFactoryImpl.TInet6SvrFactory;
+{$IFDEF unix}
 TUnixSvrFactory = UnixSvrFactoryImpl.TUnixSvrFactory;
+{$ENDIF}
 TBoundSvrFactory = BoundSvrFactoryImpl.TBoundSvrFactory;
 
 {$IFDEF LINUX}
 TEpollInetSvrFactory = EpollInetSvrFactoryImpl.TEpollInetSvrFactory;
+TEpollInet6SvrFactory = EpollInet6SvrFactoryImpl.TEpollInet6SvrFactory;
 TEpollUnixSvrFactory = EpollUnixSvrFactoryImpl.TEpollUnixSvrFactory;
 TEpollBoundSvrFactory = EpollBoundSvrFactoryImpl.TEpollBoundSvrFactory;
 {$ENDIF}
@@ -48,6 +53,7 @@ TEpollBoundSvrFactory = EpollBoundSvrFactoryImpl.TEpollBoundSvrFactory;
 {$IFDEF FREEBSD}
     {$IFDEF USE_KQUEUE}
     TKQueueInetSvrFactory = KQueueInetSvrFactoryImpl.TKQueueInetSvrFactory;
+    TKQueueInet6SvrFactory = KQueueInet6SvrFactoryImpl.TKQueueInet6SvrFactory;
     TKQueueUnixSvrFactory = KQueueUnixSvrFactoryImpl.TKQueueUnixSvrFactory;
     TKQueueBoundSvrFactory = KQueueBoundSvrFactoryImpl.TKQueueBoundSvrFactory;
     {$ENDIF}

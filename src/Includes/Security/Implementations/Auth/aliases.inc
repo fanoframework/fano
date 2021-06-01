@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -19,6 +19,7 @@ TCredentials = CredentialTypes.TCredentials;
 TAbstractPasswHashAuth = AbstractPasswHashAuthImpl.TAbstractPasswHashAuth;
 TDbPasswHashAuth = DbPasswHashAuthImpl.TDbPasswHashAuth;
 TStaticCredentialsAuth = StaticCredentialsAuthImpl.TStaticCredentialsAuth;
+TStaticPasswHashAuth = StaticPasswHashAuthImpl.TStaticPasswHashAuth;
 
 TBasicAuthMiddleware = BasicAuthMiddlewareImpl.TBasicAuthMiddleware;
 TStaticCredentialsBasicAuthMiddlewareFactory = StaticCredentialsBasicAuthMiddlewareFactoryImpl.TStaticCredentialsBasicAuthMiddlewareFactory;
@@ -31,3 +32,4 @@ TBearerAuthMiddleware = BearerAuthMiddlewareImpl.TBearerAuthMiddleware;
 TBearerAuthMiddlewareFactory = BearerAuthMiddlewareFactoryImpl.TBearerAuthMiddlewareFactory;
 
 TDbPasswHashAuthFactory = DbPasswHashAuthFactoryImpl.TDbPasswHashAuthFactory;
+TStaticPasswHashAuthFactory = StaticPasswHashAuthFactoryImpl.TStaticPasswHashAuthFactory;
