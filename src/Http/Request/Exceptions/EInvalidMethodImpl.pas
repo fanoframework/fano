@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    ENotImplementedImpl;
 
 type
 
@@ -23,8 +23,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EInvalidMethod = class(Exception)
-    end;
+    EInvalidMethod = class(ENotImplemented);
 
 resourcestring
 

@@ -29,6 +29,8 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
     TBaseErrorHandler = class abstract (TInjectableObject, IErrorHandler)
+    protected
+        procedure writeHeaders(const exc : Exception);
     public
         (*!---------------------------------------------------
          * handle exception
@@ -46,5 +48,24 @@ type
     end;
 
 implementation
+
+uses
+
+    EHttpExceptionImpl;
+
+    procedure TBaseErrorHandler.writeHeaders(const exc : Exception);
+    var httpExc : EHttpException;
+    begin
+        if (exc is EHttpException)then
+        begin
+            httpExc := EHttpException(exc);
+            if (httpExc.headers <> '') then
+            begin
+                //we use write() because we assume headers
+                //contains line ending
+                write(httpExc.headers);
+            end;
+        end;
+    end;
 
 end.

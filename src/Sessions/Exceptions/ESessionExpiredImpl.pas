@@ -15,7 +15,7 @@ interface
 
 uses
 
-    SysUtils;
+    EHttpExceptionImpl;
 
 type
 
@@ -24,8 +24,22 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    ESessionExpired = class(Exception);
+    ESessionExpired = class(EHttpException)
+    public
+        constructor create(
+            const aErrorMsg : string;
+            const respHeaders : string = ''
+        );
+    end;
 
 implementation
+
+    constructor ESessionExpired.create(
+        const aErrorMsg : string;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited create(419, 'Session Expired', aErrorMsg, respHeaders);
+    end;
 
 end.

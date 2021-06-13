@@ -24,7 +24,7 @@ uses
 type
 
     (*!------------------------------------------------
-     * null midlleware class
+     * null middleware class that does nothing
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
