@@ -11,10 +11,11 @@ unit EMethodNotAllowedImpl;
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
 
-    sysutils;
+    EHttpExceptionImpl;
 
 type
 
@@ -25,9 +26,21 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EMethodNotAllowed = class(Exception)
+    EMethodNotAllowed = class(EHttpException)
+    public
+        constructor create(
+            const aErrorMsg : string;
+            const respHeaders : string = ''
+        );
     end;
 
 implementation
 
+    constructor EMethodNotAllowed.create(
+        const aErrorMsg : string;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited create(401, 'Unauthorized', aErrorMsg, respHeaders);
+    end;
 end.

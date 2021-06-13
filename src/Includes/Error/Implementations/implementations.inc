@@ -35,6 +35,8 @@ DecoratorErrorHandlerImpl,
 BoolErrorHandlerImpl,
 NotFoundErrorHandlerImpl,
 MethodNotAllowedErrorHandlerImpl,
+TooManyRequestsErrorHandlerImpl,
+InternalServerErrorHandlerImpl,
 
 FileLogErrorHandlerFactoryImpl,
 ProductionErrorHandlerFactoryImpl,
