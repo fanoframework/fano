@@ -127,7 +127,8 @@ uses
     ENotFoundImpl,
     EDependencyNotFoundImpl,
     EUnauthorizedImpl,
-    EForbiddenImpl;
+    EForbiddenImpl,
+    ETooManyRequestsImpl;
 
     procedure TCoreWebApplication.reset();
     begin
@@ -265,6 +266,12 @@ uses
             on e : EMethodNotAllowed do
             begin
                 errorHandler.handleError(env.enumerator, e, 405, sHttp405Message);
+                reset();
+            end;
+
+            on e : ETooManyRequests do
+            begin
+                errorHandler.handleError(env.enumerator, e, 429, sHttp429Message);
                 reset();
             end;
 

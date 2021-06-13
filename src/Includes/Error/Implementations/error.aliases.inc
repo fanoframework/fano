@@ -10,6 +10,7 @@ TDecoratorErrorHandler = DecoratorErrorHandlerImpl.TDecoratorErrorHandler;
 TBoolErrorHandler = BoolErrorHandlerImpl.TBoolErrorHandler;
 TNotFoundErrorHandler = NotFoundErrorHandlerImpl.TNotFoundErrorHandler;
 TMethodNotAllowedErrorHandler = MethodNotAllowedErrorHandlerImpl.TMethodNotAllowedErrorHandler;
+TTooManyRequestsErrorHandler = TooManyRequestsErrorHandlerImpl.TTooManyRequestsErrorHandler;
 
 TFileLogErrorHandlerFactory = FileLogErrorHandlerFactoryImpl.TFileLogErrorHandlerFactory;
 TProductionErrorHandlerFactory = ProductionErrorHandlerFactoryImpl.TProductionErrorHandlerFactory;

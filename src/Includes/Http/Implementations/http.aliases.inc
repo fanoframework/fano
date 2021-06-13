@@ -21,6 +21,7 @@ EInvalidMethod = EInvalidMethodImpl.EInvalidMethod;
 ENotFound = ENotFoundImpl.ENotFound;
 EForbidden = EForbiddenImpl.EForbidden;
 EUnauthorized = EUnauthorizedImpl.EUnauthorized;
+ETooManyRequests = ETooManyRequestsImpl.ETooManyRequests;
 
 TCookie = CookieImpl.TCookie;
 TCookieFactory = CookieFactoryImpl.TCookieFactory;

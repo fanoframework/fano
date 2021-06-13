@@ -7,12 +7,20 @@
  *}
 
 (*! ---------------------------------------------
- * unit interfaces that is included in fano.pas unit
+ * redeclare all class types in unit inside Libs/Mailer
+ * directory
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
+AbstractRateLimiterImpl,
+DecoratorRateLimiterImpl,
+MemoryRateLimiterImpl,
 
-DispatcherIntf,
-RequestHandlerIntf,
-RequestResponseFactoryIntf,
-HandlerTypes,
+AbstractRequestIdentifierImpl,
+IpAddrRequestIdentifierImpl,
+SessionRequestIdentifierImpl,
+
+ThrottleMiddlewareImpl,
+ThrottleMiddlewareFactoryImpl,
+
+RateTypes,

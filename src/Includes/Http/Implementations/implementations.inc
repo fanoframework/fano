@@ -34,6 +34,7 @@ EInvalidMethodImpl,
 ENotFoundImpl,
 EForbiddenImpl,
 EUnauthorizedImpl,
+ETooManyRequestsImpl,
 
 CookieImpl,
 CookieFactoryImpl,

@@ -35,3 +35,6 @@ ERouteHandlerNotFoundImpl,
 RequestResponseFactoryImpl,
 FcgiRequestResponseFactoryImpl,
 VerbTunnellingRequestResponseFactoryImpl,
+
+FuncRequestHandlerImpl,
+MethodRequestHandlerImpl,

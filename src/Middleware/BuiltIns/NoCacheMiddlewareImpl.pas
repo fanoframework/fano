@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit NullMiddlewareImpl;
+unit NoCacheMiddlewareImpl;
 
 interface
 
@@ -16,38 +16,41 @@ uses
 
     RequestIntf,
     ResponseIntf,
-    MiddlewareIntf,
     RouteArgsReaderIntf,
     RequestHandlerIntf,
-    InjectableObjectImpl;
+    AbstractMiddlewareImpl;
 
 type
 
     (*!------------------------------------------------
-     * null middleware class that does nothing
+     * middleware class that prevent browser from caching
+     * response
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TNullMiddleware = class(TInjectableObject, IMiddleware)
+    TNoCacheMiddleware = class(TAbstractMiddleware)
     public
         function handleRequest(
             const request : IRequest;
             const response : IResponse;
             const args : IRouteArgsReader;
-            const nextMdlwr : IRequestHandler
-        ) : IResponse;
+            const nextMiddleware : IRequestHandler
+        ) : IResponse; override;
     end;
 
 implementation
 
-    function TNullMiddleware.handleRequest(
+    function TNoCacheMiddleware.handleRequest(
         const request : IRequest;
         const response : IResponse;
         const args : IRouteArgsReader;
-        const nextMdlwr : IRequestHandler
+        const nextMiddleware : IRequestHandler
     ) : IResponse;
     begin
-        //intentionally does nothing
-        result := nextMdlwr.handleRequest(request, response, args);
+        result := nextMiddleware.handleRequest(request, response, args);
+        result.headers().setHeader(
+            'Cache-Control',
+            'no-store, no-cache, must-revalidate'
+        );
     end;
 end.

@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit NullMiddlewareImpl;
+unit AbstractMiddlewareImpl;
 
 interface
 
@@ -24,30 +24,20 @@ uses
 type
 
     (*!------------------------------------------------
-     * null middleware class that does nothing
+     * abstract middleware class
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TNullMiddleware = class(TInjectableObject, IMiddleware)
+    TAbstractMiddleware = class abstract (TInjectableObject, IMiddleware)
     public
         function handleRequest(
             const request : IRequest;
             const response : IResponse;
             const args : IRouteArgsReader;
             const nextMdlwr : IRequestHandler
-        ) : IResponse;
+        ) : IResponse; virtual; abstract;
     end;
 
 implementation
 
-    function TNullMiddleware.handleRequest(
-        const request : IRequest;
-        const response : IResponse;
-        const args : IRouteArgsReader;
-        const nextMdlwr : IRequestHandler
-    ) : IResponse;
-    begin
-        //intentionally does nothing
-        result := nextMdlwr.handleRequest(request, response, args);
-    end;
 end.
