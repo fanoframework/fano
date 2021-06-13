@@ -13,6 +13,7 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 AbstractRateLimiterImpl,
+DecoratorRateLimiterImpl,
 MemoryRateLimiterImpl,
 
 AbstractRequestIdentifierImpl,

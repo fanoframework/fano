@@ -13,6 +13,7 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 TAbstractRateLimiter = AbstractRateLimiterImpl.TAbstractRateLimiter;
+TDecoratorRateLimiter = DecoratorRateLimiterImpl.TDecoratorRateLimiter;
 TMemoryRateLimiter = MemoryRateLimiterImpl.TMemoryRateLimiter;
 
 TAbstractRequestIdentifier = AbstractRequestIdentifierImpl.TAbstractRequestIdentifier;

@@ -63,8 +63,8 @@ uses
 
 const
 
-    //default limit is 5000 req/sec
-    DEFAULT_OPERATIONS = 5000;
+    //default limit is 1 req/sec
+    DEFAULT_OPERATIONS = 1;
     DEFAULT_INTERVAL = 1;
 
     constructor TThrottleMiddlewareFactory.create();
