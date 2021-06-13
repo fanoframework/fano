@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit ESessionInvalidImpl;
+unit EGoneImpl;
 
 interface
 
@@ -19,29 +19,29 @@ uses
 
 type
 
-
     (*!------------------------------------------------
-     * Exception that is raised when valid session
-     * cannot be found in storage
+     * Exception that is raised when requested resource
+     * no longer available and there is no forwarding address.
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
-     *-----------------------------------------------*)
-    ESessionInvalid = class(EHttpException)
+     *-------------------------------------------------*)
+    EGone = class(EHttpException)
     public
         constructor create(
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+
     end;
 
 implementation
 
-    constructor ESessionInvalid.create(
+    constructor EGone.create(
         const aErrorMsg : string;
         const respHeaders : string = ''
     );
     begin
-        inherited create(419, 'Session Invalid', aErrorMsg, respHeaders);
+        inherited create(410, 'Gone', aErrorMsg, respHeaders);
     end;
 
 end.

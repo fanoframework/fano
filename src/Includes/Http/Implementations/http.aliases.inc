@@ -22,6 +22,7 @@ EForbidden = EForbiddenImpl.EForbidden;
 ENotFound = ENotFoundImpl.ENotFound;
 EMethodNotAllowed = EMethodNotAllowedImpl.EMethodNotAllowed;
 ENotAcceptable = ENotAcceptableImpl.ENotAcceptable;
+EGone = EGoneImpl.EGone;
 EUnsupportedMediaType = EUnsupportedMediaTypeImpl.EUnsupportedMediaType;
 EUnprocessableEntity = EUnprocessableEntityImpl.EUnprocessableEntity;
 ETooManyRequests = ETooManyRequestsImpl.ETooManyRequests;
