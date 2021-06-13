@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit EForbiddenImpl;
+unit EBadRequestImpl;
 
 interface
 
@@ -20,12 +20,11 @@ uses
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when client does not have
-     * right to resource.
+     * Exception that is raised when request syntax is invalid.
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EForbidden = class(EHttpException)
+    EBadRequest = class(EHttpException)
     public
         constructor create(
             const aErrorMsg : string;
@@ -36,12 +35,12 @@ type
 
 implementation
 
-    constructor EForbidden.create(
+    constructor EBadRequest.create(
         const aErrorMsg : string;
         const respHeaders : string = ''
     );
     begin
-        inherited create(403, 'Forbidden', aErrorMsg, respHeaders);
+        inherited create(400, 'Bad Request', aErrorMsg, respHeaders);
     end;
 
 end.

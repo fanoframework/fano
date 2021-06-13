@@ -67,7 +67,7 @@ uses
 
     SysUtils,
     HeadersIntf,
-    HttpCodeResponseImpl;
+    ETooManyRequestsImpl;
 
     constructor TThrottleMiddleware.create(
         const rateLimiter : IRateLimiter;
@@ -95,25 +95,23 @@ uses
         const args : IRouteArgsReader;
         const next : IRequestHandler
     ) : IResponse;
-    const TOO_MANY_REQUESTS = 429;
     var status : TLimitStatus;
-        hdrs : IHeaders;
+        headers : string;
     begin
         status := fRateLimiter.limit(fIdentifier[request], fRate);
         if status.limitReached then
         begin
-            result := THttpCodeResponse.create(
-                //rfc 6585
-                TOO_MANY_REQUESTS,
-                'Too Many Requests',
-                response.headers(),
-                response.body()
+            headers :=
+                'X-RateLimit-Limit: ' + inttostr(status.limit) + #13#10 +
+                'X-RateLimit-Remaining: ' + inttostr(status.remainingAttempts) + #13#10 +
+                'X-RateLimit-Reset: ' + inttostr(status.resetTimestamp) + #13#10 +
+                'Retry-After: ' + inttostr(status.retryAfter) + #13#10;
+
+            raise ETooManyRequests.create(
+                'Too many requests. Please try again after ' +
+                inttostr(status.retryAfter) +' seconds',
+                headers
             );
-            hdrs := result.headers();
-            hdrs.setHeader('X-RateLimit-Limit', inttostr(status.limit));
-            hdrs.setHeader('X-RateLimit-Remaining',inttostr(status.remainingAttempts));
-            hdrs.setHeader('X-RateLimit-Reset', inttostr(status.resetTimestamp));
-            hdrs.setHeader('Retry-After', inttostr(status.retryAfter));
         end else
         begin
             result := next.handleRequest(request, response, args);

@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit EForbiddenImpl;
+unit ENotImplementedImpl;
 
 interface
 
@@ -20,12 +20,12 @@ uses
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when client does not have
-     * right to resource.
+     * Exception that is raised when server encountered
+     * request method it can not support.
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EForbidden = class(EHttpException)
+    ENotImplemented = class(EHttpException)
     public
         constructor create(
             const aErrorMsg : string;
@@ -36,12 +36,12 @@ type
 
 implementation
 
-    constructor EForbidden.create(
+    constructor ENotImplemented.create(
         const aErrorMsg : string;
         const respHeaders : string = ''
     );
     begin
-        inherited create(403, 'Forbidden', aErrorMsg, respHeaders);
+        inherited create(501, 'Not Implemented', aErrorMsg, respHeaders);
     end;
 
 end.

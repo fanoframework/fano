@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit EForbiddenImpl;
+unit EGoneImpl;
 
 interface
 
@@ -20,12 +20,12 @@ uses
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when client does not have
-     * right to resource.
+     * Exception that is raised when requested resource
+     * no longer available and there is no forwarding address.
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EForbidden = class(EHttpException)
+    EGone = class(EHttpException)
     public
         constructor create(
             const aErrorMsg : string;
@@ -36,12 +36,12 @@ type
 
 implementation
 
-    constructor EForbidden.create(
+    constructor EGone.create(
         const aErrorMsg : string;
         const respHeaders : string = ''
     );
     begin
-        inherited create(403, 'Forbidden', aErrorMsg, respHeaders);
+        inherited create(410, 'Gone', aErrorMsg, respHeaders);
     end;
 
 end.

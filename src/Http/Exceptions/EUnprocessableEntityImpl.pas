@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit EForbiddenImpl;
+unit EUnprocessableEntityImpl;
 
 interface
 
@@ -20,12 +20,12 @@ uses
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when client does not have
-     * right to resource.
+     * Exception that is raised when well-formed request
+     * contain semantic error
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EForbidden = class(EHttpException)
+    EUnprocessableEntity = class(EHttpException)
     public
         constructor create(
             const aErrorMsg : string;
@@ -36,12 +36,12 @@ type
 
 implementation
 
-    constructor EForbidden.create(
+    constructor EUnprocessableEntity.create(
         const aErrorMsg : string;
         const respHeaders : string = ''
     );
     begin
-        inherited create(403, 'Forbidden', aErrorMsg, respHeaders);
+        inherited create(422, 'Unprocessable Entity', aErrorMsg, respHeaders);
     end;
 
 end.

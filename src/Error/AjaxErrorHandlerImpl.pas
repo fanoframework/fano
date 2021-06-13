@@ -50,6 +50,7 @@ type
 
 implementation
 
+
     function TAjaxErrorHandler.getStackTrace(const e : Exception) : string;
     var
         i, len: integer;
@@ -99,6 +100,7 @@ implementation
     begin
         writeln('Content-Type: application/json');
         writeln('Status: ', intToStr(status), ' ', msg);
+        writeHeaders(exc);
         writeln();
         writeln(getStackTrace(exc));
         result := self;

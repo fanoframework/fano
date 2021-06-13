@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    EUnprocessableEntityImpl;
 
 type
 
@@ -23,8 +23,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EInvalidCookie = class(Exception)
-    end;
+    EInvalidCookie = class(EUnprocessableEntity);
 
 implementation
 

@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    ENotFoundImpl;
 
 type
 
@@ -23,8 +23,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    ERouteHandlerNotFound = class(Exception)
-    end;
+    ERouteHandlerNotFound = class(ENotFound);
 
 implementation
 

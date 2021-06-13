@@ -15,15 +15,26 @@ TFileResponseStream = FileResponseStreamImpl.TFileResponseStream;
 TUploadedFile = UploadedFileImpl.TUploadedFile;
 TUploadedFileCollection = UploadedFileCollectionImpl.TUploadedFileCollection;
 
+EHttpException = EHttpExceptionImpl.EHttpException;
+EBadRequest = EBadRequestImpl.EBadRequest;
+EUnauthorized = EUnauthorizedImpl.EUnauthorized;
+EForbidden = EForbiddenImpl.EForbidden;
+ENotFound = ENotFoundImpl.ENotFound;
+EMethodNotAllowed = EMethodNotAllowedImpl.EMethodNotAllowed;
+ENotAcceptable = ENotAcceptableImpl.ENotAcceptable;
+EGone = EGoneImpl.EGone;
+EUnsupportedMediaType = EUnsupportedMediaTypeImpl.EUnsupportedMediaType;
+EUnprocessableEntity = EUnprocessableEntityImpl.EUnprocessableEntity;
+ETooManyRequests = ETooManyRequestsImpl.ETooManyRequests;
+EInternalServerError = EInternalServerErrorImpl.EInternalServerError;
+ENotImplemented = ENotImplementedImpl.ENotImplemented;
+
+EInvalidMethod = EInvalidMethodImpl.EInvalidMethod;
 EInvalidRequest = EInvalidRequestImpl.EInvalidRequest;
 EInvalidUploadedFile = EInvalidUploadedFileImpl.EInvalidUploadedFile;
-EInvalidMethod = EInvalidMethodImpl.EInvalidMethod;
-ENotFound = ENotFoundImpl.ENotFound;
-EForbidden = EForbiddenImpl.EForbidden;
-EUnauthorized = EUnauthorizedImpl.EUnauthorized;
-ETooManyRequests = ETooManyRequestsImpl.ETooManyRequests;
 
 TCookie = CookieImpl.TCookie;
 TCookieFactory = CookieFactoryImpl.TCookieFactory;
+EInvalidCookie = EInvalidCookieImpl.EInvalidCookie;
 
 TUri = UriImpl.TUri;

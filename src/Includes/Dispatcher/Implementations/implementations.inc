@@ -29,7 +29,6 @@ XSimpleDispatcherFactoryImpl,
 MwExecDispatcherFactoryImpl,
 
 EInvalidDispatcherImpl,
-EMethodNotAllowedImpl,
 ERouteHandlerNotFoundImpl,
 
 RequestResponseFactoryImpl,
