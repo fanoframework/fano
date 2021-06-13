@@ -12,7 +12,5 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-DispatcherIntf,
-RequestHandlerIntf,
-RequestResponseFactoryIntf,
-HandlerTypes,
+RateLimiterIntf,
+RequestIdentifierIntf,
