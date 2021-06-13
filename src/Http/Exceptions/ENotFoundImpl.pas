@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    EHttpExceptionImpl;
 
 type
 
@@ -23,8 +23,22 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    ENotFound = class(Exception);
+    ENotFound = class(EHttpException)
+    public
+        constructor create(
+            const aErrorMsg : string;
+            const respHeaders : string = ''
+        );
+    end;
 
 implementation
+
+    constructor ENotFound.create(
+        const aErrorMsg : string;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited create(404, 'Not Found', aErrorMsg, respHeaders);
+    end;
 
 end.

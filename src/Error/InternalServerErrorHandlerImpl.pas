@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit NullErrorHandlerImpl;
+unit InternalServerErrorHandlerImpl;
 
 interface
 
@@ -14,42 +14,43 @@ interface
 {$H+}
 
 uses
+
     sysutils,
     ErrorHandlerIntf,
     EnvironmentEnumeratorIntf,
-    BaseErrorHandlerImpl;
+    ConditionalErrorHandlerImpl;
 
 type
 
     (*!---------------------------------------------------
-     * default error handler to surpress error message
+     * error handler that handle EInternalServerError exception
+     * or pass to default error handler
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
-    TNullErrorHandler = class(TBaseErrorHandler)
-    public
-        function handleError(
+    TInternalServerErrorHandler = class (TConditionalErrorHandler)
+    protected
+        function condition(
             const env : ICGIEnvironmentEnumerator;
             const exc : Exception;
-            const status : integer = 500;
-            const msg : string  = 'Internal Server Error'
-        ) : IErrorHandler; override;
+            const status : integer;
+            const msg : string
+        ) : boolean; override;
     end;
 
 implementation
 
-    function TNullErrorHandler.handleError(
+uses
+
+    EInternalServerErrorImpl;
+
+    function TInternalServerErrorHandler.condition(
         const env : ICGIEnvironmentEnumerator;
         const exc : Exception;
-        const status : integer = 500;
-        const msg : string  = 'Internal Server Error'
-    ) : IErrorHandler;
+        const status : integer;
+        const msg : string
+    ) : boolean;
     begin
-        writeln('Content-Type: text/html');
-        writeln('Status: ', intToStr(status), ' ', msg);
-        writeHeaders(exc);
-        writeln();
-        writeln('');
-        result := self;
+        result := exc is EInternalServerError;
     end;
 end.

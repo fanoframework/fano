@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit EForbiddenImpl;
+unit EInternalServerErrorImpl;
 
 interface
 
@@ -20,12 +20,12 @@ uses
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when client does not have
-     * right to resource.
+     * Exception that is raised when server encountered
+     * situation it can not handle.
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EForbidden = class(EHttpException)
+    EInternalServerError = class(EHttpException)
     public
         constructor create(
             const aErrorMsg : string;
@@ -36,12 +36,12 @@ type
 
 implementation
 
-    constructor EForbidden.create(
+    constructor EInternalServerError.create(
         const aErrorMsg : string;
         const respHeaders : string = ''
     );
     begin
-        inherited create(403, 'Forbidden', aErrorMsg, respHeaders);
+        inherited create(500, 'Internal Server Error', aErrorMsg, respHeaders);
     end;
 
 end.
