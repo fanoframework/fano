@@ -14,16 +14,16 @@ interface
 
 uses
 
-    sysutils;
+    EUnprocessableEntityImpl;
 
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when header line is invalie
+     * Exception that is raised when header line is invalid
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EInvalidHeader = class(Exception);
+    EInvalidHeader = class(EUnprocessableEntity);
 
 implementation
 

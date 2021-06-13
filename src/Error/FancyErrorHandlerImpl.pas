@@ -106,6 +106,7 @@ implementation
     begin
         writeln('Content-Type: text/html');
         writeln('Status: ', intToStr(status), ' ', msg);
+        writeHeaders(exc);
         writeln();
         writeln(STR_HEAD_HTML);
         writeln(getStackTrace(exc));

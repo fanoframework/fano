@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    EInternalServerErrorImpl;
 
 type
 
@@ -24,8 +24,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    ERouteArgNotFound = class(Exception)
-    end;
+    ERouteArgNotFound = EInternalServerError;
 
 implementation
 
