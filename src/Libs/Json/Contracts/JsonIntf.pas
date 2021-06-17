@@ -13,10 +13,6 @@ interface
 {$MODE OBJFPC}
 {$H+}
 
-uses
-
-    ReadOnlyKeyValuePairIntf;
-
 type
 
     (*!------------------------------------------------

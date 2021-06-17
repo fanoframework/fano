@@ -24,7 +24,7 @@ uses
 type
 
     (*!------------------------------------------------
-     * basic class that can parse template and replace
+     * basic class that can parse mustache template and replace
      * variable placeholder with value
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
