@@ -31,6 +31,11 @@ type
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
 
     end;
 
@@ -43,5 +48,15 @@ implementation
     begin
         inherited create(415, 'Unsupported Media Type', aErrorMsg, respHeaders);
     end;
+
+    constructor EUnsupportedMediaType.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(415, 'Unsupported Media Type', aErrorMsg, args, respHeaders);
+    end;
+
 
 end.

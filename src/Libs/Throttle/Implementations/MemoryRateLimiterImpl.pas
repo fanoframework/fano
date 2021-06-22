@@ -21,15 +21,6 @@ uses
 
 type
 
-    TRateLimitRec = record
-        //total number of operations recorded
-        currentOperations : integer;
-
-        //timestamp when this record should be reset
-        resetTimestamp : integer;
-    end;
-    PRateLimitRec = ^TRateLimitRec;
-
     (*!------------------------------------------------
      * rate limiter implementation which store its
      * state in memory
@@ -42,43 +33,39 @@ type
 
         procedure cleanUpStorage();
 
+    protected
+        function readRateLimit(
+            const identifier : shortstring
+        ) : PRateLimitRec; override;
+
         (*!------------------------------------------------
-         * count number of operations identified by identifier
-         *-----------------------------------------------
-         * @param identifier unique identifier
-         * @param rate rate configuration
-         * @return total number of operation and reset timestamp
+         * insert new rate limit info to storage
+         *
+         * @param identifier id to locate info from storage
          *-----------------------------------------------*)
-        function countHit(
+        procedure createRateLimit(
             const identifier : shortstring;
-            const rate : TRate
-        ) : TRateLimitRec;
+            rateLimit: PRateLimitRec
+        ); override;
+
+        (*!------------------------------------------------
+         * update rate limit info to storage
+         *
+         * @param identifier id to locate info from storage
+         *-----------------------------------------------*)
+        procedure updateRateLimit(
+            const identifier : shortstring;
+            rateLimit: PRateLimitRec
+        ); override;
 
     public
         constructor create();
         destructor destroy(); override;
 
-        (*!------------------------------------------------
-         * check if number of operations identified by identifier
-         * not exceed rate configuration
-         *-----------------------------------------------
-         * @param identifier unique identifier
-         * @param rate rate configuration
-         * @return limit status
-         *-----------------------------------------------*)
-        function limit(
-            const identifier : shortstring;
-            const rate : TRate
-        ) : TLimitStatus; override;
-
     end;
 
 implementation
 
-uses
-
-    SysUtils,
-    DateUtils;
 
     constructor TMemoryRateLimiter.create();
     begin
@@ -104,73 +91,38 @@ uses
         fStorage.free();
     end;
 
-    (*!------------------------------------------------
-     * count number of operations identified by identifier
-     *-----------------------------------------------
-     * @param identifier unique identifier
-     * @param rate rate configuration
-     * @return total number of operation and reset timestamp
-     *-----------------------------------------------*)
-    function TMemoryRateLimiter.countHit(
-        const identifier : shortstring;
-        const rate : TRate
-    ) : TRateLimitRec;
-    var rateLimitRec : PRateLimitRec;
-        currTimestamp : integer;
+    function TMemoryRateLimiter.readRateLimit(
+        const identifier : shortstring
+    ) : PRateLimitRec;
     begin
-        currTimestamp := DateTimeToUnix(Now);
-        rateLimitRec := fStorage.find(identifier);
-        if (rateLimitRec = nil) then
-        begin
-            //identifier not yet tracked, store it
-            new(rateLimitRec);
-            rateLimitRec^.currentOperations := 1;
-            rateLimitRec^.resetTimestamp := currTimestamp + rate.interval;
-            fStorage.add(identifier, rateLimitRec);
-        end else
-        begin
-            if currTimestamp < rateLimitRec^.resetTimestamp then
-            begin
-                inc(rateLimitRec^.currentOperations);
-            end else
-            begin
-                //expired, reset its value
-                rateLimitRec^.currentOperations := 1;
-                rateLimitRec^.resetTimestamp := currTimestamp + rate.interval;
-            end;
-        end;
-
-        result := rateLimitRec^;
+        result := fStorage.find(identifier);
     end;
 
     (*!------------------------------------------------
-     * check if number of operations identified by identifier
-     * not exceed rate configuration
-     *-----------------------------------------------
-     * @param identifier unique identifier
-     * @param rate rate configuration
-     * @return boolean true if limit is reached, false otherwise
+     * insert new rate limit info to storage
+     *
+     * @param identifier id to locate info from storage
      *-----------------------------------------------*)
-    function TMemoryRateLimiter.limit(
+    procedure TMemoryRateLimiter.createRateLimit(
         const identifier : shortstring;
-        const rate : TRate
-    ) : TLimitStatus;
-    var statusHit : TRateLimitRec;
+        rateLimit: PRateLimitRec
+    );
     begin
-        statusHit := countHit(identifier, rate);
-        result.limitReached := (statusHit.currentOperations > rate.operations);
-        result.limit := rate.operations;
-        result.remainingAttempts := rate.operations - statusHit.currentOperations;
-        if result.remainingAttempts < 0 then
-        begin
-            result.remainingAttempts := 0;
-        end;
-        result.resetTimestamp := statusHit.resetTimestamp;
-        result.retryAfter := statusHit.resetTimestamp - DateTimeToUnix(Now);
-        if (result.retryAfter < 0) then
-        begin
-            result.retryAfter := 0;
-        end;
+        fStorage.add(identifier, rateLimit);
+    end;
+
+    (*!------------------------------------------------
+     * update rate limit info to storage
+     *
+     * @param identifier id to locate info from storage
+     *-----------------------------------------------*)
+    procedure TMemoryRateLimiter.updateRateLimit(
+        const identifier : shortstring;
+        rateLimit: PRateLimitRec
+    );
+    begin
+        //intentionally does nothing as update record means
+        //data in fStorage will be updated too
     end;
 
 end.

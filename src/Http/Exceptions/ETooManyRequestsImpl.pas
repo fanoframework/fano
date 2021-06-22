@@ -29,6 +29,11 @@ type
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
     end;
 
 implementation
@@ -39,6 +44,15 @@ implementation
     );
     begin
         inherited create(429, 'Too Many Requests', aErrorMsg, respHeaders);
+    end;
+
+    constructor ETooManyRequests.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(429, 'Too Many Requests', aErrorMsg, args, respHeaders);
     end;
 
 end.
