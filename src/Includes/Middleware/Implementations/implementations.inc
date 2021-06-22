@@ -12,6 +12,7 @@
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
+MiddlewareExecutorImpl,
 
 MiddlewareListImpl,
 NullMiddlewareListImpl,

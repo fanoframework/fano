@@ -31,6 +31,11 @@ type
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
 
     end;
 
@@ -42,6 +47,15 @@ implementation
     );
     begin
         inherited create(422, 'Unprocessable Entity', aErrorMsg, respHeaders);
+    end;
+
+    constructor EUnprocessableEntity.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(422, 'Unprocessable Entity', aErrorMsg, args, respHeaders);
     end;
 
 end.

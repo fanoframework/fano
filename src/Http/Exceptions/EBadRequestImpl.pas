@@ -31,6 +31,11 @@ type
             const respHeaders : string = ''
         );
 
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
     end;
 
 implementation
@@ -41,6 +46,15 @@ implementation
     );
     begin
         inherited create(400, 'Bad Request', aErrorMsg, respHeaders);
+    end;
+
+    constructor EBadRequest.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(400, 'Bad Request', aErrorMsg, args, respHeaders);
     end;
 
 end.
