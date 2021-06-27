@@ -30,6 +30,11 @@ type
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
     end;
 
 implementation
@@ -40,6 +45,15 @@ implementation
     );
     begin
         inherited create(401, 'Unauthorized', aErrorMsg, respHeaders);
+    end;
+
+    constructor EUnauthorized.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(401, 'Unauthorized', aErrorMsg, args, respHeaders);
     end;
 
 end.

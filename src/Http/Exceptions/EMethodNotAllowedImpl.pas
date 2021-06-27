@@ -32,6 +32,12 @@ type
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
     end;
 
 implementation
@@ -41,6 +47,15 @@ implementation
         const respHeaders : string = ''
     );
     begin
-        inherited create(401, 'Unauthorized', aErrorMsg, respHeaders);
+        inherited create(405, 'Method Not Allowed', aErrorMsg, respHeaders);
+    end;
+
+    constructor EMethodNotAllowed.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(405, 'Method Not Allowed', aErrorMsg, args, respHeaders);
     end;
 end.

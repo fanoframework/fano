@@ -31,6 +31,11 @@ type
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
 
     end;
 
@@ -42,6 +47,15 @@ implementation
     );
     begin
         inherited create(500, 'Internal Server Error', aErrorMsg, respHeaders);
+    end;
+
+    constructor EInternalServerError.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(500, 'Internal Server Error', aErrorMsg, args, respHeaders);
     end;
 
 end.

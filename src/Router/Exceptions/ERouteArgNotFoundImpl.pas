@@ -24,7 +24,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    ERouteArgNotFound = EInternalServerError;
+    ERouteArgNotFound = class(EInternalServerError);
 
 implementation
 

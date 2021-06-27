@@ -31,6 +31,11 @@ type
             const aErrorMsg : string;
             const respHeaders : string = ''
         );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
 
     end;
 
@@ -42,6 +47,15 @@ implementation
     );
     begin
         inherited create(501, 'Not Implemented', aErrorMsg, respHeaders);
+    end;
+
+    constructor ENotImplemented.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(501, 'Not Implemented', aErrorMsg, args, respHeaders);
     end;
 
 end.

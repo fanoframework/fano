@@ -7,21 +7,11 @@
  *}
 
 (*! ---------------------------------------------
- * redeclare all class types in unit inside Libs/Mailer
- * directory
+ * data types declaration unit that is included in fano.pas unit
+ * This file is provided so we can use fano framework
+ * by using only one uses to simplify things.
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
-AbstractRateLimiterImpl,
-DecoratorRateLimiterImpl,
-MemoryRateLimiterImpl,
-DbRateLimiterImpl,
 
-AbstractRequestIdentifierImpl,
-IpAddrRequestIdentifierImpl,
-SessionRequestIdentifierImpl,
-
-ThrottleMiddlewareImpl,
-ThrottleMiddlewareFactoryImpl,
-
-RateTypes,
+{$INCLUDE Libs/Consts/consts.inc}
