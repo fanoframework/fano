@@ -25,6 +25,7 @@ resourcestring
     sHttp403Message = 'Forbidden';
     sHttp404Message = 'Not Found';
     sHttp405Message = 'Method Not Allowed';
+    sHttp429Message = 'Too Many Requests';
     sHttp501Message = 'Not Implemented';
     sErrInvalidDispatcher = 'Dispatcher instance is invalid';
 

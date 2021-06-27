@@ -6,6 +6,9 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
+TLogLevelType = LogLevelTypes.TLogLevelType;
+TLogLevelTypes = LogLevelTypes.TLogLevelTypes;
+
 TAbstractLogger = AbstractLoggerImpl.TAbstractLogger;
 TFileLogger = FileLoggerImpl.TFileLogger;
 TFileLoggerFactory = FileLoggerFactoryImpl.TFileLoggerFactory;

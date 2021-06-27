@@ -120,6 +120,7 @@ uses
     ResponseIntf,
 
     //exception-related units
+    EHttpExceptionImpl,
     ERouteHandlerNotFoundImpl,
     EMethodNotAllowedImpl,
     EInvalidMethodImpl,
@@ -127,7 +128,8 @@ uses
     ENotFoundImpl,
     EDependencyNotFoundImpl,
     EUnauthorizedImpl,
-    EForbiddenImpl;
+    EForbiddenImpl,
+    ETooManyRequestsImpl;
 
     procedure TCoreWebApplication.reset();
     begin
@@ -232,45 +234,14 @@ uses
         try
             result := doExecute(container, env, stdin, dispatcher);
         except
-            on e : EInvalidRequest do
+            on e : EHttpException do
             begin
-                errorHandler.handleError(env.enumerator, e, 400, sHttp400Message);
-                reset();
-            end;
-
-            on e : EUnauthorized do
-            begin
-                errorHandler.handleError(env.enumerator, e, 401, sHttp401Message);
-                reset();
-            end;
-
-            on e : EForbidden do
-            begin
-                errorHandler.handleError(env.enumerator, e, 403, sHttp403Message);
-                reset();
-            end;
-
-            on e : ERouteHandlerNotFound do
-            begin
-                errorHandler.handleError(env.enumerator, e, 404, sHttp404Message);
-                reset();
-            end;
-
-            on e : ENotFound do
-            begin
-                errorHandler.handleError(env.enumerator, e, 404, sHttp404Message);
-                reset();
-            end;
-
-            on e : EMethodNotAllowed do
-            begin
-                errorHandler.handleError(env.enumerator, e, 405, sHttp405Message);
-                reset();
-            end;
-
-            on e : EInvalidMethod do
-            begin
-                errorHandler.handleError(env.enumerator, e, 501, sHttp501Message);
+                errorHandler.handleError(
+                    env.enumerator,
+                    e,
+                    e.httpCode,
+                    e.httpMessage
+                );
                 reset();
             end;
 

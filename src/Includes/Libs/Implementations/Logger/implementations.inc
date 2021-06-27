@@ -7,6 +7,7 @@
  *}
 
 {------------ Begin logger-related------------------}
+LogLevelTypes,
 AbstractLoggerImpl,
 
 FileLoggerImpl,

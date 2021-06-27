@@ -11,20 +11,51 @@ unit EForbiddenImpl;
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
 
-    sysutils;
+    EHttpExceptionImpl;
 
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when resource is not found.
+     * Exception that is raised when client does not have
+     * right to resource.
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EForbidden = class(Exception);
+    EForbidden = class(EHttpException)
+    public
+        constructor create(
+            const aErrorMsg : string;
+            const respHeaders : string = ''
+        );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
+
+    end;
 
 implementation
+
+    constructor EForbidden.create(
+        const aErrorMsg : string;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited create(403, 'Forbidden', aErrorMsg, respHeaders);
+    end;
+
+    constructor EForbidden.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(403, 'Forbidden', aErrorMsg, args, respHeaders);
+    end;
 
 end.

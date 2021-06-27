@@ -15,7 +15,7 @@ interface
 
 uses
 
-    SysUtils;
+    EHttpExceptionImpl;
 
 type
 
@@ -26,8 +26,36 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    ESessionInvalid = class(Exception);
+    ESessionInvalid = class(EHttpException)
+    public
+        constructor create(
+            const aErrorMsg : string;
+            const respHeaders : string = ''
+        );
+        constructor createFmt(
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
+    end;
 
 implementation
+
+    constructor ESessionInvalid.create(
+        const aErrorMsg : string;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited create(419, 'Session Invalid', aErrorMsg, respHeaders);
+    end;
+
+    constructor ESessionInvalid.createFmt(
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(419, 'Session Invalid', aErrorMsg, args, respHeaders);
+    end;
 
 end.

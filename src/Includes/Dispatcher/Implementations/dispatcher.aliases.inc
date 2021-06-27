@@ -1,5 +1,4 @@
 EInvalidDispatcher = EInvalidDispatcherImpl.EInvalidDispatcher;
-EMethodNotAllowed = EMethodNotAllowedImpl.EMethodNotAllowed;
 ERouteHandlerNotFound = ERouteHandlerNotFoundImpl.ERouteHandlerNotFound;
 
 TDispatcher = DispatcherImpl.TDispatcher;
@@ -20,3 +19,6 @@ TMwExecDispatcherFactory = MwExecDispatcherFactoryImpl.TMwExecDispatcherFactory;
 TRequestResponseFactory = RequestResponseFactoryImpl.TRequestResponseFactory;
 TFcgiRequestResponseFactory = FcgiRequestResponseFactoryImpl.TFcgiRequestResponseFactory;
 TVerbTunnellingRequestResponseFactory = VerbTunnellingRequestResponseFactoryImpl.TVerbTunnellingRequestResponseFactory;
+
+TFuncRequestHandler = FuncRequestHandlerImpl.TFuncRequestHandler;
+TMethodRequestHandler = MethodRequestHandlerImpl.TMethodRequestHandler;

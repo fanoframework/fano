@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    EInternalServerErrorImpl;
 
 type
 
@@ -24,8 +24,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EInvalidDispatcher = class(Exception)
-    end;
+    EInvalidDispatcher = class(EInternalServerError);
 
 implementation
 
