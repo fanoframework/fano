@@ -22,6 +22,7 @@ uses
     RdbmsFieldIntf,
     db,
     sqldb,
+    ProxySQLConnectorImpl,
     InjectableObjectImpl;
 
 type
@@ -34,18 +35,19 @@ type
      *-------------------------------------------------*)
     TRdbms = class(TInjectableObject, IRdbms, IRdbmsResultSet, IRdbmsFields, IRdbmsField, IRdbmsStatement)
     private
-        dbInstance : TSQLConnector;
         fQuery : TSQLQuery;
-        currentField : TField;
-        connectionType : string;
+        fCurrentField : TField;
+        fConnectionType : string;
 
         //true if current sql is if data retrival command (SELECT)
         //false for everything else
-        isSelect : boolean;
+        fIsSelect : boolean;
 
         procedure raiseExceptionIfInvalidConnection();
         procedure raiseExceptionIfInvalidQuery();
         procedure raiseExceptionIfInvalidField();
+    protected
+        fDbInstance : TProxySQLConnector;
     public
         constructor create(const connType : string);
         destructor destroy(); override;
@@ -66,7 +68,7 @@ type
             const username : string;
             const password : string;
             const port : word
-        ) : IRdbms;
+        ) : IRdbms; virtual;
 
         (*!------------------------------------------------
         * get current database name
@@ -242,17 +244,17 @@ resourcestring
 
     constructor TRdbms.create(const connType : string);
     begin
-        dbInstance := nil;
+        fDbInstance := nil;
         fQuery := nil;
-        currentField := nil;
-        connectionType := connType;
+        fCurrentField := nil;
+        fConnectionType := connType;
     end;
 
     destructor TRdbms.destroy();
     begin
         fQuery.free();
-        dbInstance.free();
-        currentField := nil;
+        fDbInstance.free();
+        fCurrentField := nil;
         inherited destroy();
     end;
 
@@ -274,26 +276,26 @@ resourcestring
         const port : word
     ) : IRdbms;
     begin
-        if (dbInstance = nil) then
+        if (fDbInstance = nil) then
         begin
-            dbInstance := TSQLConnector.create(nil);
-            dbInstance.transaction := TSQLTransaction.create(dbInstance);
+            fDbInstance := TProxySQLConnector.create(nil);
+            fDbInstance.transaction := TSQLTransaction.create(fDbInstance);
 
             //by default SqlDb TSQLConnection will start transaction as needed
             //we do not want that. let developer decide for themselves
             //but somehow SqlDb always want to use transaction so following
             //line will cause EDatabaseError
             //"Error: attempt to implicitly start a transaction on Connection..."
-            //dbInstance.Transaction.Options := [stoExplicitStart];
+            //fDbInstance.Transaction.Options := [stoExplicitStart];
 
             fQuery := TSQLQuery.create(nil);
-            fQuery.database := dbInstance;
+            fQuery.database := fDbInstance;
         end;
-        dbInstance.ConnectorType := connectionType;
-        dbInstance.HostName := host;
-        dbInstance.DatabaseName := dbname;
-        dbInstance.UserName := username;
-        dbInstance.Password := password;
+        fDbInstance.ConnectorType := fConnectionType;
+        fDbInstance.HostName := host;
+        fDbInstance.DatabaseName := dbname;
+        fDbInstance.UserName := username;
+        fDbInstance.Password := password;
         result := self;
     end;
 
@@ -304,12 +306,12 @@ resourcestring
      *-------------------------------------------------*)
     function TRdbms.getDbName() : string;
     begin
-        result := dbInstance.DatabaseName;
+        result := fDbInstance.DatabaseName;
     end;
 
     procedure TRdbms.raiseExceptionIfInvalidConnection();
     begin
-        if (dbInstance = nil) then
+        if (fDbInstance = nil) then
         begin
             raise EInvalidDbConnection.create(sErrInvalidConnection);
         end;
@@ -332,7 +334,7 @@ resourcestring
     function TRdbms.beginTransaction() : IRdbms;
     begin
         raiseExceptionIfInvalidConnection();
-        dbInstance.startTransaction();
+        fDbInstance.startTransaction();
         result := self;
     end;
 
@@ -344,7 +346,7 @@ resourcestring
     function TRdbms.rollback() : IRdbms;
     begin
         raiseExceptionIfInvalidConnection();
-        dbInstance.transaction.rollback();
+        fDbInstance.transaction.rollback();
         result := self;
     end;
 
@@ -356,7 +358,7 @@ resourcestring
     function TRdbms.commit() : IRdbms;
     begin
         raiseExceptionIfInvalidConnection();
-        dbInstance.transaction.commit();
+        fDbInstance.transaction.commit();
         result := self;
     end;
 
@@ -424,7 +426,7 @@ resourcestring
     function TRdbms.fieldByName(const name : shortstring) : IRdbmsField;
     begin
         raiseExceptionIfInvalidQuery();
-        currentField := fQuery.fields.fieldByName(name);
+        fCurrentField := fQuery.fields.fieldByName(name);
         result := self;
     end;
 
@@ -436,16 +438,16 @@ resourcestring
     function TRdbms.fieldByIndex(const indx : integer) : IRdbmsField;
     begin
         raiseExceptionIfInvalidConnection();
-        currentField := fQuery.fields.fieldByNumber(indx);
+        fCurrentField := fQuery.fields.fieldByNumber(indx);
         result := self;
     end;
 
     (*!------------------------------------------------
-     * test currentField for validity and raise exception
+     * test fCurrentField for validity and raise exception
      *-------------------------------------------------*)
     procedure TRdbms.raiseExceptionIfInvalidField();
     begin
-        if (currentField = nil) then
+        if (fCurrentField = nil) then
         begin
             raise EInvalidDbField.create(sErrInvalidField);
         end;
@@ -459,7 +461,7 @@ resourcestring
     function TRdbms.asBoolean() : boolean;
     begin
         raiseExceptionIfInvalidField();
-        result := currentField.asBoolean;
+        result := fCurrentField.asBoolean;
     end;
 
     (*!------------------------------------------------
@@ -470,7 +472,7 @@ resourcestring
     function TRdbms.asInteger() : integer;
     begin
         raiseExceptionIfInvalidField();
-        result := currentField.asInteger;
+        result := fCurrentField.asInteger;
     end;
 
     (*!------------------------------------------------
@@ -481,7 +483,7 @@ resourcestring
     function TRdbms.asString() : string;
     begin
         raiseExceptionIfInvalidField();
-        result := currentField.asString;
+        result := fCurrentField.asString;
     end;
 
     (*!------------------------------------------------
@@ -492,7 +494,7 @@ resourcestring
     function TRdbms.asFloat() : double;
     begin
         raiseExceptionIfInvalidField();
-        result := currentField.asFloat;
+        result := fCurrentField.asFloat;
     end;
 
     (*!------------------------------------------------
@@ -503,7 +505,7 @@ resourcestring
     function TRdbms.asDateTime() : TDateTime;
     begin
         raiseExceptionIfInvalidField();
-        result := currentField.asDateTime;
+        result := fCurrentField.asDateTime;
     end;
 
     (*!------------------------------------------------
@@ -517,7 +519,7 @@ resourcestring
         raiseExceptionIfInvalidQuery();
         //make sure to close first.
         fQuery.close();
-        isSelect := (pos('select', trimLeft(lowerCase(sql))) = 1);
+        fIsSelect := (pos('select', trimLeft(lowerCase(sql))) = 1);
         fQuery.sql.text := sql;
         result := self;
     end;
@@ -530,7 +532,7 @@ resourcestring
     function TRdbms.execute() : IRdbmsResultSet;
     begin
         raiseExceptionIfInvalidConnection();
-        if (isSelect) then
+        if (fIsSelect) then
         begin
             fQuery.open();
         end else

@@ -29,3 +29,6 @@ TFirebirdDbFactory = FirebirdDbFactoryImpl.TFirebirdDbFactory;
 
 TSQLiteDb = SQLiteDbImpl.TSQLiteDb;
 TSQLiteDbFactory = SQLiteDbFactoryImpl.TSQLiteDbFactory;
+
+TOdbcDb = OdbcDbImpl.TOdbcDb;
+TOdbcDbFactory = OdbcDbFactoryImpl.TOdbcDbFactory;
