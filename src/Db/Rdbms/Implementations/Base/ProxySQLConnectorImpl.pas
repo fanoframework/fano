@@ -5,25 +5,30 @@
  * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
-unit ERouteMatcherImpl;
+
+unit ProxySQLConnectorImpl;
 
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
 
-    EInternalServerErrorImpl;
+    sqldb;
 
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when route matching
-     * is failed
+     * internal class which expose proxy TSqlconnection
+     * as public
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    ERouteMatcher = class(EInternalServerError);
+    TProxySQLConnector = class(TSQLConnector)
+    public
+        property proxy;
+    end;
 
 implementation
 

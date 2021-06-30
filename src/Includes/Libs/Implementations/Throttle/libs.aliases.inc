@@ -15,6 +15,7 @@
 TAbstractRateLimiter = AbstractRateLimiterImpl.TAbstractRateLimiter;
 TDecoratorRateLimiter = DecoratorRateLimiterImpl.TDecoratorRateLimiter;
 TMemoryRateLimiter = MemoryRateLimiterImpl.TMemoryRateLimiter;
+TDbRateLimiter = DbRateLimiterImpl.TDbRateLimiter;
 
 TAbstractRequestIdentifier = AbstractRequestIdentifierImpl.TAbstractRequestIdentifier;
 TIpAddrRequestIdentifier = IpAddrRequestIdentifierImpl.TIpAddrRequestIdentifier;

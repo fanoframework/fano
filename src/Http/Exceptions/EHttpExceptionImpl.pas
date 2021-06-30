@@ -45,6 +45,14 @@ type
             const respHeaders : string = ''
         );
 
+        constructor createFmt(
+            const ahttpCode :word;
+            const ahttpMessage : string;
+            const aErrorMsg : string;
+            const args: array of const;
+            const respHeaders : string = ''
+        );
+
         property httpCode : word read fCode write fCode;
         property httpMessage : string read fHttpMessage write fHttpMessage;
         property headers : string read fHeaders write fHeaders;
@@ -60,6 +68,20 @@ implementation
     );
     begin
         inherited create(aErrorMsg);
+        fCode := ahttpCode;
+        fHttpMessage := ahttpMessage;
+        fHeaders := respHeaders;
+    end;
+
+    constructor EHttpException.createFmt(
+        const ahttpCode :word;
+        const ahttpMessage : string;
+        const aErrorMsg : string;
+        const args: array of const;
+        const respHeaders : string = ''
+    );
+    begin
+        inherited createFmt(aErrorMsg, args);
         fCode := ahttpCode;
         fHttpMessage := ahttpMessage;
         fHeaders := respHeaders;
