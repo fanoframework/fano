@@ -21,10 +21,11 @@ uses
 
 type
 
-    {------------------------------------------------
-     default error handler to surpress error message
-     @author Zamrony P. Juhara <zamronypj@yahoo.com>
-    -----------------------------------------------}
+    (*!---------------------------------------------------
+     * default error handler to surpress error message
+     *
+     * @author Zamrony P. Juhara <zamronypj@yahoo.com>
+     *---------------------------------------------------*)
     TNullErrorHandler = class(TBaseErrorHandler)
     public
         function handleError(
@@ -46,6 +47,7 @@ implementation
     begin
         writeln('Content-Type: text/html');
         writeln('Status: ', intToStr(status), ' ', msg);
+        writeHeaders(exc);
         writeln();
         writeln('');
         result := self;

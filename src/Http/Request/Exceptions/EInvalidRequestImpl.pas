@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    EBadRequestImpl;
 
 type
 
@@ -23,8 +23,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EInvalidRequest = class(Exception)
-    end;
+    EInvalidRequest = class(EBadRequest);
 
 implementation
 

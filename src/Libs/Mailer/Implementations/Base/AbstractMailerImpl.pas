@@ -27,7 +27,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TAbstractMailer = class(TInjectableObject, IMailer)
+    TAbstractMailer = class abstract (TInjectableObject, IMailer)
     private
         fSenderEmail : string;
         fSenderName : string;

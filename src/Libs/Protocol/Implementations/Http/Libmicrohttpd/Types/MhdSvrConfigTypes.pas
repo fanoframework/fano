@@ -36,6 +36,9 @@ type
         tlsKey : string;
         //SSL certificate file path
         tlsCert : string;
+
+        threaded : boolean;
+        threadPoolSize : integer;
     end;
 
 implementation

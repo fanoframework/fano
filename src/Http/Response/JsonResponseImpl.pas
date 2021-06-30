@@ -18,7 +18,8 @@ uses
     ResponseIntf,
     ResponseStreamIntf,
     HeadersIntf,
-    CloneableIntf;
+    CloneableIntf,
+    SerializeableIntf;
 
 type
     (*!------------------------------------------------
@@ -32,6 +33,10 @@ type
         responseStream : IResponseStream;
     public
         constructor create(const hdrs : IHeaders; const json : string);
+        constructor create(
+            const hdrs : IHeaders;
+            const serializer : ISerializeable
+        );
         destructor destroy(); override;
 
         (*!------------------------------------
@@ -72,6 +77,23 @@ uses
     begin
         httpHeaders := hdrs;
         responseStream := TResponseStream.create(TStringStream.create(json));
+    end;
+
+    constructor TJsonResponse.create(
+        const hdrs : IHeaders;
+        const serializer : ISerializeable
+    );
+    var jsonSerializer : ISerializeable;
+    begin
+        //const cause no reference be counted, need to copy to tmp variable
+        //so reference count is increased to avoid memory leak
+        //(we can remove const but prefer to use it)
+        jsonSerializer := serializer;
+        try
+            create(hdrs, jsonSerializer.serialize());
+        finally
+            jsonSerializer := nil;
+        end;
     end;
 
     destructor TJsonResponse.destroy();
