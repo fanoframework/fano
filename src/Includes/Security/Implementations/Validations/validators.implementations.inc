@@ -101,3 +101,6 @@ DirectoryValidatorImpl,
 CompareStrValidatorImpl,
 EqualStrValidatorImpl,
 CaseInsensitiveEqualStrValidatorImpl,
+
+StartWithValidatorImpl,
+EndWithValidatorImpl,

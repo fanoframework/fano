@@ -109,3 +109,6 @@ TDirectoryValidator = DirectoryValidatorImpl.TDirectoryValidator;
 TCompareStrValidator = CompareStrValidatorImpl.TCompareStrValidator;
 TEqualStrValidator = EqualStrValidatorImpl.TEqualStrValidator;
 TCaseInsensitiveEqualStrValidator = CaseInsensitiveEqualStrValidatorImpl.TCaseInsensitiveEqualStrValidator;
+
+TStartWithValidator = StartWithValidatorImpl.TStartWithValidator;
+TEndWithValidator = EndWithValidatorImpl.TEndWithValidator;
