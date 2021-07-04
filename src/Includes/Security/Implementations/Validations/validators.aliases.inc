@@ -49,6 +49,23 @@ TCompareIntValidator = CompareIntValidatorImpl.TCompareIntValidator;
 TEqualIntValidator = EqualIntValidatorImpl.TEqualIntValidator;
 TLessThanValidator = LessThanValidatorImpl.TLessThanValidator;
 TGreaterThanValidator = GreaterThanValidatorImpl.TGreaterThanValidator;
+TLessOrEqualThanValidator = LessOrEqualThanValidatorImpl.TLessOrEqualThanValidator;
+TGreaterOrEqualThanValidator = GreaterOrEqualThanValidatorImpl.TGreaterOrEqualThanValidator;
+TBetweenValidator = BetweenValidatorImpl.TBetweenValidator;
+
+TCompareFloatValidator = CompareFloatValidatorImpl.TCompareFloatValidator;
+TFloatLessThanValidator = FloatLessThanValidatorImpl.TFloatLessThanValidator;
+TFloatGreaterThanValidator = FloatGreaterThanValidatorImpl.TFloatGreaterThanValidator;
+TFloatLessOrEqualThanValidator = FloatLessOrEqualThanValidatorImpl.TFloatLessOrEqualThanValidator;
+TFloatGreaterOrEqualThanValidator = FloatGreaterOrEqualThanValidatorImpl.TFloatGreaterOrEqualThanValidator;
+TFloatBetweenValidator = FloatBetweenValidatorImpl.TFloatBetweenValidator;
+
+TCompareCurrencyValidator = CompareCurrencyValidatorImpl.TCompareCurrencyValidator;
+TCurrLessThanValidator = CurrLessThanValidatorImpl.TCurrLessThanValidator;
+TCurrGreaterThanValidator = CurrGreaterThanValidatorImpl.TCurrGreaterThanValidator;
+TCurrLessOrEqualThanValidator = CurrLessOrEqualThanValidatorImpl.TCurrLessOrEqualThanValidator;
+TCurrGreaterOrEqualThanValidator = CurrGreaterOrEqualThanValidatorImpl.TCurrGreaterOrEqualThanValidator;
+TCurrBetweenValidator = CurrBetweenValidatorImpl.TCurrBetweenValidator;
 
 TFloatValidator = FloatValidatorImpl.TFloatValidator;
 TNumericValidator = NumericValidatorImpl.TNumericValidator;
@@ -112,3 +129,6 @@ TCaseInsensitiveEqualStrValidator = CaseInsensitiveEqualStrValidatorImpl.TCaseIn
 
 TStartWithValidator = StartWithValidatorImpl.TStartWithValidator;
 TEndWithValidator = EndWithValidatorImpl.TEndWithValidator;
+
+TLatitudeValidator = LatitudeValidatorImpl.TLatitudeValidator;
+TLongitudeValidator = LongitudeValidatorImpl.TLongitudeValidator;
