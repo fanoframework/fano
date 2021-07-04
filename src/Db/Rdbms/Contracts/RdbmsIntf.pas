@@ -15,7 +15,6 @@ interface
 
 uses
 
-    RdbmsResultSetIntf,
     RdbmsStatementIntf;
 
 type
