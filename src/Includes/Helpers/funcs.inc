@@ -7,11 +7,11 @@
  *}
 
 (*! ---------------------------------------------
- * data types declaration unit that is included in fano.pas unit
+ * helper function declaration units that is included in fano.pas unit
  * This file is provided so we can use fano framework
  * by using only one uses to simplify things.
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
-KeyValueTypes,
-PlaceholderTypes,
+FileUtils,
+StringUtils; //note: this is last unit so semicolon is intentional

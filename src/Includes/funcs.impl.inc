@@ -7,11 +7,12 @@
  *}
 
 (*! ---------------------------------------------
- * data types declaration unit that is included in fano.pas unit
+ * redeclare implementation aliases that is included in fano.pas unit
  * This file is provided so we can use fano framework
  * by using only one uses to simplify things.
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
-KeyValueTypes,
-PlaceholderTypes,
+
+{$INCLUDE Helpers/funcs.impl.inc}
+
