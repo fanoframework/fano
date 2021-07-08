@@ -26,8 +26,16 @@ uses
 
 type
 
+    TOnLimitReachedEvent = function (
+        const status : TLimitStatus;
+        const request : IRequest;
+        const response : IResponse;
+        const args : IRouteArgsReader;
+        const next : IRequestHandler
+    ) : IResponse of object;
+
     (*!------------------------------------------------
-     * abstract rate limiter implementation
+     * rate limiter implementation
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
@@ -36,11 +44,21 @@ type
         fRateLimiter : IRateLimiter;
         fIdentifier : IRequestIdentifier;
         fRate : TRate;
+        fOnLimitReached : TOnLimitReachedEvent;
+
+        function defaultLimitReach(
+            const status : TLimitStatus;
+            const request : IRequest;
+            const response : IResponse;
+            const args : IRouteArgsReader;
+            const next : IRequestHandler
+        ) : IResponse;
     public
         constructor create(
             const rateLimiter : IRateLimiter;
             const identifier : IRequestIdentifier;
-            const rate : TRate
+            const rate : TRate;
+            const evLimitReached : TOnLimitReachedEvent = nil
         );
 
         (*!---------------------------------------
@@ -72,12 +90,41 @@ uses
     constructor TThrottleMiddleware.create(
         const rateLimiter : IRateLimiter;
         const identifier : IRequestIdentifier;
-        const rate : TRate
+        const rate : TRate;
+        const evLimitReached : TOnLimitReachedEvent = nil
     );
     begin
         fRateLimiter := rateLimiter;
         fIdentifier := identifier;
         fRate := rate;
+        fOnLimitReached := @defaultLimitReach;
+        if (evLimitReached <> nil) then
+        begin
+            fOnLimitReached := @evLimitReached;
+        end;
+    end;
+
+    function TThrottleMiddleware.defaultLimitReach(
+        const status : TLimitStatus;
+        const request : IRequest;
+        const response : IResponse;
+        const args : IRouteArgsReader;
+        const next : IRequestHandler
+    ) : IResponse;
+    var
+        headers : string;
+    begin
+        headers :=
+            'X-RateLimit-Limit: ' + inttostr(status.limit) + #13#10 +
+            'X-RateLimit-Remaining: ' + inttostr(status.remainingAttempts) + #13#10 +
+            'X-RateLimit-Reset: ' + inttostr(status.resetTimestamp) + #13#10 +
+            'Retry-After: ' + inttostr(status.retryAfter) + #13#10;
+
+        raise ETooManyRequests.create(
+            'Too many requests. Please try again after ' +
+            inttostr(status.retryAfter) +' seconds',
+            headers
+        );
     end;
 
     (*!---------------------------------------
@@ -101,17 +148,10 @@ uses
         status := fRateLimiter.limit(fIdentifier[request], fRate);
         if status.limitReached then
         begin
-            headers :=
-                'X-RateLimit-Limit: ' + inttostr(status.limit) + #13#10 +
-                'X-RateLimit-Remaining: ' + inttostr(status.remainingAttempts) + #13#10 +
-                'X-RateLimit-Reset: ' + inttostr(status.resetTimestamp) + #13#10 +
-                'Retry-After: ' + inttostr(status.retryAfter) + #13#10;
-
-            raise ETooManyRequests.create(
-                'Too many requests. Please try again after ' +
-                inttostr(status.retryAfter) +' seconds',
-                headers
-            );
+            if (Assigned(fOnLimitReached)) then
+            begin
+                result := fOnLimitReached(status, request, response, args, next);
+            end;
         end else
         begin
             result := next.handleRequest(request, response, args);
