@@ -33,6 +33,7 @@ type
         fRate : TRate;
         fRateLimiter : IRateLimiter;
         fRequestIdentifier : IRequestIdentifier;
+        fOnLimitReached : TOnLimitReachedEvent;
     public
         constructor create();
         function rateLimiter(const limiter : IRateLimiter) : TThrottleMiddlewareFactory;
@@ -43,6 +44,8 @@ type
         function ratePerMinute(const numOperations : integer) : TThrottleMiddlewareFactory;
         function ratePerHour(const numOperations : integer) : TThrottleMiddlewareFactory;
         function ratePerDay(const numOperations : integer) : TThrottleMiddlewareFactory;
+
+        function onLimitReached(const limitReachedEv : TOnLimitReachedEvent) : TThrottleMiddlewareFactory;
 
         (*!---------------------------------------
          * build middleware instance
@@ -76,6 +79,7 @@ const
         //rate
         fRate.operations := DEFAULT_OPERATIONS;
         fRate.interval := DEFAULT_INTERVAL;
+        fOnLimitReached := nil;
     end;
 
     function TThrottleMiddlewareFactory.rateLimiter(
@@ -137,12 +141,19 @@ const
         result := self;
     end;
 
+    function TThrottleMiddlewareFactory.onLimitReached(const limitReachedEv : TOnLimitReachedEvent) : TThrottleMiddlewareFactory;
+    begin
+        fOnLimitReached := limitReachedEv;
+        result := self;
+    end;
+
     function TThrottleMiddlewareFactory.build(const container : IDependencyContainer) : IDependency;
     begin
         result := TThrottleMiddleware.create(
             fRateLimiter,
             fRequestIdentifier,
-            fRate
+            fRate,
+            fOnLimitReached
         );
     end;
 

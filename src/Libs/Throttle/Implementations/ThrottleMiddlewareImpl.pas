@@ -26,14 +26,6 @@ uses
 
 type
 
-    TOnLimitReachedEvent = function (
-        const status : TLimitStatus;
-        const request : IRequest;
-        const response : IResponse;
-        const args : IRouteArgsReader;
-        const next : IRequestHandler
-    ) : IResponse of object;
-
     (*!------------------------------------------------
      * rate limiter implementation
      *
@@ -100,7 +92,7 @@ uses
         fOnLimitReached := @defaultLimitReach;
         if (evLimitReached <> nil) then
         begin
-            fOnLimitReached := @evLimitReached;
+            fOnLimitReached := evLimitReached;
         end;
     end;
 
@@ -143,15 +135,11 @@ uses
         const next : IRequestHandler
     ) : IResponse;
     var status : TLimitStatus;
-        headers : string;
     begin
         status := fRateLimiter.limit(fIdentifier[request], fRate);
         if status.limitReached then
         begin
-            if (Assigned(fOnLimitReached)) then
-            begin
-                result := fOnLimitReached(status, request, response, args, next);
-            end;
+            result := fOnLimitReached(status, request, response, args, next);
         end else
         begin
             result := next.handleRequest(request, response, args);

@@ -13,6 +13,13 @@ interface
 {$MODE OBJFPC}
 {$H+}
 
+uses
+
+    RequestIntf,
+    ResponseIntf,
+    RequestHandlerIntf,
+    RouteArgsReaderIntf;
+
 type
 
     TRate = record
@@ -34,6 +41,14 @@ type
         //number of seconds after counter will be reset
         retryAfter : integer;
     end;
+
+    TOnLimitReachedEvent = function (
+        const status : TLimitStatus;
+        const request : IRequest;
+        const response : IResponse;
+        const args : IRouteArgsReader;
+        const next : IRequestHandler
+    ) : IResponse of object;
 
 implementation
 

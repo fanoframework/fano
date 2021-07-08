@@ -21,9 +21,9 @@ TAbstractRequestIdentifier = AbstractRequestIdentifierImpl.TAbstractRequestIdent
 TIpAddrRequestIdentifier = IpAddrRequestIdentifierImpl.TIpAddrRequestIdentifier;
 TSessionRequestIdentifier = SessionRequestIdentifierImpl.TSessionRequestIdentifier;
 
-TOnLimitReachedEvent = ThrottleMiddlewareImpl.TOnLimitReachedEvent;
 TThrottleMiddleware = ThrottleMiddlewareImpl.TThrottleMiddleware;
 TThrottleMiddlewareFactory = ThrottleMiddlewareFactoryImpl.TThrottleMiddlewareFactory;
 
 TRate = RateTypes.TRate;
 TLimitStatus = RateTypes.TLimitStatus;
+TOnLimitReachedEvent = RateTypes.TOnLimitReachedEvent;
