@@ -30,7 +30,7 @@
      * @param delimiter string to separate each
      * @param values array of string to join
      *-----------------------------------------------*)
-    function join(const delimiter : string; const values : array of string) : string; inline;
+    function join(const delimiter : string; const values : array of string) : string;
 
     (*!------------------------------------------------
      * generate slug

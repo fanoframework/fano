@@ -8,3 +8,4 @@
 
 IRateLimiter = RateLimiterIntf.IRateLimiter;
 IRequestIdentifier = RequestIdentifierIntf.IRequestIdentifier;
+IThrottleRequest = ThrottleRequestIntf.IThrottleRequest;

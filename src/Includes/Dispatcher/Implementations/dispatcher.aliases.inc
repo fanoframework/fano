@@ -7,6 +7,7 @@ TVerbTunnellingDispatcher = VerbTunnellingDispatcherImpl.TVerbTunnellingDispatch
 TXDispatcher = XDispatcherImpl.TXDispatcher;
 TXSimpleDispatcher = XSimpleDispatcherImpl.TXSimpleDispatcher;
 TMwExecDispatcher = MwExecDispatcherImpl.TMwExecDispatcher;
+TMaintenanceModeDispatcher = MaintenanceModeDispatcherImpl.TMaintenanceModeDispatcher;
 
 TDispatcherFactory = DispatcherFactoryImpl.TDispatcherFactory;
 TSimpleDispatcherFactory = SimpleDispatcherFactoryImpl.TSimpleDispatcherFactory;
@@ -15,6 +16,7 @@ TVerbTunnellingDispatcherFactory = VerbTunnellingDispatcherFactoryImpl.TVerbTunn
 TXDispatcherFactory = XDispatcherFactoryImpl.TXDispatcherFactory;
 TXSimpleDispatcherFactory = XSimpleDispatcherFactoryImpl.TXSimpleDispatcherFactory;
 TMwExecDispatcherFactory = MwExecDispatcherFactoryImpl.TMwExecDispatcherFactory;
+TMaintenanceModeDispatcherFactory = MaintenanceModeDispatcherFactoryImpl.TMaintenanceModeDispatcherFactory;
 
 TRequestResponseFactory = RequestResponseFactoryImpl.TRequestResponseFactory;
 TFcgiRequestResponseFactory = FcgiRequestResponseFactoryImpl.TFcgiRequestResponseFactory;

@@ -28,6 +28,9 @@ EUnprocessableEntity = EUnprocessableEntityImpl.EUnprocessableEntity;
 ETooManyRequests = ETooManyRequestsImpl.ETooManyRequests;
 EInternalServerError = EInternalServerErrorImpl.EInternalServerError;
 ENotImplemented = ENotImplementedImpl.ENotImplemented;
+EBadGateway = EBadGatewayImpl.EBadGateway;
+EServiceUnavailable = EServiceUnavailableImpl.EServiceUnavailable;
+EGatewayTimeout = EGatewayTimeoutImpl.EGatewayTimeout;
 
 EInvalidMethod = EInvalidMethodImpl.EInvalidMethod;
 EInvalidRequest = EInvalidRequestImpl.EInvalidRequest;
