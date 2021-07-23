@@ -20,8 +20,11 @@ DbRateLimiterImpl,
 AbstractRequestIdentifierImpl,
 IpAddrRequestIdentifierImpl,
 SessionRequestIdentifierImpl,
+QueryParamRequestIdentifierImpl,
 
 ThrottleMiddlewareImpl,
+NonBlockingThrottleMiddlewareImpl,
 ThrottleMiddlewareFactoryImpl,
+NonBlockingThrottleMiddlewareFactoryImpl,
 
 RateTypes,
