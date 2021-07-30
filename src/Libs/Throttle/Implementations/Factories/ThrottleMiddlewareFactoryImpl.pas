@@ -12,6 +12,7 @@ interface
 
 {$MODE OBJFPC}
 {$H+}
+
 uses
 
     DependencyIntf,
@@ -29,7 +30,7 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
     TThrottleMiddlewareFactory = class(TFactory, IDependencyFactory)
-    private
+    protected
         fRate : TRate;
         fRateLimiter : IRateLimiter;
         fRequestIdentifier : IRequestIdentifier;
@@ -61,21 +62,19 @@ uses
     MemoryRateLimiterImpl,
     IpAddrRequestIdentifierImpl;
 
-const
-
-    //default limit is 1 req/sec
-    DEFAULT_OPERATIONS = 1;
-    DEFAULT_INTERVAL = 1;
-
     constructor TThrottleMiddlewareFactory.create();
+    const
+        //default limit is 1 req/sec
+        DEFAULT_OPERATIONS_ONE_REQUEST = 1;
+        DEFAULT_INTERVAL_ONE_SECOND = 1;
     begin
         //default rate limiter using memory storage
         fRateLimiter := TMemoryRateLimiter.create();
         //default identifier is IP address
         fRequestIdentifier := TIpAddrRequestIdentifier.create();
         //rate
-        fRate.operations := DEFAULT_OPERATIONS;
-        fRate.interval := DEFAULT_INTERVAL;
+        fRate.operations := DEFAULT_OPERATIONS_ONE_REQUEST;
+        fRate.interval := DEFAULT_INTERVAL_ONE_SECOND;
     end;
 
     function TThrottleMiddlewareFactory.rateLimiter(

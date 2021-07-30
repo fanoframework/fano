@@ -14,4 +14,4 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 KeyValueTypes,
-PlaceholderTypes; //note: this is last unit so semicolon is intentional
+PlaceholderTypes,

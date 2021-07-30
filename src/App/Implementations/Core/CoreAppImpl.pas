@@ -118,18 +118,9 @@ uses
 
     SysUtils,
     ResponseIntf,
-
-    //exception-related units
-    EHttpExceptionImpl,
-    ERouteHandlerNotFoundImpl,
-    EMethodNotAllowedImpl,
-    EInvalidMethodImpl,
-    EInvalidRequestImpl,
-    ENotFoundImpl,
-    EDependencyNotFoundImpl,
-    EUnauthorizedImpl,
-    EForbiddenImpl,
-    ETooManyRequestsImpl;
+    SerializeableIntf,
+    ExceptionSerializeableImpl,
+    EHttpExceptionImpl;
 
     procedure TCoreWebApplication.reset();
     begin
@@ -172,6 +163,7 @@ uses
      * constructed
      *-----------------------------------------------*)
     function TCoreWebApplication.initialize(const container : IDependencyContainer) : boolean;
+    var errSerializable : ISerializeable;
     begin
         try
             fAppSvc.register(container);
@@ -181,10 +173,9 @@ uses
             on e : Exception do
             begin
                 result := false;
-                //TODO : improve exception handling
                 writeln('Fail to initialize application.');
-                writeln('Exception: ', e.ClassName);
-                writeln('Message: ', e.Message);
+                errSerializable := TExceptionSerializeable.create(e);
+                writeln(errSerializable.serialize());
             end;
         end;
     end;

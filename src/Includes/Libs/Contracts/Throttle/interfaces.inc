@@ -14,3 +14,4 @@
 
 RateLimiterIntf,
 RequestIdentifierIntf,
+ThrottleRequestIntf,
