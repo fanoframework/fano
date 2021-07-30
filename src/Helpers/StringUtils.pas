@@ -100,6 +100,10 @@ uses
      *-----------------------------------------------*)
     function slug(const originalStr : string) : string;
     begin
-        result := ReplaceRegExpr('[\W\s]+', lowercase(trim(originalStr)), '-', true);
+        result := trim(originalStr);
+        if (result <> '') then
+        begin
+            result := ReplaceRegExpr('[\W\s]+', lowercase(result), '-', true);
+        end;
     end;
 end.

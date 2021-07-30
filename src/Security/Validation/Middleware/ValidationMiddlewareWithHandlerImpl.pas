@@ -67,6 +67,14 @@ type
 
 implementation
 
+uses
+
+    EInvalidValidatorImpl;
+
+resourcestring
+
+    sErrValidatorCannotBeNil = 'Validator can not be nil';
+    sErrHandlerCannotBeNil = 'Validation error handler can not be nil';
 
     constructor TValidationMiddlewareWithHandler.create(
         const validationInst : IRequestValidator;
@@ -74,7 +82,17 @@ implementation
     );
     begin
         fValidation := validationInst;
+
+        if (fValidation = nil) then
+        begin
+            raise EInvalidValidator.create(sErrValidatorCannotBeNil);
+        end;
+
         fValidationErrorHandler := validationErrorHandler;
+        if (fValidationErrorHandler = nil) then
+        begin
+            raise EInvalidValidator.create(sErrHandlerCannotBeNil);
+        end;
     end;
 
     destructor TValidationMiddlewareWithHandler.destroy();

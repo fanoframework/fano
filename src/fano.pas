@@ -17,6 +17,7 @@ uses
     {$INCLUDE Includes/interfaces.inc}
     {$INCLUDE Includes/implementations.inc}
     {$INCLUDE Includes/types.inc}
+    {$INCLUDE Includes/funcs.inc}
 
 type
     (*!-----------------------------------------------
@@ -31,11 +32,14 @@ type
 
     {$INCLUDE Includes/interfaces.aliases.inc}
     {$INCLUDE Includes/implementations.aliases.inc}
+    {$INCLUDE Includes/funcs.aliases.inc}
 
 const
 
     {$INCLUDE Includes/consts.inc}
 
 implementation
+
+    {$INCLUDE Includes/funcs.impl.inc}
 
 end.

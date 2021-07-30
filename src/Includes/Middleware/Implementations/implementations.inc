@@ -34,3 +34,7 @@ NoCacheMiddlewareFactoryImpl,
 StaticFilesMiddlewareImpl,
 StaticFilesMiddlewareFactoryImpl,
 CommonStaticFilesMiddlewareFactoryImpl,
+
+MiddlewareTypes,
+FuncMiddlewareImpl,
+MethodMiddlewareImpl,

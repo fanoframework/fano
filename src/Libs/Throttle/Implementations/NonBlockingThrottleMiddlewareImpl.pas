@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit ThrottleMiddlewareImpl;
+unit NonBlockingThrottleMiddlewareImpl;
 
 interface
 
@@ -19,31 +19,21 @@ uses
     ResponseIntf,
     RouteArgsReaderIntf,
     RequestHandlerIntf,
-    AbstractMiddlewareImpl,
-    RateLimiterIntf,
-    RequestIdentifierIntf,
+    ThrottleMiddlewareImpl,
     RateTypes;
 
 type
 
     (*!------------------------------------------------
-     * rate limiter middleware implementation that block
-     * request if exceed given limit.
+     * rate limiter middleware implementation which does not
+     * block request if exceed given limit. It just wraps
+     * request with additional rate limit data and continue
+     * so that other middleware or controller can decides what to do
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TThrottleMiddleware = class (TAbstractMiddleware)
-    protected
-        fRateLimiter : IRateLimiter;
-        fIdentifier : IRequestIdentifier;
-        fRate : TRate;
+    TNonBlockingThrottleMiddleware = class (TThrottleMiddleware)
     public
-        constructor create(
-            const rateLimiter : IRateLimiter;
-            const identifier : IRequestIdentifier;
-            const rate : TRate
-        );
-
         (*!---------------------------------------
          * handle request
          *----------------------------------------
@@ -66,20 +56,8 @@ implementation
 
 uses
 
-    SysUtils,
-    HeadersIntf,
-    ETooManyRequestsImpl;
-
-    constructor TThrottleMiddleware.create(
-        const rateLimiter : IRateLimiter;
-        const identifier : IRequestIdentifier;
-        const rate : TRate
-    );
-    begin
-        fRateLimiter := rateLimiter;
-        fIdentifier := identifier;
-        fRate := rate;
-    end;
+    ThrottleRequestIntf,
+    ThrottleRequestImpl;
 
     (*!---------------------------------------
      * handle request
@@ -90,33 +68,19 @@ uses
      * @param next next middleware to execute
      * @return response
      *----------------------------------------*)
-    function TThrottleMiddleware.handleRequest(
+    function TNonBlockingThrottleMiddleware.handleRequest(
         const request : IRequest;
         const response : IResponse;
         const args : IRouteArgsReader;
         const next : IRequestHandler
     ) : IResponse;
-    var status : TLimitStatus;
-        headers : string;
+    var
+        status : TLimitStatus;
+        throttledRequest : IThrottleRequest;
     begin
         status := fRateLimiter.limit(fIdentifier[request], fRate);
-        if status.limitReached then
-        begin
-            headers :=
-                'X-RateLimit-Limit: ' + inttostr(status.limit) + #13#10 +
-                'X-RateLimit-Remaining: ' + inttostr(status.remainingAttempts) + #13#10 +
-                'X-RateLimit-Reset: ' + inttostr(status.resetTimestamp) + #13#10 +
-                'Retry-After: ' + inttostr(status.retryAfter) + #13#10;
-
-            raise ETooManyRequests.create(
-                'Too many requests. Please try again after ' +
-                inttostr(status.retryAfter) +' seconds',
-                headers
-            );
-        end else
-        begin
-            result := next.handleRequest(request, response, args);
-        end;
+        throttledRequest := TThrottleRequest.create(request, status);
+        result := next.handleRequest(throttledRequest, response, args);
     end;
 
 end.
