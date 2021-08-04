@@ -39,7 +39,7 @@ type
 implementation
 
     (*!------------------------------------------------
-     * sanitize input string with html entities
+     * sanitize input string
      *-------------------------------------------------
      * @param dataToSanitize input data to sanitize
      * @return sanitized output

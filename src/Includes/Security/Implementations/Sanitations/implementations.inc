@@ -14,3 +14,5 @@
  *-----------------------------------------------*)
 
 HtmlEntitiesSanitizerImpl,
+NullSanitizerImpl,
+GroupSanitizerImpl,

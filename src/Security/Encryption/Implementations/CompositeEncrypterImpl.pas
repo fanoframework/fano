@@ -49,7 +49,7 @@ type
          * the order of encrypters and decrypters must match
          * as decrypters is looped reverse. See decrypt() method
          * for example
-         * TComposetEncrypter.create(
+         * TCompositEncrypter.create(
          *    [AEncrypter, BEncrypter]
          *    [ADecrypter, BDecrypter]
          * );
