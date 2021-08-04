@@ -20,4 +20,4 @@
 {$INCLUDE Auth/aliases.inc}
 {$INCLUDE PasswordHash/aliases.inc}
 {$INCLUDE Jwt/aliases.inc}
-{$INCLUDE Encryptions/aliases.inc}
+{$INCLUDE Encryption/aliases.inc}

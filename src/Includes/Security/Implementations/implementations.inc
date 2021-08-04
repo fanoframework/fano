@@ -22,4 +22,4 @@
 {$INCLUDE FrameGuard/implementations.inc}
 {$INCLUDE PasswordHash/implementations.inc}
 {$INCLUDE Jwt/implementations.inc}
-{$INCLUDE Encryptions/implementations.inc}
+{$INCLUDE Encryption/implementations.inc}
