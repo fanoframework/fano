@@ -19,3 +19,4 @@
 {$INCLUDE Auth/interfaces.inc}
 {$INCLUDE PasswordHash/interfaces.inc}
 {$INCLUDE Jwt/interfaces.inc}
+{$INCLUDE Encryptions/interfaces.inc}

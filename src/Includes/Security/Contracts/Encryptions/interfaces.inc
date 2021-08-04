@@ -13,11 +13,5 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-{$INCLUDE Csrf/aliases.inc}
-{$INCLUDE Sanitations/aliases.inc}
-{$INCLUDE Validations/aliases.inc}
-{$INCLUDE Cors/aliases.inc}
-{$INCLUDE Auth/aliases.inc}
-{$INCLUDE PasswordHash/aliases.inc}
-{$INCLUDE Jwt/aliases.inc}
-{$INCLUDE Encryptions/aliases.inc}
+DecrypterIntf,
+EncrypterIntf,

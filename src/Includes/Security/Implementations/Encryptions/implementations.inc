@@ -7,17 +7,15 @@
  *}
 
 (*! ---------------------------------------------
- * alias for interface in security
- * that is included in fano.pas unit
+ * list of csrf units in security
+ * that is included in implementations.inc
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-{$INCLUDE Csrf/aliases.inc}
-{$INCLUDE Sanitations/aliases.inc}
-{$INCLUDE Validations/aliases.inc}
-{$INCLUDE Cors/aliases.inc}
-{$INCLUDE Auth/aliases.inc}
-{$INCLUDE PasswordHash/aliases.inc}
-{$INCLUDE Jwt/aliases.inc}
-{$INCLUDE Encryptions/aliases.inc}
+Base64EncrypterImpl,
+BlowfishEncrypterImpl,
+CompositeEncrypterImpl,
+HmacEncrypterImpl,
+Md5HmacEncrypterImpl,
+Sha1HmacEncrypterImpl,
