@@ -19,3 +19,8 @@ CompositeEncrypterImpl,
 HmacEncrypterImpl,
 Md5HmacEncrypterImpl,
 Sha1HmacEncrypterImpl,
+
+BlowfishEncrypterFactoryImpl,
+HmacEncrypterFactoryImpl,
+Md5BlowfishEncrypterFactoryImpl,
+Sha1BlowfishEncrypterFactoryImpl,

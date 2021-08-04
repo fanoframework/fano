@@ -15,6 +15,7 @@
 IView = ViewIntf.IView;
 IViewPartial = ViewPartialIntf.IViewPartial;
 IViewParameters = ViewParametersIntf.IViewParameters;
+IViewParametersFactory = ViewParametersFactoryIntf.IViewParametersFactory;
 ITemplateParser = TemplateParserIntf.ITemplateParser;
 IViewStack = ViewStackIntf.IViewStack;
 IViewPush = ViewPushIntf.IViewPush;

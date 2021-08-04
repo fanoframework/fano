@@ -20,6 +20,9 @@ TNullViewParameters = NullViewParametersImpl.TNullViewParameters;
 TNullViewParametersFactory = NullViewParametersFactoryImpl.TNullViewParametersFactory;
 TCompositeViewParameters = CompositeViewParametersImpl.TCompositeViewParameters;
 
+TSanitizedViewParameters = SanitizedViewParametersImpl.TSanitizedViewParameters;
+TSanitizedViewParametersFactory = SanitizedViewParametersFactoryImpl.TSanitizedViewParametersFactory;
+
 TView = ViewImpl.TView;
 TStaticView = StaticViewImpl.TStaticView;
 TCompositeView = CompositeViewImpl.TCompositeView;

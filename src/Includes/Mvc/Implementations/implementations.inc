@@ -13,8 +13,8 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-TemplateParserFactoryImpl,
 TemplateParserImpl,
+TemplateParserFactoryImpl,
 
 SimpleTemplateParserFactoryImpl,
 SimpleTemplateParserImpl,
@@ -22,11 +22,14 @@ SimpleTemplateParserImpl,
 NullTemplateParserFactoryImpl,
 NullTemplateParserImpl,
 
+AbstractViewParametersFactoryImpl,
 ViewParametersImpl,
 ViewParametersFactoryImpl,
 NullViewParametersImpl,
 NullViewParametersFactoryImpl,
 CompositeViewParametersImpl,
+SanitizedViewParametersImpl,
+SanitizedViewParametersFactoryImpl,
 
 ViewImpl,
 StaticViewImpl,

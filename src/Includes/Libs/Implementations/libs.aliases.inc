@@ -34,7 +34,6 @@ TKeyValuePairFactory = KeyValuePairFactoryImpl.TKeyValuePairFactory;
 {$INCLUDE Protocol/libs.aliases.inc}
 {$INCLUDE Random/libs.aliases.inc}
 {$INCLUDE Cli/libs.aliases.inc}
-{$INCLUDE Encrypter/libs.aliases.inc}
 {$INCLUDE Antivirus/libs.aliases.inc}
 {$INCLUDE Mailer/libs.aliases.inc}
 {$INCLUDE UserAgent/libs.aliases.inc}

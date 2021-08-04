@@ -16,7 +16,7 @@ uses
 
     DependencyIntf,
     DependencyContainerIntf,
-    FactoryImpl;
+    AbstractViewParametersFactoryImpl;
 
 type
 
@@ -26,7 +26,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TNullViewParametersFactory = class(TFactory, IDependencyFactory)
+    TNullViewParametersFactory = class(TAbstractViewParametersFactory, IDependencyFactory)
     public
         function build(const container : IDependencyContainer) : IDependency; override;
     end;

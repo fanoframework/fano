@@ -22,5 +22,5 @@ TSha1HmacEncrypter = Sha1HmacEncrypterImpl.TSha1HmacEncrypter;
 
 TBlowfishEncrypterFactory = BlowfishEncrypterFactoryImpl.TBlowfishEncrypterFactory;
 THmacEncrypterFactory = HmacEncrypterFactoryImpl.THmacEncrypterFactory;
-TMd5HmacEncrypterFactory = Md5HmacEncrypterFactoryImpl.TMd5HmacEncrypterFactory;
-TSha1HmacEncrypterFactory = Sha1HmacEncrypterFactoryImpl.TSha1HmacEncrypterFactory;
+TMd5BlowfishEncrypterFactory = Md5BLowfishEncrypterFactoryImpl.TMd5BlowfishEncrypterFactory;
+TSha1BlowfishEncrypterFactory = Sha1BlowfishEncrypterFactoryImpl.TSha1BlowfishEncrypterFactory;
