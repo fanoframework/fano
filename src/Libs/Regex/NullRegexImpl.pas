@@ -32,6 +32,13 @@ type
             const replacement : string
         ) : string;
 
+        function replaceEx(
+            const regexPattern : string;
+            const source : string;
+            const replacement : string;
+            const modifier : string
+        ) : string;
+
         function quote(const regexPattern : string) : string;
 
         function match(
@@ -54,6 +61,29 @@ uses
         const regexPattern : string;
         const source : string;
         const replacement : string
+    ) : string;
+    begin
+        result := source;
+    end;
+
+    {*!--------------------------------
+     * Replace string regex pattern with modifier
+     * --------------------------------
+     * @param regexPattern regex pattern
+     * @param source original string
+     * @param replacement string to be used to replace
+     * @param modifer chars of mode replacement for ex 'gi' for greedy insensitivecase
+     * @return replaced string
+     *----------------------------------
+     * mode :
+     * g : greedy
+     * i : insensitive case
+     *----------------------------------*}
+    function TNullRegex.replaceEx(
+        const regexPattern : string;
+        const source : string;
+        const replacement : string;
+        const modifier : string
     ) : string;
     begin
         result := source;

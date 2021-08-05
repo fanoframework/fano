@@ -16,3 +16,4 @@
 THtmlEntitiesSanitizer = HtmlEntitiesSanitizerImpl.THtmlEntitiesSanitizer;
 TNullSanitizer = NullSanitizerImpl.TNullSanitizer;
 TGroupSanitizer = GroupSanitizerImpl.TGroupSanitizer;
+TStripTagsSanitizer = StripTagsSanitizerImpl.TStripTagsSanitizer;

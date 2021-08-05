@@ -40,6 +40,13 @@ type
             const replacement : string
         ) : string;
 
+        function replaceEx(
+            const regexPattern : string;
+            const source : string;
+            const replacement : string;
+            const modifier : string
+        ) : string;
+
         function quote(const regexPattern : string) : string;
 
         function match(
@@ -77,6 +84,73 @@ uses
             source,
             replacement,
             true
+        );
+    end;
+
+    {*!--------------------------------
+     * Replace string regex pattern with modifier
+     * --------------------------------
+     * @param regexPattern regex pattern
+     * @param source original string
+     * @param replacement string to be used to replace
+     * @param modifer chars of modifier for ex 'gi' for greedy insensitive case
+     * @return replaced string
+     *----------------------------------
+     * modfier:
+     * g : greedy
+     * i : insensitive case
+     * m : multiline string
+     * s : single line string
+     * x : extended syntax
+     *----------------------------------*}
+    function TRegex.replaceEx(
+        const regexPattern : string;
+        const source : string;
+        const replacement : string;
+        const modifier : string
+    ) : string;
+    var opts: TRegexReplaceOptions;
+        lowerCaseModifier : string;
+    begin
+        lowerCaseModifier := lowercase(modifier);
+
+        opts := [rroUseSubstitution];
+
+        if (pos('i', lowerCaseModifier) <> 0) then
+        begin
+            opts := opts + [rroModifierI];
+        end;
+
+        if (pos('g', lowerCaseModifier) <> 0) then
+        begin
+            opts := opts + [rroModifierG];
+        end;
+
+        if (pos('r', lowerCaseModifier) <> 0) then
+        begin
+            opts := opts + [rroModifierR];
+        end;
+
+        if (pos('s', lowerCaseModifier) <> 0) then
+        begin
+            opts := opts + [rroModifierS];
+        end;
+
+        if (pos('m', lowerCaseModifier) <> 0) then
+        begin
+            opts := opts + [rroModifierM];
+        end;
+
+        if (pos('x', lowerCaseModifier) <> 0) then
+        begin
+            opts := opts + [rroModifierX];
+        end;
+
+        result := ReplaceRegExpr(
+            regexPattern,
+            source,
+            replacement,
+            opts
         );
     end;
 
