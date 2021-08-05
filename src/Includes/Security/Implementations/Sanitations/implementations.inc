@@ -16,3 +16,4 @@
 HtmlEntitiesSanitizerImpl,
 NullSanitizerImpl,
 GroupSanitizerImpl,
+StripTagsSanitizerImpl,
