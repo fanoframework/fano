@@ -21,8 +21,15 @@ uses
     ListenSocketIntf,
     StreamAdapterIntf,
     SocketOptsIntf,
+
+    {$IFDEF UNIX}
     BaseUnix,
-    Unix;
+    Unix
+    {$ENDIF}
+
+    {$IFDEF WINDOWS}
+    Winsock
+    {$ENDIF};
 
 type
 

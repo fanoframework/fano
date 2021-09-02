@@ -117,7 +117,6 @@ uses
 
     SysUtils,
     Classes,
-    BaseUnix,
     StreamAdapterImpl,
     SegregatedStreamAdapterImpl,
     ESockStreamImpl,

@@ -22,8 +22,14 @@ uses
     StreamAdapterIntf,
     SocketOptsIntf,
     AbstractIoHandlerImpl,
+    {$IFDEF UNIX}
     BaseUnix,
-    Unix;
+    Unix
+    {$ENDIF}
+
+    {$IFDEF WINDOWS}
+    Winsock
+    {$ENDIF};
 
 type
 

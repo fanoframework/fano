@@ -42,7 +42,13 @@ implementation
 uses
 
     Sockets,
-    BaseUnix;
+    {$IFDEF UNIX}
+    BaseUnix
+    {$ENDIF}
+
+    {$IFDEF WINDOWS}
+    Winsock
+    {$ENDIF};
 
     (*!-----------------------------------------------
      * make file descriptor/socket non blocking

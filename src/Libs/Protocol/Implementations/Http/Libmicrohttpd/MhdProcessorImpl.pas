@@ -144,7 +144,15 @@ implementation
 uses
 
     Classes,
+
+    {$IFDEF UNIX}
     BaseUnix,
+    {$ENDIF}
+
+    {$IFDEF WINDOWS}
+    Winsock,
+    {$ENDIF}
+
     SysUtils,
     SigTermImpl,
     KeyValueEnvironmentImpl,

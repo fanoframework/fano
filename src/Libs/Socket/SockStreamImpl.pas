@@ -37,7 +37,15 @@ implementation
 uses
 
     sockets,
+
+    {$IFDEF UNIX}
     BaseUnix,
+    {$ENDIF}
+
+    {$IFDEF WINDOWS}
+    Winsock,
+    {$ENDIF}
+
     errors,
     ESockStreamImpl,
     ESockWouldBlockImpl,
