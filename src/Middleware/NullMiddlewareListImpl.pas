@@ -31,7 +31,8 @@ type
      *-------------------------------------------------*)
     TNullMiddlewareList = class(TInjectableObject, IMiddlewareList, IMiddlewareLinkList, IMiddlewareListItem)
     public
-        function add(const middleware : IMiddleware) : IMiddlewareList;
+        function add(const aMiddleware : IMiddleware) : IMiddlewareList;
+        function middleware(const aMiddleware : IMiddleware) : IMiddlewareList;
         function get(const indx : integer) : IMiddlewareLink;
         function count() : integer;
         function asLinkList() : IMiddlewareLinkList;
@@ -40,9 +41,14 @@ type
 
 implementation
 
-    function TNullMiddlewareList.add(const middleware : IMiddleware) : IMiddlewareList;
+    function TNullMiddlewareList.add(const aMiddleware : IMiddleware) : IMiddlewareList;
     begin
         result := self;
+    end;
+
+    function TNullMiddlewareList.middleware(const aMiddleware : IMiddleware) : IMiddlewareList;
+    begin
+        result := add(aMiddleware);
     end;
 
     function TNullMiddlewareList.get(const indx : integer) : IMiddlewareLink;

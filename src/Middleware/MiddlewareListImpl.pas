@@ -36,7 +36,8 @@ type
     public
         constructor create();
         destructor destroy(); override;
-        function add(const middleware : IMiddleware) : IMiddlewareList;
+        function add(const aMiddleware : IMiddleware) : IMiddlewareList;
+        function middleware(const aMiddleware : IMiddleware) : IMiddlewareList;
         function get(const indx : integer) : IMiddlewareLink;
         function count() : integer;
         function asLinkList() : IMiddlewareLinkList;
@@ -71,11 +72,11 @@ uses
         inherited destroy();
     end;
 
-    function TMiddlewareList.add(const middleware : IMiddleware) : IMiddlewareList;
+    function TMiddlewareList.add(const aMiddleware : IMiddleware) : IMiddlewareList;
     var prevLink, newLink : IMiddlewareLink;
     begin
         try
-            newLink := TMiddlewareLink.create(middleware);
+            newLink := TMiddlewareLink.create(aMiddleware);
             if (middlewareList.count > 0) then
             begin
                 prevLink := middlewareList[middlewareList.count - 1] as IMiddlewareLink;
@@ -89,6 +90,11 @@ uses
             newLink := nil;
             raise;
         end;
+    end;
+
+    function TMiddlewareList.middleware(const aMiddleware : IMiddleware) : IMiddlewareList;
+    begin
+        result := add(amiddleware);
     end;
 
     function TMiddlewareList.get(const indx : integer) : IMiddlewareLink;

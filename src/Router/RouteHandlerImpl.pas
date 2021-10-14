@@ -32,7 +32,7 @@ uses
 type
 
     (*!------------------------------------------------
-     * basic abstract class that can act as route handler
+     * basic internal abstract class that can act as route handler
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      * -----------------------------------------------*)
@@ -129,6 +129,13 @@ type
          * @return current route instance
          *--------------------------------------------*)
         function add(const amiddleware : IMiddleware) : IRoute;
+
+        (*!-------------------------------------------
+         * attach middleware
+         *--------------------------------------------
+         * @return current route instance
+         *--------------------------------------------*)
+        function middleware(const amiddleware : IMiddleware) : IRoute;
 
         (*!-------------------------------------------
          * get route instance
@@ -295,6 +302,16 @@ uses
     begin
         fMiddlewares.asList().add(amiddleware);
         result := self;
+    end;
+
+    (*!-------------------------------------------
+     * attach middleware
+     *--------------------------------------------
+     * @return current route instance
+     *--------------------------------------------*)
+    function TRouteHandler.middleware(const amiddleware : IMiddleware) : IRoute;
+    begin
+        result := add(amiddleware);
     end;
 
     (*!-------------------------------------------

@@ -49,6 +49,12 @@ type
          *--------------------------------------------*)
         function add(const amiddleware : IMiddleware) : IRoute;
 
+        (*!-------------------------------------------
+         * attach middleware before route
+         *--------------------------------------------
+         * @return current route instance
+         *--------------------------------------------*)
+        function middleware(const amiddleware : IMiddleware) : IRoute;
     end;
 
 implementation
@@ -82,6 +88,17 @@ implementation
      * @return current route instance
      *--------------------------------------------*)
     function TNullRoute.add(const amiddleware : IMiddleware) : IRoute;
+    begin
+        //intentionally does nothing
+        result := self;
+    end;
+
+    (*!-------------------------------------------
+     * attach middleware before route
+     *--------------------------------------------
+     * @return current route instance
+     *--------------------------------------------*)
+    function TNullRoute.middleware(const amiddleware : IMiddleware) : IRoute;
     begin
         //intentionally does nothing
         result := self;

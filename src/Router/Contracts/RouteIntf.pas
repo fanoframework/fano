@@ -50,6 +50,12 @@ type
          *--------------------------------------------*)
         function add(const amiddleware : IMiddleware) : IRoute;
 
+        (*!-------------------------------------------
+         * attach middleware before route
+         *--------------------------------------------
+         * @return current route instance
+         *--------------------------------------------*)
+        function middleware(const amiddleware : IMiddleware) : IRoute;
     end;
 
 implementation
