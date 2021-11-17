@@ -38,3 +38,5 @@ CommonStaticFilesMiddlewareFactoryImpl,
 MiddlewareTypes,
 FuncMiddlewareImpl,
 MethodMiddlewareImpl,
+
+MaintenanceModeMiddlewareImpl,

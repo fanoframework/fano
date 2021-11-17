@@ -25,3 +25,5 @@ TMiddlewareMethod = MiddlewareTypes.TMiddlewareMethod;
 TMiddlewareFunc = MiddlewareTypes.TMiddlewareFunc;
 TFuncMiddleware = FuncMiddlewareImpl.TFuncMiddleware;
 TMethodMiddleware = MethodMiddlewareImpl.TMethodMiddleware;
+
+TMaintenanceModeMiddleware = MaintenanceModeMiddlewareImpl.TMaintenanceModeMiddleware;
