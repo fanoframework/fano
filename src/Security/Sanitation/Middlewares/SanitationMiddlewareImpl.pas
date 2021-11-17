@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit JsonContentTypeMiddlewareImpl;
+unit SanitationMiddlewareImpl;
 
 interface
 
@@ -19,19 +19,21 @@ uses
     MiddlewareIntf,
     RouteArgsReaderIntf,
     RequestHandlerIntf,
+    SanitizerIntf,
     InjectableObjectImpl;
 
 type
 
     (*!------------------------------------------------
-     * middleware class that make POST PUT request with
-     * body of content type json available as request
-     * parsed body
+     * middleware class that sanitized request param reading
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    TJsonContentTypeMiddleware = class(TInjectableObject, IMiddleware)
+    TSanitationMiddleware = class(TInjectableObject, IMiddleware)
+    private
+        fSanitizer : ISanitizer;
     public
+        constructor create(const aSanitizer : ISanitizer);
         function handleRequest(
             const request : IRequest;
             const response : IResponse;
@@ -44,34 +46,22 @@ implementation
 
 uses
 
-    JsonRequestImpl;
+    SanitizedRequestImpl;
 
-    function TJsonContentTypeMiddleware.handleRequest(
+    constructor TSanitationMiddleware.create(const aSanitizer : ISanitizer);
+    begin
+        fSanitizer := aSanitizer;
+    end;
+
+    function TSanitationMiddleware.handleRequest(
         const request : IRequest;
         const response : IResponse;
         const args : IRouteArgsReader;
         const nextMdlwr : IRequestHandler
     ) : IResponse;
-    var jsonRequest : IRequest;
-        isJsonRequest : boolean;
-        method : string;
+    var sanitizedRequest : IRequest;
     begin
-        method := request.method;
-        isJsonRequest := ((method = 'POST') or (method = 'PUT') or
-            (method = 'PATCH') or (method = 'DELETE')) and
-            (request.env.contentType = 'application/json');
-
-        if isJsonRequest then
-        begin
-            jsonRequest := TJsonRequest.create(request);
-            try
-                result := nextMdlwr.handleRequest(jsonRequest, response, args);
-            finally
-                jsonRequest := nil;
-            end;
-        end else
-        begin
-            result := nextMdlwr.handleRequest(request, response, args);
-        end;
+        sanitizedRequest := TSanitizedRequest.create(request, fSanitizer);
+        result := nextMdlwr.handleRequest(sanitizedRequest, response, args);
     end;
 end.
