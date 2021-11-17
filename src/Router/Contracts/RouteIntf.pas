@@ -44,14 +44,14 @@ type
         function getName() : shortstring;
 
         (*!-------------------------------------------
-         * attach middleware before route
+         * attach middleware to route
          *--------------------------------------------
          * @return current route instance
          *--------------------------------------------*)
-        function add(const amiddleware : IMiddleware) : IRoute;
+        function add(const amiddleware : IMiddleware) : IRoute; deprecated 'Use qmiddleware() method instead';
 
         (*!-------------------------------------------
-         * attach middleware before route
+         * attach middleware to route
          *--------------------------------------------
          * @return current route instance
          *--------------------------------------------*)
