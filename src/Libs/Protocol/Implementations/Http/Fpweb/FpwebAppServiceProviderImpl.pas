@@ -14,6 +14,7 @@ interface
 
 uses
 
+    SyncObjs,
     RunnableWithDataNotifIntf,
     DaemonAppServiceProviderIntf,
     RequestResponseFactoryIntf,
@@ -31,6 +32,7 @@ type
      *-----------------------------------------------}
     TFpwebAppServiceProvider = class (TProtocolAppServiceProvider)
     private
+        fLock : TCriticalSection;
         fServer : IRunnableWithDataNotif;
     public
         constructor create(
@@ -50,6 +52,7 @@ uses
     RunnableIntf,
     FpwebProcessorImpl,
     FpwebStdOutWriterImpl,
+    ThreadSafeFpwebResponseAwareImpl,
     FpwebResponseAwareIntf;
 
     constructor TFpwebAppServiceProvider.create(
@@ -58,11 +61,24 @@ uses
     );
     begin
         inherited create(actualSvc);
+        fLock := TCriticalSection.create();
+
         fStdOut := TFpwebStdOutWriter.create();
+        if svrConfig.threaded then
+        begin
+            fStdOut := TThreadSafeFpWebResponseAware.create(
+                fLock,
+                fStdOut,
+                fStdOut as IFpwebResponseAware
+            );
+        end;
+
         fProtocol := TFpwebProcessor.create(
+            fLock,
             fStdOut as IFpwebResponseAware,
             svrConfig
         );
+
         //TFpwebProcessor also act as server
         fServer := fProtocol as IRunnableWithDataNotif;
     end;
@@ -72,6 +88,7 @@ uses
         fServer := nil;
         fStdOut := nil;
         fProtocol := nil;
+        fLock.free();
         inherited destroy();
     end;
 

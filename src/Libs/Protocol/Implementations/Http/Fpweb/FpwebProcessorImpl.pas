@@ -15,6 +15,7 @@ interface
 
 uses
 
+    SyncObjs,
     RunnableIntf,
     RunnableWithDataNotifIntf,
     ProtocolProcessorIntf,
@@ -38,6 +39,7 @@ type
      *-----------------------------------------------*)
     TFpwebProcessor = class(TInterfacedObject, IProtocolProcessor, IRunnable, IRunnableWithDataNotif)
     private
+        fLock : TCriticalSection;
         fStdIn : IStreamAdapter;
         fRequestReadyListener : IReadyListener;
         fDataListener : IDataAvailListener;
@@ -49,6 +51,7 @@ type
 
         function initHttpServer(const svrConfig : TFpwebSvrConfig) : TFpHttpServer;
         procedure waitUntilTerminate();
+        procedure fakeConnect();
 
         function buildEnv(
             const request : TFPHttpConnectionRequest
@@ -74,6 +77,7 @@ type
 
     public
         constructor create(
+            const lock : TCriticalSection;
             const conn : IFpwebResponseAware;
             const svrConfig : TFpwebSvrConfig
         );
@@ -178,10 +182,12 @@ type
     end;
 
     constructor TFpwebProcessor.create(
+        const lock : TCriticalSection;
         const conn : IFpwebResponseAware;
         const svrConfig : TFpwebSvrConfig
     );
     begin
+        fLock := lock;
         fConnection := conn;
         fStdIn := nil;
         fRequestReadyListener := nil;
@@ -197,6 +203,7 @@ type
         fRequestReadyListener := nil;
         fStdIn := nil;
         fConnection := nil;
+        fLock := nil;
         inherited destroy();
     end;
 
@@ -263,15 +270,32 @@ type
     var fpwebEnv : ICGIEnvironment;
     begin
         fConnection.response := response;
-        fpwebEnv := buildEnv(request);
-
-        fRequestReadyListener.ready(
-            //we will not use socket stream as we will have our own IStdOut
-            //that write output with TFpHttpServer
-            TNullStreamAdapter.create(),
-            fpwebEnv,
-            TStreamAdapter.create(TStringStream.create(request.content))
-        );
+        if (fSvrConfig.threaded) then
+        begin
+            fLock.acquire();
+            try
+                fpwebEnv := buildEnv(request);
+                fRequestReadyListener.ready(
+                    //we will not use socket stream as we will have our own IStdOut
+                    //that write output with TFpHttpServer
+                    TNullStreamAdapter.create(),
+                    fpwebEnv,
+                    TStreamAdapter.create(TStringStream.create(request.content))
+                );
+            finally
+                fLock.release();
+            end;
+        end else
+        begin
+            fpwebEnv := buildEnv(request);
+            fRequestReadyListener.ready(
+                //we will not use socket stream as we will have our own IStdOut
+                //that write output with TFpHttpServer
+                TNullStreamAdapter.create(),
+                fpwebEnv,
+                TStreamAdapter.create(TStringStream.create(request.content))
+            );
+        end;
     end;
 
     procedure TFpwebProcessor.handleRequest(
@@ -364,6 +388,26 @@ type
     end;
 
     (*!------------------------------------------------
+     * send fake connection to our own server
+     *-------------------------------------------------
+     * Note this is workaround
+     * due to current behavior (bug?) of TInetServer
+     * which does not immediately exit accept loop when
+     * Active:=false until new request comes
+     * workaround send fake connection just to break accept loop
+     *-------------------------------------------------*)
+    procedure TFpwebProcessor.fakeConnect();
+    begin
+        try
+            //TFpHttpServer always use TInetServer not unix domain socket
+            //so use of TInetSocket is ok here
+            TInetSocket.create(fSvrConfig.host, fSvrConfig.port).free();
+        except
+            //intentionally surpress all exception it may raise
+        end;
+    end;
+
+    (*!------------------------------------------------
      * run it
      *-------------------------------------------------
      * @return current instance
@@ -378,12 +422,9 @@ type
             waitUntilTerminate();
             fHttpSvr.active := false;
 
-            //due to current behavior (bug?) of TFpHttpServer
-            //which does not immediately exit server loop when
-            //Active:=false until new request comes
-            //waitFor() may wait forever
-            //workaround is just to load a page so that new request comes
+            //create fake a new connection to allow breaking accept loop
             //thus THttpServerThread can terminate
+            fakeConnect();
             svrThread.waitFor();
 
         finally

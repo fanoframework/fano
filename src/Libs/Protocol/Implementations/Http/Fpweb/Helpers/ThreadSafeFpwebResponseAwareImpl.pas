@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit ThreadSafeMhdConnectionAwareImpl;
+unit ThreadSafeFpWebResponseAwareImpl;
 
 interface
 
@@ -15,80 +15,80 @@ interface
 
 uses
 
-    libmicrohttpd,
+    fphttpserver,
     SyncObjs,
     StdOutIntf,
-    MhdConnectionAwareIntf,
+    FpwebResponseAwareIntf,
     ThreadSafeStdOutImpl,
     StreamAdapterIntf;
 
 type
 
     (*!------------------------------------------------
-     * IStdOut implmentation class having maintain libmicrohttpd
-     * connection instance in thread-safe way
+     * IStdOut implementation class TFpHttpServer response
+     * instance in thread-safe way
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TThreadSafeMhdConnectionAware = class(TThreadSafeStdOut, IMhdConnectionAware)
+    TThreadSafeFpwebResponseAware = class(TThreadSafeStdOut, IFpwebResponseAware)
     private
-        fActualConnectionAware : IMhdConnectionAware;
+        fActualResponseAware : IFpwebResponseAware;
     public
         constructor create(
             const lock : TCriticalSection;
             const actualStdOut : IStdOut;
-            const actualConnectionAware : IMhdConnectionAware
+            const actualResponseAware : IFpwebResponseAware
         );
 
         (*!------------------------------------------------
-         * get libmicrohttpd connection
+         * get TFpHttpServer response connection
          *-----------------------------------------------
          * @return connection
          *-----------------------------------------------*)
-        function getConnection() : PMHD_Connection;
+        function getResponse() : TFPHTTPConnectionResponse;
 
         (*!------------------------------------------------
-         * set libmicrohttpd connection
+         * set TFpHttpServer response connection
          *-----------------------------------------------*)
-        procedure setConnection(aconnection : PMHD_Connection);
+        procedure setResponse(aresponse : TFPHTTPConnectionResponse);
 
     end;
 
 implementation
 
-    constructor TThreadSafeMhdConnectionAware.create(
+    constructor TThreadSafeFpwebResponseAware.create(
         const lock : TCriticalSection;
         const actualStdOut : IStdOut;
-        const actualConnectionAware : IMhdConnectionAware
+        const actualResponseAware : IFpwebResponseAware
     );
     begin
         inherited create(lock, actualStdOut);
-        fActualConnectionAware := actualConnectionAware;
+        fActualResponseAware := actualResponseAware;
     end;
 
     (*!------------------------------------------------
-     * get libmicrohttpd connection
+     * get TFpHttpServer response connection
      *-----------------------------------------------
      * @return connection
      *-----------------------------------------------*)
-    function TThreadSafeMhdConnectionAware.getConnection() : PMHD_Connection;
+    function TThreadSafeFpwebResponseAware.getResponse() : TFPHTTPConnectionResponse;
     begin
         fLock.acquire();
         try
-            result := fActualConnectionAware.getConnection();
+            result := fActualResponseAware.getResponse();
         finally
             fLock.release();
         end;
     end;
 
     (*!------------------------------------------------
-     * set libmicrohttpd connection
+     * set TFpHttpServer response connection
      *-----------------------------------------------*)
-    procedure TThreadSafeMhdConnectionAware.setConnection(aconnection : PMHD_Connection);
+    procedure TThreadSafeFpwebResponseAware.setResponse(aresponse : TFPHTTPConnectionResponse);
     begin
         fLock.acquire();
         try
-            fActualConnectionAware.setConnection(aconnection);
+            fActualResponseAware.setResponse(aresponse);
         finally
             fLock.release();
         end;
