@@ -13,7 +13,7 @@ interface
 
 uses
 
-    sysutils;
+    EInternalServerErrorImpl;
 
 type
 
@@ -23,8 +23,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    ERouteMatcher = class(Exception)
-    end;
+    ERouteMatcher = class(EInternalServerError);
 
 implementation
 

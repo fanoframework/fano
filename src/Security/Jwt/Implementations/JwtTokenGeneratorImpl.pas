@@ -114,8 +114,9 @@ resourcestring
      *        and issuer match
      *-------------------------------------------------*)
     function TJwtTokenGenerator.generateToken(const payload : TJSONObject) : string;
-    var jwt : TJwt;
-        jwtHeaderPayloadStr, sig : string;
+    var
+        jwt : TJwt;
+        jwtHeaderPayloadStr : string;
     begin
         jwt := TJwt.create();
         try

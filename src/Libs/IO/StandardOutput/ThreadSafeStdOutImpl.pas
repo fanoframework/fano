@@ -16,73 +16,111 @@ interface
 uses
 
     SyncObjs,
-    StreamAdapterIntf,
     StdOutIntf,
+    StreamAdapterIntf,
     DecoratorStdOutImpl;
 
 type
 
     (*!------------------------------------------------
-     * decorator class having capability to
-     * write string to standard output
+     * IStdOut thread-safe implmentation
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
     TThreadSafeStdOut = class(TDecoratorStdOut)
-    private
-        fCriticalSection : TCriticalSection;
+    protected
+        fLock : TCriticalSection;
     public
-        constructor create(const actualStdOut : IStdOut);
-        destructor destroy(); override;
+        constructor create(
+            const lock : TCriticalSection;
+            const actualStdOut : IStdOut
+        );
+
+        (*!------------------------------------------------
+         * set stream to write to if any
+         *-----------------------------------------------
+         * @param stream, stream to write to
+         * @return current instance
+         *-----------------------------------------------*)
         function setStream(const astream : IStreamAdapter) : IStdOut; override;
+
+        (*!------------------------------------------------
+         * write string to stdout
+         *-----------------------------------------------
+         * @param str, string to write
+         * @return current instance
+         *-----------------------------------------------*)
         function write(const str : string) : IStdOut; override;
-        function writeln(const str : string = '') : IStdOut; override;
+
+        (*!------------------------------------------------
+         * write string with newline to stdout
+         *-----------------------------------------------
+         * @param str, string to write
+         * @return current instance
+         *-----------------------------------------------*)
+        function writeln(const str : string) : IStdOut; override;
+
     end;
 
 implementation
 
-    constructor TThreadSafeStdOut.create(const actualStdOut : IStdOut);
+    constructor TThreadSafeStdout.create(
+        const lock : TCriticalSection;
+        const actualStdOut : IStdOut
+    );
     begin
         inherited create(actualStdOut);
-        fCriticalSection := TCriticalSection.create();
+        fLock := lock;
     end;
 
-    destructor TThreadSafeStdOut.destroy();
-    begin
-        fCriticalSection.free();
-        inherited destroy();
-    end;
-
+    (*!------------------------------------------------
+     * set stream to write to if any
+     *-----------------------------------------------
+     * @param stream, stream to write to
+     * @return current instance
+     *-----------------------------------------------*)
     function TThreadSafeStdOut.setStream(const astream : IStreamAdapter) : IStdOut;
     begin
-        fCriticalSection.acquire();
+        fLock.acquire();
         try
             inherited setStream(astream);
             result := self;
         finally
-            fCriticalSection.release();
+            fLock.release();
         end;
     end;
 
+    (*!------------------------------------------------
+     * write string to stdout
+     *-----------------------------------------------
+     * @param str, string to write
+     * @return current instance
+     *-----------------------------------------------*)
     function TThreadSafeStdOut.write(const str : string) : IStdOut;
     begin
-        fCriticalSection.acquire();
+        fLock.acquire();
         try
             inherited write(str);
             result := self;
         finally
-            fCriticalSection.release();
+            fLock.release();
         end;
     end;
 
-    function TThreadSafeStdOut.writeln(const str : string = '') : IStdOut;
+    (*!------------------------------------------------
+     * write string with newline to stdout
+     *-----------------------------------------------
+     * @param str, string to write
+     * @return current instance
+     *-----------------------------------------------*)
+    function TThreadSafeStdOut.writeln(const str : string) : IStdOut;
     begin
-        fCriticalSection.acquire();
+        fLock.acquire();
         try
             inherited writeln(str);
             result := self;
         finally
-            fCriticalSection.release();
+            fLock.release();
         end;
     end;
 

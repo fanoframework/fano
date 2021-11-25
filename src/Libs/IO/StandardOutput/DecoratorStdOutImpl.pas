@@ -15,14 +15,13 @@ interface
 
 uses
 
-    StreamAdapterIntf,
-    StdOutIntf;
+    StdOutIntf,
+    StreamAdapterIntf;
 
 type
 
     (*!------------------------------------------------
-     * decorator class having capability to
-     * write string to standard output
+     * IStdOut decorator implmentation
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
@@ -31,31 +30,71 @@ type
         fActualStdOut : IStdOut;
     public
         constructor create(const actualStdOut : IStdOut);
+
+        (*!------------------------------------------------
+         * set stream to write to if any
+         *-----------------------------------------------
+         * @param stream, stream to write to
+         * @return current instance
+         *-----------------------------------------------*)
         function setStream(const astream : IStreamAdapter) : IStdOut; virtual;
+
+        (*!------------------------------------------------
+         * write string to stdout
+         *-----------------------------------------------
+         * @param str, string to write
+         * @return current instance
+         *-----------------------------------------------*)
         function write(const str : string) : IStdOut; virtual;
-        function writeln(const str : string = '') : IStdOut; virtual;
+
+        (*!------------------------------------------------
+         * write string with newline to stdout
+         *-----------------------------------------------
+         * @param str, string to write
+         * @return current instance
+         *-----------------------------------------------*)
+        function writeln(const str : string) : IStdOut; virtual;
+
     end;
 
 implementation
 
-    constructor TDecoratorStdOut.create(const actualStdOut : IStdOut);
+    constructor TDecoratorStdout.create(const actualStdOut : IStdOut);
     begin
         fActualStdOut := actualStdOut;
     end;
 
+    (*!------------------------------------------------
+     * set stream to write to if any
+     *-----------------------------------------------
+     * @param stream, stream to write to
+     * @return current instance
+     *-----------------------------------------------*)
     function TDecoratorStdOut.setStream(const astream : IStreamAdapter) : IStdOut;
     begin
         fActualStdOut.setStream(astream);
         result := self;
     end;
 
+    (*!------------------------------------------------
+     * write string to stdout
+     *-----------------------------------------------
+     * @param str, string to write
+     * @return current instance
+     *-----------------------------------------------*)
     function TDecoratorStdOut.write(const str : string) : IStdOut;
     begin
         fActualStdOut.write(str);
         result := self;
     end;
 
-    function TDecoratorStdOut.writeln(const str : string = '') : IStdOut;
+    (*!------------------------------------------------
+     * write string with newline to stdout
+     *-----------------------------------------------
+     * @param str, string to write
+     * @return current instance
+     *-----------------------------------------------*)
+    function TDecoratorStdOut.writeln(const str : string) : IStdOut;
     begin
         fActualStdOut.writeln(str);
         result := self;

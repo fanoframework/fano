@@ -18,6 +18,7 @@ uses
     DependencyIntf,
     CloneableIntf,
     ListIntf,
+    ReadonlyHeadersIntf,
     HeadersIntf;
 
 type
@@ -28,7 +29,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    THeaders = class(TInterfacedObject, IHeaders, IDependency, ICloneable)
+    THeaders = class(TInterfacedObject, IReadOnlyHeaders, IHeaders, IDependency, ICloneable)
     private
         headerList : IList;
         procedure clearHeaders(const hdrList : IList);

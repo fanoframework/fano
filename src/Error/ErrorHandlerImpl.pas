@@ -91,6 +91,7 @@ implementation
     begin
         writeln('Content-Type: text/html');
         writeln('Status: ', intToStr(status), ' ', msg);
+        writeHeaders(exc);
         writeln();
         writeln(
             '<!DOCTYPE html><html><head>' +

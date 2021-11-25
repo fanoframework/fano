@@ -15,3 +15,4 @@
 DispatcherIntf,
 RequestHandlerIntf,
 RequestResponseFactoryIntf,
+HandlerTypes,

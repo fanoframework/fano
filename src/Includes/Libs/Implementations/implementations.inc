@@ -45,3 +45,4 @@ KeyValuePairFactoryImpl,
 {$INCLUDE Antivirus/implementations.inc}
 {$INCLUDE Mailer/implementations.inc}
 {$INCLUDE UserAgent/implementations.inc}
+{$INCLUDE Throttle/implementations.inc}

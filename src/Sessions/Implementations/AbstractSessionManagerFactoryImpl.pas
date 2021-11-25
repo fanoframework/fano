@@ -37,8 +37,8 @@ type
     public
         constructor create(
             const cookieName : string = FANO_COOKIE_NAME;
-            const baseDir : string = '/tmp';
-            const prefix : string = ''
+            const baseDir : string = DEFAULT_SESS_DIR;
+            const prefix : string = DEFAULT_SESS_PREFIX
         );
 
         function sessionIdGenerator(const factory : ISessionIdGeneratorFactory) : TAbstractSessionManagerFactory;
@@ -53,8 +53,8 @@ uses
 
     constructor TAbstractSessionManagerFactory.create(
         const cookieName : string = FANO_COOKIE_NAME;
-        const baseDir : string = '/tmp';
-        const prefix : string = ''
+        const baseDir : string = DEFAULT_SESS_DIR;
+        const prefix : string = DEFAULT_SESS_PREFIX
     );
     begin
         fCookieName := cookieName;

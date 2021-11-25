@@ -15,7 +15,7 @@ interface
 uses
     DependencyIntf,
     DependencyContainerIntf,
-    FactoryImpl;
+    DecoratorFactoryImpl;
 
 type
 
@@ -26,12 +26,8 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
-    TVerbTunnellingDispatcherFactory = class(TFactory, IDependencyFactory)
-    private
-        fActualFactory : IDependencyFactory;
+    TVerbTunnellingDispatcherFactory = class(TDecoratorFactory)
     public
-        constructor create (const actualFactory : IDependencyFactory);
-        destructor destroy(); override;
         function build(const container : IDependencyContainer) : IDependency; override;
     end;
 
@@ -42,21 +38,9 @@ uses
     DispatcherIntf,
     VerbTunnellingDispatcherImpl;
 
-    constructor TVerbTunnellingDispatcherFactory.create(
-        const actualFactory : IDependencyFactory
-    );
-    begin
-        inherited create();
-        fActualFactory := actualFactory;
-    end;
-
-    destructor TVerbTunnellingDispatcherFactory.destroy();
-    begin
-        fActualFactory := nil;
-        inherited destroy();
-    end;
-
-    function TVerbTunnellingDispatcherFactory.build(const container : IDependencyContainer) : IDependency;
+    function TVerbTunnellingDispatcherFactory.build(
+        const container : IDependencyContainer
+    ) : IDependency;
     begin
         result := TVerbTunnellingDispatcher.create(
             fActualFactory.build(container) as IDispatcher
