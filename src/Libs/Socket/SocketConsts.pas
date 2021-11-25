@@ -17,8 +17,12 @@ uses
 
     sockets;
 
+{$IFDEF WINDOWS}
+const DEFAULT_LISTEN_BACKLOG = 4096;
+{$ELSE}
 //Set equal to SOMAXCONN
 const DEFAULT_LISTEN_BACKLOG = SOMAXCONN;
+{$ENDIF}
 
 resourcestring
 
