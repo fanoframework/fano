@@ -27,12 +27,13 @@ uses
 type
 
     (*!------------------------------------------------
-     * abstract rate limiter implementation
+     * rate limiter middleware implementation that block
+     * request if exceed given limit.
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
     TThrottleMiddleware = class (TAbstractMiddleware)
-    private
+    protected
         fRateLimiter : IRateLimiter;
         fIdentifier : IRequestIdentifier;
         fRate : TRate;

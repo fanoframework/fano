@@ -32,7 +32,13 @@ type
     (*!---------------------------------------------------
      * Request dispatcher class having capability dispatch
      * request and return response and with middleware support
-     *
+     *----------------------------------------------------
+     * Note : It differs little bit from TDispatcher
+     * It creates request and response before route matching so that
+     * we can enhance request, response or CGI environment before
+     * route matching. This to allow scenario such as HTTP method
+     * override using _method param
+     *----------------------------------------------------
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
     TXDispatcher = class(TBaseDispatcher)

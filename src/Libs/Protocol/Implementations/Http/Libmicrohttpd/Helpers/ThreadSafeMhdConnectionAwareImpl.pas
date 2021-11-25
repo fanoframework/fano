@@ -19,6 +19,7 @@ uses
     SyncObjs,
     StdOutIntf,
     MhdConnectionAwareIntf,
+    ThreadSafeStdOutImpl,
     StreamAdapterIntf;
 
 type
@@ -29,10 +30,8 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TThreadSafeMhdConnectionAware = class(TInterfacedObject, IStdOut, IMhdConnectionAware)
+    TThreadSafeMhdConnectionAware = class(TThreadSafeStdOut, IMhdConnectionAware)
     private
-        fLock : TCriticalSection;
-        fActualStdOut : IStdOut;
         fActualConnectionAware : IMhdConnectionAware;
     public
         constructor create(
@@ -40,30 +39,6 @@ type
             const actualStdOut : IStdOut;
             const actualConnectionAware : IMhdConnectionAware
         );
-
-        (*!------------------------------------------------
-         * set stream to write to if any
-         *-----------------------------------------------
-         * @param stream, stream to write to
-         * @return current instance
-         *-----------------------------------------------*)
-        function setStream(const astream : IStreamAdapter) : IStdOut;
-
-        (*!------------------------------------------------
-         * write string to stdout
-         *-----------------------------------------------
-         * @param str, string to write
-         * @return current instance
-         *-----------------------------------------------*)
-        function write(const str : string) : IStdOut;
-
-        (*!------------------------------------------------
-         * write string with newline to stdout
-         *-----------------------------------------------
-         * @param str, string to write
-         * @return current instance
-         *-----------------------------------------------*)
-        function writeln(const str : string) : IStdOut;
 
         (*!------------------------------------------------
          * get libmicrohttpd connection
@@ -87,60 +62,8 @@ implementation
         const actualConnectionAware : IMhdConnectionAware
     );
     begin
-        fLock := lock;
-        fActualStdOut := actualStdOut;
+        inherited create(lock, actualStdOut);
         fActualConnectionAware := actualConnectionAware;
-    end;
-
-    (*!------------------------------------------------
-     * set stream to write to if any
-     *-----------------------------------------------
-     * @param stream, stream to write to
-     * @return current instance
-     *-----------------------------------------------*)
-    function TThreadSafeMhdConnectionAware.setStream(const astream : IStreamAdapter) : IStdOut;
-    begin
-        fLock.acquire();
-        try
-            fActualStdOut.setStream(astream);
-            result := self;
-        finally
-            fLock.release();
-        end;
-    end;
-
-    (*!------------------------------------------------
-     * write string to stdout
-     *-----------------------------------------------
-     * @param str, string to write
-     * @return current instance
-     *-----------------------------------------------*)
-    function TThreadSafeMhdConnectionAware.write(const str : string) : IStdOut;
-    begin
-        fLock.acquire();
-        try
-            fActualStdOut.write(str);
-            result := self;
-        finally
-            fLock.release();
-        end;
-    end;
-
-    (*!------------------------------------------------
-     * write string with newline to stdout
-     *-----------------------------------------------
-     * @param str, string to write
-     * @return current instance
-     *-----------------------------------------------*)
-    function TThreadSafeMhdConnectionAware.writeln(const str : string) : IStdOut;
-    begin
-        fLock.acquire();
-        try
-            fActualStdOut.writeln(str);
-            result := self;
-        finally
-            fLock.release();
-        end;
     end;
 
     (*!------------------------------------------------

@@ -20,3 +20,10 @@ TNoCacheMiddlewareFactory = NoCacheMiddlewareFactoryImpl.TNoCacheMiddlewareFacto
 TStaticFilesMiddleware = StaticFilesMiddlewareImpl.TStaticFilesMiddleware;
 TStaticFilesMiddlewareFactory = StaticFilesMiddlewareFactoryImpl.TStaticFilesMiddlewareFactory;
 TCommonStaticFilesMiddlewareFactory = CommonStaticFilesMiddlewareFactoryImpl.TCommonStaticFilesMiddlewareFactory;
+
+TMiddlewareMethod = MiddlewareTypes.TMiddlewareMethod;
+TMiddlewareFunc = MiddlewareTypes.TMiddlewareFunc;
+TFuncMiddleware = FuncMiddlewareImpl.TFuncMiddleware;
+TMethodMiddleware = MethodMiddlewareImpl.TMethodMiddleware;
+
+TMaintenanceModeMiddleware = MaintenanceModeMiddlewareImpl.TMaintenanceModeMiddleware;
