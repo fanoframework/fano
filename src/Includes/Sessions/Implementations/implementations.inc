@@ -59,3 +59,6 @@ CookieSessionManagerFactoryImpl,
 SessionMiddlewareExecutorImpl,
 
 SessionResponseImpl,
+
+SessionMiddlewareImpl,
+SessionMiddlewareFactoryImpl,

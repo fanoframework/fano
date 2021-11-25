@@ -23,6 +23,9 @@ const
     DEFAULT_DATA_COLUMN = 'data';
     DEFAULT_EXPIRED_AT_COLUMN = 'expired_at';
 
+    DEFAULT_SESS_DIR = '/tmp/';
+    DEFAULT_SESS_PREFIX = '';
+
 resourcestring
 
     rsSessionExpired = 'Session is expired. Id : %s';
