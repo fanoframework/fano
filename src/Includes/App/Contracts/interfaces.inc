@@ -15,3 +15,5 @@
 
 AppIntf,
 AppFactoryIntf,
+AppServiceProviderIntf,
+DaemonAppServiceProviderIntf,

@@ -15,3 +15,5 @@
 
 IWebApplication = AppIntf.IWebApplication;
 IWebApplicationFactory = AppFactoryIntf.IWebApplicationFactory;
+IAppServiceProvider = AppServiceProviderIntf.IAppServiceProvider;
+IDaemonAppServiceProvider = DaemonAppServiceProviderIntf.IDaemonAppServiceProvider;

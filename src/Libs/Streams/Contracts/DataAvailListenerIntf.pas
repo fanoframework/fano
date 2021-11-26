@@ -36,6 +36,7 @@ type
         * @param stream, stream that store data
         * @param context, additional data related to stream
         * @param streamCloser, instance that can close stream if required
+        * @param streamId, instance that can identify stream
         * @return true if data is handled
         *-----------------------------------------------*)
         function handleData(

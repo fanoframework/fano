@@ -188,6 +188,12 @@ uses
                         writeln('Exception: ', e.ClassName);
                         writeln('Message: ', e.Message);
                     end;
+                    on e : EInvalidPointer do
+                    begin
+                        writeln('Invalid pointer.');
+                        writeln('Exception: ', e.ClassName);
+                        writeln('Message: ', e.Message);
+                    end;
                 end;
             finally
                 fDaemonAppSvc.server.setDataAvailListener(nil);

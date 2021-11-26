@@ -33,8 +33,7 @@ uses
 type
 
     {*------------------------------------------------
-     * interface for any class having capability to
-     * register one or more service factories
+     * Service provider for daemon application
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------}
@@ -100,11 +99,16 @@ uses
 
     function TDaemonAppServiceProvider.buildServer() : IRunnableWithDataNotif;
     begin
+        //create dummy runnable instance, server instance will be provided
+        //somewhere else such as from TServerAppServiceProvider
         result := TNullRunnableWithDataNotif.create();
     end;
 
     function TDaemonAppServiceProvider.buildProtocol() : IProtocolProcessor;
     begin
+        //create dummy protocol processor instance, it will be provided
+        //somewhere else such as from TScgiAppServiceProvider (SCGI),
+        //TFastCgiAppServiceProvider (FastCGI) or TUwsgiAppServiceProvider (uwsgi)
         result := TNullProtocolProcessor.create();
     end;
 
