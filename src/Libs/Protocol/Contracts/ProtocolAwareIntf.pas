@@ -33,7 +33,7 @@ type
          * @param protocol protocol processor
          *-----------------------------------------------*)
         procedure setProtocol(const protocol : IProtocolProcessor);
-
+        property protocol : IProtocolProcessor write setProtocol;
     end;
 
 implementation

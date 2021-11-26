@@ -6,7 +6,7 @@
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit ThreadProtocolProcessorImpl;
+unit ThreadPoolProtocolProcessorImpl;
 
 interface
 
@@ -19,19 +19,24 @@ uses
     CloseableIntf,
     ReadyListenerIntf,
     StreamIdIntf,
+    TaskQueueIntf,
     ProtocolProcessorIntf,
     DecoratorProtocolProcessorImpl;
 
 type
 
     (*!-----------------------------------------------
-     * decorator class having capability to process
-     * stream from web server by spawning new worker thread
+     * class having capability to process
+     * stream from web server by submitting socket stream
+     * to queue which then be processed by pool of worker thread
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
-    TThreadProtocolProcessor = class(TDecoratorProtocolProcessor)
+    TThreadPoolProtocolProcessor = class(TInterfacedObject, IProtocolProcessor)
+    private
+        fQueue : ITaskQueue;
     public
+        constructor create(const queue : ITaskQueue);
 
         (*!------------------------------------------------
          * process request stream
@@ -40,7 +45,7 @@ type
             const stream : IStreamAdapter;
             const streamCloser : ICloseable;
             const streamId : IStreamId
-        ) : boolean; override;
+        ) : boolean;
 
     end;
 
@@ -52,60 +57,74 @@ uses
 
 type
 
-    TProcessorThread = class (TThread)
+    TProcessingTask = class(TInterfacedObject, IRunnable, IProtocolAware);
     private
+        fActualProcessor : IProtocolProcessor;
         fStream : IStreamAdapter;
         fStreamCloser : ICloseable;
         fStreamId : IStreamId;
-        fActualProcessor : IProtocolProcessor;
     public
         constructor create(
             const stream : IStreamAdapter;
             const streamCloser : ICloseable;
-            const streamId : IStreamId;
-            const actualProcessor : IProtocolProcessor
+            const streamId : IStreamId
         );
-        procedure execute(); override;
+
+        (*!------------------------------------------------
+         * set protocol processor
+         *-----------------------------------------------
+         * @param protocol protocol processor
+         *-----------------------------------------------*)
+        procedure setProtocol(const protocol : IProtocolProcessor);
+        function run() : IRunnable;
     end;
 
-    constructor TProcessorThread.create(
+    constructor TProcessingTask.create(
         const stream : IStreamAdapter;
         const streamCloser : ICloseable;
-        const streamId : IStreamId;
-        const actualProcessor : IProtocolProcessor
+        const streamId : IStreamId
     );
-    const SUSPENDED_THREAD = true;
     begin
-        inherited create(SUSPENDED_THREAD);
         fStream := stream;
         fStreamCloser := streamCloser;
         fStreamId := streamId;
-        fActualProcessor := actualProcessor;
-        FreeOnTerminate := true;
     end;
 
-    procedure TProcessorThread.execute();
+    (*!------------------------------------------------
+     * set protocol processor
+     *-----------------------------------------------
+     * @param protocol protocol processor
+     *-----------------------------------------------*)
+    procedure TProcessingTask.setProtocol(const protocol : IProtocolProcessor);
+    begin
+        fActualProcessor := protocol;
+    end;
+
+    function TProcessingTask.run() : IRunnable;
     begin
         fActualProcessor.process(fStream, fStreamCloser, fStreamId);
+    end;
+
+    constructor TThreadPoolProtocolProcessor.create(const queue : ITaskQueue);
+    begin
+        fQueue := queue;
     end;
 
     (*!------------------------------------------------
      * process request stream
      *-----------------------------------------------*)
-    function TThreadProtocolProcessor.process(
+    function TThreadPoolProtocolProcessor.process(
         const stream : IStreamAdapter;
         const streamCloser : ICloseable;
         const streamId : IStreamId
     ) : boolean;
-    var executorThread : TProcessorThread;
+    var task : PTaskItem;
     begin
-        executorThread := TProcessorThread.create(
-            stream,
-            streamCloser,
-            streamId,
-            fActualProcessor
-        );
-        executorThread.start();
+        new(task);
+        task^.quit := false;
+        task^.protocolAware := TProcessingTask.create(stream, streamCloser, streamId);
+        task^.work := task^.protocolAware as IRunnable;
+        fQueue.enqueue(task);
         result := true;
     end;
 end.
