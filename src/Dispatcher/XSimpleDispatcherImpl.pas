@@ -24,7 +24,7 @@ type
 
     (*!------------------------------------------------
      * simple dispatcher implementation without
-     * middleware support similar to TXSimpleDispatcher.
+     * middleware support similar to TSimpleDispatcher.
      * except that request is created first before run route
      * matching
      *------------------------------------------------

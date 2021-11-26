@@ -14,7 +14,7 @@ interface
 
 uses
 
-    sysutils;
+    EUnprocessableEntityImpl;
 
 type
 
@@ -23,8 +23,7 @@ type
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EHeaderNotSet = class(Exception)
-    end;
+    EHeaderNotSet = class(EUnprocessableEntity);
 
 implementation
 

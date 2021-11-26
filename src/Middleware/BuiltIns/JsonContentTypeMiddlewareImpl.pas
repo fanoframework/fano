@@ -24,7 +24,7 @@ uses
 type
 
     (*!------------------------------------------------
-     * midlleware class that make POST PUT request with
+     * middleware class that make POST PUT request with
      * body of content type json available as request
      * parsed body
      *

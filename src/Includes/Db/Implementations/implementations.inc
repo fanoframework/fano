@@ -31,3 +31,6 @@ FirebirdDbFactoryImpl,
 
 SQLiteDbImpl,
 SQLiteDbFactoryImpl,
+
+OdbcDbImpl,
+OdbcDbFactoryImpl,

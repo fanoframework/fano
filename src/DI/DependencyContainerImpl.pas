@@ -38,6 +38,8 @@ type
          * @param serviceName name of service
          * @param serviceFactory factory instance
          * @param singleInstance true if single instance otherwise false
+         * @param aliased true if service name is alias to other service
+         * @param actualServiceName actual service if aliased
          * @return current dependency container instance
          *---------------------------------------------------------*)
         function addDependency(

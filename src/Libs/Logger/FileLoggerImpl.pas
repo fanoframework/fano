@@ -30,23 +30,15 @@ uses
 type
 
     (*!------------------------------------------------
-     * we use bigger textfile file buffer to speed up
-     *
-     * @author Zamrony P. Juhara <zamronypj@yahoo.com>
-     *-----------------------------------------------*)
-    TFileBuffer = array[0..65535] of char;
-
-
-    (*!------------------------------------------------
      * logger class that write log to text file
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
     TFileLogger = class(TAbstractLogger)
     private
+        fAutoFlush : boolean;
         outputFile : TextFile;
         isOpen : boolean;
-        fileBuffer : TFileBuffer;
 
         (*!--------------------------------------
          * try opening file
@@ -61,9 +53,13 @@ type
          * constructor
          * --------------------------------------
          * @param filename file to store logs
+         * @param autoFlush when true, log is written to disk when log() is called
          * @throws EInOutError
          *---------------------------------------*)
-        constructor create(const filename : string);
+        constructor create(
+            const filename : string;
+            const autoFlush : boolean = true
+        );
 
         (*!--------------------------------------
          * destructor
@@ -122,6 +118,7 @@ implementation
      * constructor
      * --------------------------------------
      * @param filename file to store logs
+     * @param autoFlush when true, log is written to disk when log() is called
      * @throws EInOutError
      * --------------------------------------
      * if file exists, we open file for append
@@ -130,11 +127,14 @@ implementation
      * If file can not be open, EInOutError exception
      * is raised
      *---------------------------------------*)
-    constructor TFileLogger.create(const filename : string);
+    constructor TFileLogger.create(
+        const filename : string;
+        const autoFlush : boolean = true
+    );
     begin
+        fAutoFlush := autoFlush;
         isOpen := false;
         assignFile(outputFile, filename);
-        setTextBuf(outputFile, fileBuffer[0], sizeof(fileBuffer));
         tryOpenFileOrExcept(filename);
 
         //tryOpenFileOrExcept() will throw EInOutError when
@@ -149,12 +149,12 @@ implementation
      *---------------------------------------*)
     destructor TFileLogger.destroy();
     begin
-        inherited destroy();
         if (isOpen) then
         begin
             //file is open succesfully, so close it properly
             closeFile(outputFile);
         end;
+        inherited destroy();
     end;
 
     (*!--------------------------------------
@@ -187,6 +187,11 @@ implementation
             writeln(outputFile, '==== Start context ====');
             writeln(outputFile, context.serialize());
             writeln(outputFile, '==== End context ====');
+        end;
+
+        if (fAutoFlush) then
+        begin
+            flush(outputfile);
         end;
         result := self;
     end;

@@ -17,6 +17,7 @@ uses
     {$INCLUDE Includes/interfaces.inc}
     {$INCLUDE Includes/implementations.inc}
     {$INCLUDE Includes/types.inc}
+    {$INCLUDE Includes/funcs.inc}
 
 type
     (*!-----------------------------------------------
@@ -24,15 +25,21 @@ type
      * using classes in application code
      *-------------------------------------------------
      * If you use this unit, then you do not need to include
-     * other unit otherwise you will get compilation error
-     * about duplicate identifier
+     * other unit
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *------------------------------------------------*)
 
     {$INCLUDE Includes/interfaces.aliases.inc}
     {$INCLUDE Includes/implementations.aliases.inc}
+    {$INCLUDE Includes/funcs.aliases.inc}
+
+const
+
+    {$INCLUDE Includes/consts.inc}
 
 implementation
+
+    {$INCLUDE Includes/funcs.impl.inc}
 
 end.

@@ -14,7 +14,8 @@ interface
 {$H+}
 
 uses
-    sysutils,
+
+    SysUtils,
     ErrorHandlerIntf,
     LoggerIntf,
     EnvironmentEnumeratorIntf,
@@ -29,18 +30,18 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *---------------------------------------------------*)
     TLogErrorHandler = class(TBaseErrorHandler)
-    private
-        logger : ILogger;
+    protected
+        fLogger : ILogger;
 
         function getStackTrace(
             const e: Exception;
             const httpStatus : integer;
             const httpMsg : string
         ) : string;
+
     public
 
         constructor create(const aLogger : ILogger);
-        destructor destroy(); override;
 
         function handleError(
             const env : ICGIEnvironmentEnumerator;
@@ -54,13 +55,7 @@ implementation
 
     constructor TLogErrorHandler.create(const aLogger : ILogger);
     begin
-        logger := aLogger;
-    end;
-
-    destructor TLogErrorHandler.destroy();
-    begin
-        inherited destroy();
-        logger := nil;
+        fLogger := aLogger;
     end;
 
     function TLogErrorHandler.getStackTrace(
@@ -100,7 +95,7 @@ implementation
         const msg : string  = 'Internal Server Error'
     ) : IErrorHandler;
     begin
-        logger.critical(getStackTrace(exc, status, msg));
+        fLogger.critical(getStackTrace(exc, status, msg));
         result := self;
     end;
 end.

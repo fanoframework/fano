@@ -12,6 +12,7 @@
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
+MiddlewareExecutorImpl,
 
 MiddlewareListImpl,
 NullMiddlewareListImpl,
@@ -19,6 +20,7 @@ NullMiddlewareListImpl,
 MiddlewareListFactoryImpl,
 NullMiddlewareListFactoryImpl,
 
+AbstractMiddlewareImpl,
 NullMiddlewareImpl,
 CompositeMiddlewareImpl,
 RequestHandlerAsMiddlewareImpl,
@@ -26,7 +28,15 @@ JsonContentTypeMiddlewareImpl,
 JsonContentTypeMiddlewareFactoryImpl,
 CacheControlMiddlewareImpl,
 CacheControlMiddlewareFactoryImpl,
+NoCacheMiddlewareImpl,
+NoCacheMiddlewareFactoryImpl,
 
 StaticFilesMiddlewareImpl,
 StaticFilesMiddlewareFactoryImpl,
 CommonStaticFilesMiddlewareFactoryImpl,
+
+MiddlewareTypes,
+FuncMiddlewareImpl,
+MethodMiddlewareImpl,
+
+MaintenanceModeMiddlewareImpl,

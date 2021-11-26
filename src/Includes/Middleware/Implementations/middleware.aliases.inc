@@ -1,8 +1,11 @@
+TMiddlewareExecutor = MiddlewareExecutorImpl.TMiddlewareExecutor;
+
 TMiddlewareList = MiddlewareListImpl.TMiddlewareList;
 TNullMiddlewareList = NullMiddlewareListImpl.TNullMiddlewareList;
 TMiddlewareListFactory = MiddlewareListFactoryImpl.TMiddlewareListFactory;
 TNullMiddlewareListFactory = NullMiddlewareListFactoryImpl.TNullMiddlewareListFactory;
 
+TAbstractMiddleware = AbstractMiddlewareImpl.TAbstractMiddleware;
 TNullMiddleware = NullMiddlewareImpl.TNullMiddleware;
 TCompositeMiddleware = CompositeMiddlewareImpl.TCompositeMiddleware;
 TRequestHandlerAsMiddleware = RequestHandlerAsMiddlewareImpl.TRequestHandlerAsMiddleware;
@@ -11,7 +14,16 @@ TJsonContentTypeMiddlewareFactory = JsonContentTypeMiddlewareFactoryImpl.TJsonCo
 
 TCacheControlMiddleware = CacheControlMiddlewareImpl.TCacheControlMiddleware;
 TCacheControlMiddlewareFactory = CacheControlMiddlewareFactoryImpl.TCacheControlMiddlewareFactory;
+TNoCacheMiddleware = NoCacheMiddlewareImpl.TNoCacheMiddleware;
+TNoCacheMiddlewareFactory = NoCacheMiddlewareFactoryImpl.TNoCacheMiddlewareFactory;
 
 TStaticFilesMiddleware = StaticFilesMiddlewareImpl.TStaticFilesMiddleware;
 TStaticFilesMiddlewareFactory = StaticFilesMiddlewareFactoryImpl.TStaticFilesMiddlewareFactory;
 TCommonStaticFilesMiddlewareFactory = CommonStaticFilesMiddlewareFactoryImpl.TCommonStaticFilesMiddlewareFactory;
+
+TMiddlewareMethod = MiddlewareTypes.TMiddlewareMethod;
+TMiddlewareFunc = MiddlewareTypes.TMiddlewareFunc;
+TFuncMiddleware = FuncMiddlewareImpl.TFuncMiddleware;
+TMethodMiddleware = MethodMiddlewareImpl.TMethodMiddleware;
+
+TMaintenanceModeMiddleware = MaintenanceModeMiddlewareImpl.TMaintenanceModeMiddleware;

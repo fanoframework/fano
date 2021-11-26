@@ -27,7 +27,12 @@ type
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
     TStdOutLogger = class(TAbstractLogger)
+    private
+        fStdOut : text;
     public
+        constructor create(var aStdOut : text); overload;
+        constructor create(); overload;
+
         (*!--------------------------------------
          * log message
          * --------------------------------------
@@ -50,6 +55,20 @@ uses
 
     SysUtils;
 
+    constructor TStdOutLogger.create(var aStdOut : text);
+    begin
+        //need copy original stdout to internal variable
+        //because our protocol implementation such as FastCgi, SCGI, uwsgi
+        //will redirect stdout to its own stdout.
+        //copy need to be done before stdout redirection
+        fStdOut := aStdOut;
+    end;
+
+    constructor TStdOutLogger.create();
+    begin
+        create(StdOut);
+    end;
+
     (*!--------------------------------------
      * log message
      * --------------------------------------
@@ -66,6 +85,7 @@ uses
     ) : ILogger;
     begin
         writeln(
+            fStdOut,
             '[', level,'] ',
             FormatDateTime('yyyy-mm-dd hh:nn:ss', Now),
             ' ',
@@ -73,9 +93,9 @@ uses
         );
         if (context <> nil) then
         begin
-            writeln('==== Start context ====');
-            writeln(context.serialize());
-            writeln('==== End context ====');
+            writeln(fStdOut, '==== Start context ====');
+            writeln(fStdOut, context.serialize());
+            writeln(fStdOut, '==== End context ====');
         end;
         result := self;
     end;

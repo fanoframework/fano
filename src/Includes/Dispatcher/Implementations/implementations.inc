@@ -19,6 +19,7 @@ VerbTunnellingDispatcherImpl,
 XDispatcherImpl,
 XSimpleDispatcherImpl,
 MwExecDispatcherImpl,
+MaintenanceModeDispatcherImpl,
 
 DispatcherFactoryImpl,
 SimpleDispatcherFactoryImpl,
@@ -27,11 +28,14 @@ VerbTunnellingDispatcherFactoryImpl,
 XDispatcherFactoryImpl,
 XSimpleDispatcherFactoryImpl,
 MwExecDispatcherFactoryImpl,
+MaintenanceModeDispatcherFactoryImpl,
 
 EInvalidDispatcherImpl,
-EMethodNotAllowedImpl,
 ERouteHandlerNotFoundImpl,
 
 RequestResponseFactoryImpl,
 FcgiRequestResponseFactoryImpl,
 VerbTunnellingRequestResponseFactoryImpl,
+
+FuncRequestHandlerImpl,
+MethodRequestHandlerImpl,
