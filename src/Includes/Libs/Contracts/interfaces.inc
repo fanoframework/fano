@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -58,3 +58,4 @@ DecrypterIntf,
 {$INCLUDE Socket2/interfaces.inc}
 {$INCLUDE Mailer/interfaces.inc}
 {$INCLUDE UserAgent/interfaces.inc}
+{$INCLUDE Throttle/interfaces.inc}

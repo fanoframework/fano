@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -12,6 +12,7 @@
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
+MiddlewareExecutorImpl,
 
 MiddlewareListImpl,
 NullMiddlewareListImpl,
@@ -19,6 +20,7 @@ NullMiddlewareListImpl,
 MiddlewareListFactoryImpl,
 NullMiddlewareListFactoryImpl,
 
+AbstractMiddlewareImpl,
 NullMiddlewareImpl,
 CompositeMiddlewareImpl,
 RequestHandlerAsMiddlewareImpl,
@@ -26,3 +28,15 @@ JsonContentTypeMiddlewareImpl,
 JsonContentTypeMiddlewareFactoryImpl,
 CacheControlMiddlewareImpl,
 CacheControlMiddlewareFactoryImpl,
+NoCacheMiddlewareImpl,
+NoCacheMiddlewareFactoryImpl,
+
+StaticFilesMiddlewareImpl,
+StaticFilesMiddlewareFactoryImpl,
+CommonStaticFilesMiddlewareFactoryImpl,
+
+MiddlewareTypes,
+FuncMiddlewareImpl,
+MethodMiddlewareImpl,
+
+MaintenanceModeMiddlewareImpl,

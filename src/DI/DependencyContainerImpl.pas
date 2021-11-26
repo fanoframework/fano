@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit DependencyContainerImpl;
@@ -38,6 +38,8 @@ type
          * @param serviceName name of service
          * @param serviceFactory factory instance
          * @param singleInstance true if single instance otherwise false
+         * @param aliased true if service name is alias to other service
+         * @param actualServiceName actual service if aliased
          * @return current dependency container instance
          *---------------------------------------------------------*)
         function addDependency(

@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -70,6 +70,7 @@ uses
     begin
         writeln('Content-Type: text/html');
         writeln('Status: ', intToStr(status), ' ', msg);
+        writeHeaders(exc);
         writeln();
         writeln(templateStr);
         result := self;

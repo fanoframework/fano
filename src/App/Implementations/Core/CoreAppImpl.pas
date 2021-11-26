@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 unit CoreAppImpl;
@@ -118,16 +118,9 @@ uses
 
     SysUtils,
     ResponseIntf,
-
-    //exception-related units
-    ERouteHandlerNotFoundImpl,
-    EMethodNotAllowedImpl,
-    EInvalidMethodImpl,
-    EInvalidRequestImpl,
-    ENotFoundImpl,
-    EDependencyNotFoundImpl,
-    EUnauthorizedImpl,
-    EForbiddenImpl;
+    SerializeableIntf,
+    ExceptionSerializeableImpl,
+    EHttpExceptionImpl;
 
     procedure TCoreWebApplication.reset();
     begin
@@ -170,6 +163,7 @@ uses
      * constructed
      *-----------------------------------------------*)
     function TCoreWebApplication.initialize(const container : IDependencyContainer) : boolean;
+    var errSerializable : ISerializeable;
     begin
         try
             fAppSvc.register(container);
@@ -179,10 +173,9 @@ uses
             on e : Exception do
             begin
                 result := false;
-                //TODO : improve exception handling
                 writeln('Fail to initialize application.');
-                writeln('Exception: ', e.ClassName);
-                writeln('Message: ', e.Message);
+                errSerializable := TExceptionSerializeable.create(e);
+                writeln(errSerializable.serialize());
             end;
         end;
     end;
@@ -232,45 +225,14 @@ uses
         try
             result := doExecute(container, env, stdin, dispatcher);
         except
-            on e : EInvalidRequest do
+            on e : EHttpException do
             begin
-                errorHandler.handleError(env.enumerator, e, 400, sHttp400Message);
-                reset();
-            end;
-
-            on e : EUnauthorized do
-            begin
-                errorHandler.handleError(env.enumerator, e, 401, sHttp401Message);
-                reset();
-            end;
-
-            on e : EForbidden do
-            begin
-                errorHandler.handleError(env.enumerator, e, 403, sHttp403Message);
-                reset();
-            end;
-
-            on e : ERouteHandlerNotFound do
-            begin
-                errorHandler.handleError(env.enumerator, e, 404, sHttp404Message);
-                reset();
-            end;
-
-            on e : ENotFound do
-            begin
-                errorHandler.handleError(env.enumerator, e, 404, sHttp404Message);
-                reset();
-            end;
-
-            on e : EMethodNotAllowed do
-            begin
-                errorHandler.handleError(env.enumerator, e, 405, sHttp405Message);
-                reset();
-            end;
-
-            on e : EInvalidMethod do
-            begin
-                errorHandler.handleError(env.enumerator, e, 501, sHttp501Message);
+                errorHandler.handleError(
+                    env.enumerator,
+                    e,
+                    e.httpCode,
+                    e.httpMessage
+                );
                 reset();
             end;
 

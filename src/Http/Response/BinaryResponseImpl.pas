@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -21,14 +21,15 @@ uses
     BaseResponseImpl;
 
 type
+
     (*!------------------------------------------------
      * base binary response class such image
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-----------------------------------------------*)
     TBinaryResponse = class(TBaseResponse)
-    private
-        contentType : string;
+    protected
+        fContentType : string;
     public
         constructor create(
             const hdrs : IHeaders;
@@ -61,14 +62,14 @@ uses
     );
     begin
         inherited create(hdrs, respBody);
-        contentType := strContentType;
+        fContentType := strContentType;
     end;
 
     function TBinaryResponse.write() : IResponse;
     var hdrs : IHeaders;
     begin
         hdrs := headers();
-        hdrs.setHeader('Content-Type', contentType);
+        hdrs.setHeader('Content-Type', fContentType);
         hdrs.setHeader('Content-Length', intToStr(body().size()));
         result := inherited write();
     end;
@@ -77,7 +78,7 @@ uses
     begin
         result := TBinaryResponse.create(
             headers().clone() as IHeaders,
-            contentType,
+            fContentType,
             //not clone response body as they may be big in size
             body()
         );

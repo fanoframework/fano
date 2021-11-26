@@ -2,9 +2,12 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
+
+TLogLevelType = LogLevelTypes.TLogLevelType;
+TLogLevelTypes = LogLevelTypes.TLogLevelTypes;
 
 TAbstractLogger = AbstractLoggerImpl.TAbstractLogger;
 TFileLogger = FileLoggerImpl.TFileLogger;
@@ -22,5 +25,14 @@ TStdErrLoggerFactory = StdErrLoggerFactoryImpl.TStdErrLoggerFactory;
 TSysLogLogger = SysLogLoggerImpl.TSysLogLogger;
 TSysLogLoggerFactory = SysLogLoggerFactoryImpl.TSysLogLoggerFactory;
 TThreadSafeLogger = ThreadSafeLoggerImpl.TThreadSafeLogger;
+
+TDecoratorLogger = DecoratorLoggerImpl.TDecoratorLogger;
+
+TBackgroundThreadLogger = BackgroundThreadLoggerImpl.TBackgroundThreadLogger;
+TBackgroundThreadLoggerFactory = BackgroundThreadLoggerFactoryImpl.TBackgroundThreadLoggerFactory;
+
 TDbLogger = DbLoggerImpl.TDbLogger;
 TDbLoggerFactory = DbLoggerFactoryImpl.TDbLoggerFactory;
+
+TMailLogger = MailLoggerImpl.TMailLogger;
+TMailLoggerFactory = MailLoggerFactoryImpl.TMailLoggerFactory;

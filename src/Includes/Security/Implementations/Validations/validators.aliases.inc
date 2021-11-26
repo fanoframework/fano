@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -25,6 +25,7 @@ TUrlValidator = UrlValidatorImpl.TUrlValidator;
 TSlugValidator = SlugValidatorImpl.TSlugValidator;
 TPhoneValidator = PhoneValidatorImpl.TPhoneValidator;
 TMacAddrValidator = MacAddrValidatorImpl.TMacAddrValidator;
+TColorValidator = ColorValidatorImpl.TColorValidator;
 
 TBaseCompositeValidator = BaseCompositeValidatorImpl.TBaseCompositeValidator;
 TCompositeValidator = CompositeValidatorImpl.TCompositeValidator;
@@ -48,6 +49,23 @@ TCompareIntValidator = CompareIntValidatorImpl.TCompareIntValidator;
 TEqualIntValidator = EqualIntValidatorImpl.TEqualIntValidator;
 TLessThanValidator = LessThanValidatorImpl.TLessThanValidator;
 TGreaterThanValidator = GreaterThanValidatorImpl.TGreaterThanValidator;
+TLessOrEqualThanValidator = LessOrEqualThanValidatorImpl.TLessOrEqualThanValidator;
+TGreaterOrEqualThanValidator = GreaterOrEqualThanValidatorImpl.TGreaterOrEqualThanValidator;
+TBetweenValidator = BetweenValidatorImpl.TBetweenValidator;
+
+TCompareFloatValidator = CompareFloatValidatorImpl.TCompareFloatValidator;
+TFloatLessThanValidator = FloatLessThanValidatorImpl.TFloatLessThanValidator;
+TFloatGreaterThanValidator = FloatGreaterThanValidatorImpl.TFloatGreaterThanValidator;
+TFloatLessOrEqualThanValidator = FloatLessOrEqualThanValidatorImpl.TFloatLessOrEqualThanValidator;
+TFloatGreaterOrEqualThanValidator = FloatGreaterOrEqualThanValidatorImpl.TFloatGreaterOrEqualThanValidator;
+TFloatBetweenValidator = FloatBetweenValidatorImpl.TFloatBetweenValidator;
+
+TCompareCurrencyValidator = CompareCurrencyValidatorImpl.TCompareCurrencyValidator;
+TCurrLessThanValidator = CurrLessThanValidatorImpl.TCurrLessThanValidator;
+TCurrGreaterThanValidator = CurrGreaterThanValidatorImpl.TCurrGreaterThanValidator;
+TCurrLessOrEqualThanValidator = CurrLessOrEqualThanValidatorImpl.TCurrLessOrEqualThanValidator;
+TCurrGreaterOrEqualThanValidator = CurrGreaterOrEqualThanValidatorImpl.TCurrGreaterOrEqualThanValidator;
+TCurrBetweenValidator = CurrBetweenValidatorImpl.TCurrBetweenValidator;
 
 TFloatValidator = FloatValidatorImpl.TFloatValidator;
 TNumericValidator = NumericValidatorImpl.TNumericValidator;
@@ -108,3 +126,9 @@ TDirectoryValidator = DirectoryValidatorImpl.TDirectoryValidator;
 TCompareStrValidator = CompareStrValidatorImpl.TCompareStrValidator;
 TEqualStrValidator = EqualStrValidatorImpl.TEqualStrValidator;
 TCaseInsensitiveEqualStrValidator = CaseInsensitiveEqualStrValidatorImpl.TCaseInsensitiveEqualStrValidator;
+
+TStartWithValidator = StartWithValidatorImpl.TStartWithValidator;
+TEndWithValidator = EndWithValidatorImpl.TEndWithValidator;
+
+TLatitudeValidator = LatitudeValidatorImpl.TLatitudeValidator;
+TLongitudeValidator = LongitudeValidatorImpl.TLongitudeValidator;

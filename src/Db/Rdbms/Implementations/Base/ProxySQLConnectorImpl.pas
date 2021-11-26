@@ -2,30 +2,32 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
-unit EMethodNotAllowedImpl;
+unit ProxySQLConnectorImpl;
 
 interface
 
 {$MODE OBJFPC}
+{$H+}
 
 uses
 
-    sysutils;
+    sqldb;
 
 type
 
     (*!------------------------------------------------
-     * Exception that is raised when request method
-     * not allowed. For example route is registerd for POST
-     * but route is requested with GET.
+     * internal class which expose proxy TSqlconnection
+     * as public
      *
      * @author Zamrony P. Juhara <zamronypj@yahoo.com>
      *-------------------------------------------------*)
-    EMethodNotAllowed = class(Exception)
+    TProxySQLConnector = class(TSQLConnector)
+    public
+        property proxy;
     end;
 
 implementation

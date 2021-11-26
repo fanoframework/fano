@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2020 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -126,6 +126,7 @@ type
         addRule(rules, OS_JAVA, REGEX_JAVA);
         addRule(rules, OS_PALMOS, REGEX_PALMOS);
         addRule(rules, OS_WEBOS, REGEX_WEBOS);
+        addRule(rules, OS_LINUX, REGEX_LINUX);
     end;
 
     procedure TUserAgent.initRules(const rules : IList);
