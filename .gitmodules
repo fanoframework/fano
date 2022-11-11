@@ -1,3 +1,9 @@
 [submodule "vendor/lnet"]
 	path = vendor/lnet
 	url = https://github.com/almindor/lnet.git
+[submodule "vendor/libuv-pas"]
+	path = vendor/libuv-pas
+	url = https://github.com/zamronypj/libuv-pas.git
+[submodule "vendor/llhttp-pas"]
+	path = vendor/llhttp-pas
+	url = https://github.com/zamronypj/llhttp-pas.git
