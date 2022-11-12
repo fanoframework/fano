@@ -28,6 +28,21 @@ type
 
     TArrayOfKeyValue = array of TKeyValue;
 
+    function NewKeyValue(const key : shortstring; value : string) : PKeyValue;
+    procedure DisposeKeyValue(keyVal : PKeyValue);
+
 implementation
+
+    function NewKeyValue(const key : shortstring; value : string) : PKeyValue;
+    begin
+        new(result);
+        result^.key := key;
+        result^.value := value;
+    end;
+
+    procedure DisposeKeyValue(keyVal : PKeyValue);
+    begin
+        dispose(keyVal);
+    end;
 
 end.
