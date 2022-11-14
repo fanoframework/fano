@@ -132,3 +132,11 @@ TEndWithValidator = EndWithValidatorImpl.TEndWithValidator;
 
 TLatitudeValidator = LatitudeValidatorImpl.TLatitudeValidator;
 TLongitudeValidator = LongitudeValidatorImpl.TLongitudeValidator;
+
+// password-related validation
+TAtLeastOneAlphaValidator = AtLeastOneAlphaValidatorImpl.TAtLeastOneAlphaValidator;
+TAtLeastOneLowerAlphaValidator = AtLeastOneLowerAlphaValidatorImpl.TAtLeastOneLowerAlphaValidator;
+TAtLeastOneUpperAlphaValidator = AtLeastOneUpperAlphaValidatorImpl.TAtLeastOneUpperAlphaValidator;
+TAtLeastOneDigitValidator = AtLeastOneDigitValidatorImpl.TAtLeastDigitAlphaValidator;
+TAtLeastOneSymbolValidator = AtLeastOneSymbolValidatorImpl.TAtLeastSymbolAlphaValidator;
+TMixedCapsValidator = MixedCapsValidatorImpl.TMixedCapsValidator;
