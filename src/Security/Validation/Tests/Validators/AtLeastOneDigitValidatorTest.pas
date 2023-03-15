@@ -58,32 +58,32 @@ uses
 
     procedure TAtLeastOneDigitValidatorTest.TestInputContainsAlphaShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_key', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_key', fData, fRequest));
     end;
 
     procedure TAtLeastOneDigitValidatorTest.TestInputContainsDigitsShouldPass();
     begin
-        AssertEquals(fValidator.isValid('my_digit', fData, fRequest), true);
+        AssertEquals(true, fValidator.isValid('my_digit', fData, fRequest));
     end;
 
     procedure TAtLeastOneDigitValidatorTest.TestSymbolOnlyInputShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_symbol', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_symbol', fData, fRequest));
     end;
 
     procedure TAtLeastOneDigitValidatorTest.TestSymbolWithAlphaInputShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_letter_symbol', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_letter_symbol', fData, fRequest));
     end;
 
     procedure TAtLeastOneDigitValidatorTest.TestOneAlphaInputShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_a', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_a', fData, fRequest));
     end;
 
     procedure TAtLeastOneDigitValidatorTest.TestMixedAlphaCapsInputShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_abcd', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_abcd', fData, fRequest));
     end;
 
 initialization
@@ -91,4 +91,3 @@ initialization
     RegisterTest(TAtLeastOneDigitValidatorTest);
 
 end.
-

@@ -16,7 +16,8 @@ uses
     classes,
     consoletestrunner,
     fano,
-    ValidatorsTest;
+    ValidatorsTest,
+    HelpersTest;
 
 type
 

@@ -59,32 +59,32 @@ uses
 
     procedure TMixedCapsValidatorTest.TestInputContainsLowerAlphaShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_key', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_key', fData, fRequest));
     end;
 
     procedure TMixedCapsValidatorTest.TestInputContainsDigitsShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_digit', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_digit', fData, fRequest));
     end;
 
     procedure TMixedCapsValidatorTest.TestSymbolOnlyInputShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_symbol', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_symbol', fData, fRequest));
     end;
 
     procedure TMixedCapsValidatorTest.TestSymbolWithAlphaInputShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_letter_symbol', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_letter_symbol', fData, fRequest));
     end;
 
     procedure TMixedCapsValidatorTest.TestOneAlphaInputShouldFails();
     begin
-        AssertEquals(fValidator.isValid('my_a', fData, fRequest), false);
+        AssertEquals(false, fValidator.isValid('my_a', fData, fRequest));
     end;
 
     procedure TMixedCapsValidatorTest.TestMixedAlphaCapsInputShouldPass();
     begin
-        AssertEquals(fValidator.isValid('my_abcd', fData, fRequest), true);
+        AssertEquals(true, fValidator.isValid('my_abcd', fData, fRequest));
     end;
 
 initialization
@@ -92,4 +92,3 @@ initialization
     RegisterTest(TMixedCapsValidatorTest);
 
 end.
-

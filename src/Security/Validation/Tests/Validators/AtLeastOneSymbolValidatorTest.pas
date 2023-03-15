@@ -60,42 +60,42 @@ uses
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_key', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneSymbolValidatorTest.TestInputContainsDigitsShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_digit', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneSymbolValidatorTest.TestSymbolOnlyInputShouldPass();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_symbol', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
     procedure TAtLeastOneSymbolValidatorTest.TestSymbolWithAlphaInputShouldPass();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_letter_symbol', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
     procedure TAtLeastOneSymbolValidatorTest.TestOneAlphaInputShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_a', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneSymbolValidatorTest.TestMixedAlphaCapsInputShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_abcd', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
 initialization
@@ -103,4 +103,3 @@ initialization
     RegisterTest(TAtLeastOneSymbolValidatorTest);
 
 end.
-

@@ -60,42 +60,42 @@ uses
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_key', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
     procedure TAtLeastOneLowerAlphaValidatorTest.TestInputContainsDigitsShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_digit', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneLowerAlphaValidatorTest.TestSymbolOnlyInputShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_symbol', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneLowerAlphaValidatorTest.TestSymbolWithAlphaInputShouldPass();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_letter_symbol', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
     procedure TAtLeastOneLowerAlphaValidatorTest.TestOneAlphaInputShouldPass();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_a', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
     procedure TAtLeastOneLowerAlphaValidatorTest.TestMixedAlphaCapsInputShouldPass();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_abcd', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
 initialization
@@ -103,4 +103,3 @@ initialization
     RegisterTest(TAtLeastOneLowerAlphaValidatorTest);
 
 end.
-

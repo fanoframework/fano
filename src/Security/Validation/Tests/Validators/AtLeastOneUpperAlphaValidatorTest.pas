@@ -61,49 +61,49 @@ uses
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_key', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneUpperAlphaValidatorTest.TestInputContainsDigitsShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_digit', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneUpperAlphaValidatorTest.TestSymbolOnlyInputShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_symbol', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneUpperAlphaValidatorTest.TestSymbolWithLowerAlphaInputShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_letter_symbol', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneUpperAlphaValidatorTest.TestSymbolWithUpperAlphaInputShouldPass();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_upper_letter_symbol', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
     procedure TAtLeastOneUpperAlphaValidatorTest.TestOneLowerAlphaInputShouldFails();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_a', fData, fRequest);
-        AssertEquals(resValid, false)
+        AssertEquals(false, resValid);
     end;
 
     procedure TAtLeastOneUpperAlphaValidatorTest.TestMixedAlphaCapsInputShouldPass();
     var resValid : boolean;
     begin
         resValid := fValidator.isValid('my_abcd', fData, fRequest);
-        AssertEquals(resValid, true)
+        AssertEquals(true, resValid);
     end;
 
 initialization
@@ -111,4 +111,3 @@ initialization
     RegisterTest(TAtLeastOneUpperAlphaValidatorTest);
 
 end.
-

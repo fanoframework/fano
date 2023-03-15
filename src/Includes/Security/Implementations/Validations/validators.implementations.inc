@@ -124,3 +124,10 @@ EndWithValidatorImpl,
 
 LatitudeValidatorImpl,
 LongitudeValidatorImpl,
+
+AtLeastOneAlphaValidatorImpl,
+AtLeastOneDigitValidatorImpl,
+AtLeastOneLowerAlphaValidatorImpl,
+AtLeastOneUpperAlphaValidatorImpl,
+AtLeastOneSymbolValidatorImpl,
+MixedCapsValidatorImpl,

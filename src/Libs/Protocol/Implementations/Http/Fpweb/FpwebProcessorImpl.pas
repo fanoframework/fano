@@ -319,7 +319,7 @@ type
         DoDirSeparators(url);
         fname := fSvrConfig.documentRoot + url;
         isStaticFileRequest := ((method = 'GET') or (method = 'HEAD')) and
-            fileExists(fname);
+            fileExists(fname) and (not directoryExists(fname));
 
         if isStaticFileRequest then
         begin

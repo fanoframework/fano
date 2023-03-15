@@ -46,11 +46,25 @@ uses
      *-----------------------------------------------*)
     function slug(const originalStr : string) : string;
 
+    (*!------------------------------------------------
+     * explode string by delimiter as array of string
+     *-----------------------------------------------
+     * @param cDelimiter string to separate each
+     * @param sValues string to explode
+     * @param iCount max number string to return, 0 means find all string.
+     * @return array of string
+     *------------------------------------------------
+     * @credit https://www.matthewhipkin.co.uk/codelib/cgi-mailform-using-freepascal/
+     * @credit http://www.jasonwhite.co.uk/delphi-explode-function-like-php-explode/
+     *-----------------------------------------------*)
+    function explode(const cDelimiter,  sValue : string; iCount : integer = 0) : TStringArray;
+
 implementation
 
 uses
 
-    regexpr;
+    regexpr,
+    strutils;
 
     (*!------------------------------------------------
      * join array of string with a delimiter
@@ -101,9 +115,69 @@ uses
     function slug(const originalStr : string) : string;
     begin
         result := trim(originalStr);
-        if (result <> '') then
+        if (result = '') then
         begin
+            exit;
+        end;
+
+        //bugfix for FPC 3.0.4 which does not support \W
+        {$IF FPC_FULLVERSION > 30004}
             result := ReplaceRegExpr('[\W\s]+', lowercase(result), '-', true);
+        {$ELSE}
+            result := ReplaceRegExpr(
+                '[~!@#$%^&*()_\-+={}\[\]|\\:;"''<>,.?/\s]+',
+                lowercase(result),
+                '-',
+                true
+            );
+        {$ENDIF}
+
+        // remove - from beginning if any
+        if pos('-', result) = 1 then
+        begin
+            result := copy(result, 2, length(result) - 1);
+        end;
+
+        // remove - from end if any
+        if rpos('-', result) = length(result) then
+        begin
+            result := copy(result, 1, length(result) - 1);
+        end;
+    end;
+
+    (*!------------------------------------------------
+     * explode string by delimiter as array of string
+     *-----------------------------------------------
+     * @param cDelimiter string to separate each
+     * @param sValues string to explode
+     * @param iCount max number string to return, 0 means find all string.
+     * @return array of string
+     *------------------------------------------------
+     * @credit https://www.matthewhipkin.co.uk/codelib/cgi-mailform-using-freepascal/
+     * @credit http://www.jasonwhite.co.uk/delphi-explode-function-like-php-explode/
+     *-----------------------------------------------*)
+    function explode(const cDelimiter,  sValue : string; iCount : integer = 0) : TStringArray;
+    var
+        s : string;
+        i, p: integer;
+    begin
+        s := sValue;
+        i := 0;
+        result := nil;
+        while length(s) > 0 do
+        begin
+            inc(i);
+            SetLength(result, i);
+            p := pos(cDelimiter, s);
+            if (p > 0) and ((i < iCount) or (iCount=0)) then
+            begin
+                result[i-1] := copy(s, 0, p-1);
+                s := copy(s, p + length(cDelimiter), length(s));
+            end else
+            begin
+                result[i-1] := s;
+                s := '';
+            end;
         end;
     end;
 end.
