@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2022 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -52,7 +52,7 @@ uses
         const args : IRouteArgsReader;
         const nextMdlwr : IRequestHandler
     ) : IResponse;
-    var jsonRequest : IRequest;
+    var req : IRequest;
         isJsonRequest : boolean;
         method : string;
     begin
@@ -63,15 +63,12 @@ uses
 
         if isJsonRequest then
         begin
-            jsonRequest := TJsonRequest.create(request);
-            try
-                result := nextMdlwr.handleRequest(jsonRequest, response, args);
-            finally
-                jsonRequest := nil;
-            end;
-        end else
+            req := TJsonRequest.create(request);
+        end else 
         begin
-            result := nextMdlwr.handleRequest(request, response, args);
+            req := request;
         end;
+
+        result := nextMdlwr.handleRequest(req, response, args);    
     end;
 end.

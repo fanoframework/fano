@@ -67,6 +67,15 @@ implementation
         fpWrite(terminatePipeOut, ch, 1);
     end;
 
+    {$IF FPC_FULLVERSION <= 30004}
+    //workaround for bug 27414 in FPC 3.0.4
+    //https://gitlab.com/freepascal.org/fpc/source/-/issues/27414
+    procedure __doTerminate(sig : longint; info : PSigInfo; ctx : PSigContext); cdecl;
+    begin
+        TSigTerm.doTerminate(sig, info, ctx);
+    end;
+    {$ENDIF}
+
     (*!-----------------------------------------------
      * install signal handler
      *-------------------------------------------------
@@ -77,7 +86,11 @@ implementation
     begin
         fillChar(newAct, sizeOf(SigactionRec), #0);
         fillChar(oldAct, sizeOf(Sigactionrec), #0);
+        {$IF FPC_FULLVERSION <= 30004}
+        newAct.sa_handler := @__doTerminate;
+        {$ELSE}
         newAct.sa_handler := @TSigTerm.doTerminate;
+        {$ENDIF}
         fpSigaction(aSig, @newAct, @oldAct);
     end;
 

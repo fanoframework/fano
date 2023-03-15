@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2022 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -319,7 +319,7 @@ type
         DoDirSeparators(url);
         fname := fSvrConfig.documentRoot + url;
         isStaticFileRequest := ((method = 'GET') or (method = 'HEAD')) and
-            fileExists(fname);
+            fileExists(fname) and (not directoryExists(fname));
 
         if isStaticFileRequest then
         begin
