@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2022 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -77,7 +77,12 @@ implementation
      *--------------------------------------------*)
     function TNullRouteArgs.getArgs() : TArrayOfPlaceholders;
     begin
-        result := [];
+        //bugfix for FPC 3.0.4
+        {$IF FPC_FULLVERSION > 30004}
+            result := [];
+        {$ELSE}
+            result := nil;
+        {$ENDIF}
     end;
 
     (*!-------------------------------------------

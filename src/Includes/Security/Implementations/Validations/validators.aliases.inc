@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2022 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -132,3 +132,11 @@ TEndWithValidator = EndWithValidatorImpl.TEndWithValidator;
 
 TLatitudeValidator = LatitudeValidatorImpl.TLatitudeValidator;
 TLongitudeValidator = LongitudeValidatorImpl.TLongitudeValidator;
+
+// password-related validation
+TAtLeastOneAlphaValidator = AtLeastOneAlphaValidatorImpl.TAtLeastOneAlphaValidator;
+TAtLeastOneLowerAlphaValidator = AtLeastOneLowerAlphaValidatorImpl.TAtLeastOneLowerAlphaValidator;
+TAtLeastOneUpperAlphaValidator = AtLeastOneUpperAlphaValidatorImpl.TAtLeastOneUpperAlphaValidator;
+TAtLeastOneDigitValidator = AtLeastOneDigitValidatorImpl.TAtLeastOneDigitValidator;
+TAtLeastOneSymbolValidator = AtLeastOneSymbolValidatorImpl.TAtLeastOneSymbolValidator;
+TMixedCapsValidator = MixedCapsValidatorImpl.TMixedCapsValidator;

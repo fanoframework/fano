@@ -2,7 +2,7 @@
  * Fano Web Framework (https://fanoframework.github.io)
  *
  * @link      https://github.com/fanoframework/fano
- * @copyright Copyright (c) 2018 - 2021 Zamrony P. Juhara
+ * @copyright Copyright (c) 2018 - 2022 Zamrony P. Juhara
  * @license   https://github.com/fanoframework/fano/blob/master/LICENSE (MIT)
  *}
 
@@ -28,6 +28,21 @@ type
 
     TArrayOfKeyValue = array of TKeyValue;
 
+    function NewKeyValue(const key : shortstring; value : string) : PKeyValue;
+    procedure DisposeKeyValue(keyVal : PKeyValue);
+
 implementation
+
+    function NewKeyValue(const key : shortstring; value : string) : PKeyValue;
+    begin
+        new(result);
+        result^.key := key;
+        result^.value := value;
+    end;
+
+    procedure DisposeKeyValue(keyVal : PKeyValue);
+    begin
+        dispose(keyVal);
+    end;
 
 end.
