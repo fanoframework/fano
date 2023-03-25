@@ -24,3 +24,4 @@
 {$INCLUDE Jwt/implementations.inc}
 {$INCLUDE Csp/implementations.inc}
 {$INCLUDE NoPoweredBy/implementations.inc}
+{$INCLUDE Hsts/implementations.inc}
