@@ -14,7 +14,4 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-TReferrerPolicyToken = ReferrerPolicyConfig.TReferrerPolicyToken;
-TReferrerPolicyConfig = ReferrerPolicyConfig.TReferrerPolicyConfig;
-TReferrerPolicyTokenStr = ReferrerPolicyConfig.TReferrerPolicyTokenStr;
 ReferrerPolicyTokenStr = ReferrerPolicyConfig.ReferrerPolicyTokenStr;
