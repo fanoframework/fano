@@ -25,3 +25,4 @@
 {$INCLUDE Csp/implementations.inc}
 {$INCLUDE NoPoweredBy/implementations.inc}
 {$INCLUDE Hsts/implementations.inc}
+{$INCLUDE ReferrerPolicy/implementations.inc}

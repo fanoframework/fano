@@ -7,22 +7,11 @@
  *}
 
 (*! ---------------------------------------------
- * alias for implementation in security
+ * alias for implementation in Referrer Policy Middleware
  * that is included in implementations.aliases.inc
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-{$INCLUDE Validations/aliases.inc}
-{$INCLUDE Sanitations/aliases.inc}
-{$INCLUDE Cors/aliases.inc}
-{$INCLUDE Csrf/aliases.inc}
-{$INCLUDE Auth/aliases.inc}
-{$INCLUDE Xss/aliases.inc}
-{$INCLUDE FrameGuard/aliases.inc}
-{$INCLUDE PasswordHash/aliases.inc}
-{$INCLUDE Jwt/aliases.inc}
-{$INCLUDE Csp/aliases.inc}
-{$INCLUDE NoPoweredBy/aliases.inc}
-{$INCLUDE Hsts/aliases.inc}
-{$INCLUDE ReferrerPolicy/aliases.inc}
+TReferrerPolicyMiddleware = ReferrerPolicyMiddlewareImpl.TReferrerPolicyMiddleware;
+TReferrerPolicyMiddlewareFactory = ReferrerPolicyMiddlewareFactoryImpl.TReferrerPolicyMiddlewareFactory;

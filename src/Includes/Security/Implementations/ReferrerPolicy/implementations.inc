@@ -7,12 +7,12 @@
  *}
 
 (*! ---------------------------------------------
- * consts declaration that is included in fano.pas unit
- * This file is provided so we can use fano framework
- * by using only one uses to simplify things.
+ * list of ReferrerPolicy units in security
+ * that is included in implementations.inc
  *
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-{$INCLUDE Csp/consts.inc}
-{$INCLUDE ReferrerPolicy/consts.inc}
+ReferrerPolicyConfig,
+ReferrerPolicyMiddlewareImpl,
+ReferrerPolicyMiddlewareFactoryImpl,

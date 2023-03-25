@@ -14,5 +14,7 @@
  * @author Zamrony P. Juhara <zamronypj@yahoo.com>
  *-----------------------------------------------*)
 
-{$INCLUDE Csp/consts.inc}
-{$INCLUDE ReferrerPolicy/consts.inc}
+TReferrerPolicyToken = ReferrerPolicyConfig.TReferrerPolicyToken;
+TReferrerPolicyConfig = ReferrerPolicyConfig.TReferrerPolicyConfig;
+TReferrerPolicyTokenStr = ReferrerPolicyConfig.TReferrerPolicyTokenStr;
+ReferrerPolicyTokenStr = ReferrerPolicyConfig.ReferrerPolicyTokenStr;
